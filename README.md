@@ -27,4 +27,4 @@ Blinkbox Backend là phần backend của dự án Blinkbox, sử dụng **Sprin
 Clone repository từ GitHub về máy tính của bạn.
 
 ```bash
-git clone https://github.com/yourusername/yourrepository.git
+[https://github.com/trungnguyen30103/SWD392_BE.git]
