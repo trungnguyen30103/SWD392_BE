@@ -1,0 +1,34 @@
+package com.blinkbox.model;
+
+public class Product {
+    private String name;
+    private String description;
+    private String price;
+
+
+    public Product() {}
+
+
+    public String getPrice() {
+        return price;
+    }
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    // Getter & Setter cho name
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+}
