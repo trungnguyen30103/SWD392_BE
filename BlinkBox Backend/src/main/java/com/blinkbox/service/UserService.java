@@ -4,9 +4,9 @@ import com.blinkbox.model.User;
 import java.util.List;
 
 public interface UserService {
-    User createUser(User user);
     List<User> getAllUsers();
-    User getUserById(Long userID);
-    User updateUser(Long userID, User user);
-    void deleteUser(Long userID);
+    User getUserById(Long id);
+    User createUser(User user);
+    User updateUser(Long id, User user);
+    void deleteUser(Long id);
 }

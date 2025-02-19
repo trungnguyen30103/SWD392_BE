@@ -3,19 +3,17 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
 
-
 @Data
 @Entity
-@Table(name = "products")
-public class Product {
+@Table(name = "reviews")
+public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long reviewID;
+    private Long userID;
+    private Long blinkboxID;
     private Long productID;
-    private String productName;
-    private String description;
-    private Long categoryID;
-    private Double price;
-    private Integer stock;
+    private Integer rating;
+    private String comment;
     private LocalDateTime createdAt;
-    private LocalDateTime lastUpdated;
 }

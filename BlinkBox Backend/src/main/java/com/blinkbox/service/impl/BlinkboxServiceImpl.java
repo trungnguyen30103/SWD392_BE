@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @Service
 public class BlinkboxServiceImpl implements BlinkboxService {
+
     @Autowired
     private BlinkboxRepository blinkboxRepository;
 
@@ -21,7 +22,8 @@ public class BlinkboxServiceImpl implements BlinkboxService {
 
     @Override
     public Blinkbox getBlinkboxById(Long id) {
-        return blinkboxRepository.findById(id).orElse(null);
+        Optional<Blinkbox> blinkbox = blinkboxRepository.findById(id);
+        return blinkbox.orElse(null);
     }
 
     @Override
@@ -31,16 +33,9 @@ public class BlinkboxServiceImpl implements BlinkboxService {
 
     @Override
     public Blinkbox updateBlinkbox(Long id, Blinkbox blinkbox) {
-        Optional<Blinkbox> existingBlinkbox = blinkboxRepository.findById(id);
-        if (existingBlinkbox.isPresent()) {
-            Blinkbox updatedBlinkbox = existingBlinkbox.get();
-            updatedBlinkbox.setBlinkboxName(blinkbox.getBlinkboxName());
-            updatedBlinkbox.setDescription(blinkbox.getDescription());
-            updatedBlinkbox.setPrice(blinkbox.getPrice());
-            updatedBlinkbox.setCategory(blinkbox.getCategory());
-            updatedBlinkbox.setRating(blinkbox.getRating());
-            updatedBlinkbox.setStock(blinkbox.getStock());
-            return blinkboxRepository.save(updatedBlinkbox);
+        if (blinkboxRepository.existsById(id)) {
+            blinkbox.setBlinkboxID(id);
+            return blinkboxRepository.save(blinkbox);
         }
         return null;
     }

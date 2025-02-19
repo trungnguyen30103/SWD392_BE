@@ -1,9 +1,10 @@
 package com.blinkbox.repository;
 
-import com.blinkbox.model.Product;
+import com.blinkbox.model.Shipment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
 }
+

@@ -1,24 +1,17 @@
 package com.blinkbox.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
 
-import java.util.List;
 
+@Data
 @Entity
-@Table(name = "category")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "categories")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long categoryId;
-
-    @Column(nullable = false, unique = true)
+    private Long categoryID;
     private String categoryName;
-
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<Blinkbox> blinkboxes;
+    private String description;
 }
+

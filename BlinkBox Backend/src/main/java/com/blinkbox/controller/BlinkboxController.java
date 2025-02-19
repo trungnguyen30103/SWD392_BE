@@ -10,6 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/blinkboxes")
 public class BlinkboxController {
+
     @Autowired
     private BlinkboxService blinkboxService;
 
