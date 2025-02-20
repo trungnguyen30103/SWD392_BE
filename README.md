@@ -6,7 +6,7 @@
 ![Maven](https://img.shields.io/badge/Maven-3.9.7-yellowgreen.svg)
 ![license](https://img.shields.io/crates/l/rustc-serialize/0.3.24.svg)
 
-# Blinkbox Backend
+# Blindbox Backend
 
 ## Giới thiệu
 
