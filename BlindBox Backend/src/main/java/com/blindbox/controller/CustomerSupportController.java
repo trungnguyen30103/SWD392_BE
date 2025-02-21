@@ -20,7 +20,7 @@ public class CustomerSupportController {
     }
 
     @GetMapping("/{id}")
-    public CustomerSupport getSupportById(@PathVariable Long id) {
+    public CustomerSupport getSupportById(@PathVariable Integer id) {
         return supportService.getSupportById(id);
     }
 
@@ -30,12 +30,12 @@ public class CustomerSupportController {
     }
 
     @PutMapping("/{id}")
-    public CustomerSupport updateSupport(@PathVariable Long id, @RequestBody CustomerSupport support) {
+    public CustomerSupport updateSupport(@PathVariable Integer id, @RequestBody CustomerSupport support) {
         return supportService.updateSupport(id, support);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteSupport(@PathVariable Long id) {
+    public void deleteSupport(@PathVariable Integer id) {
         supportService.deleteSupport(id);
     }
 }

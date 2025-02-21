@@ -5,8 +5,8 @@ import java.util.List;
 
 public interface CustomerSupportService {
     List<CustomerSupport> getAllSupports();
-    CustomerSupport getSupportById(Long id);
+    CustomerSupport getSupportById(Integer id);
     CustomerSupport createSupport(CustomerSupport support);
-    CustomerSupport updateSupport(Long id, CustomerSupport support);
-    void deleteSupport(Long id);
+    CustomerSupport updateSupport(Integer id, CustomerSupport support);
+    void deleteSupport(Integer id);
 }

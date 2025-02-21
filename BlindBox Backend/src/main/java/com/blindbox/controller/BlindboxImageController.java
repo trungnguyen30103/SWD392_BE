@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/blindbox-images")
+@RequestMapping("/api/blindboximages")
 public class BlindboxImageController {
 
     @Autowired
@@ -19,13 +19,13 @@ public class BlindboxImageController {
         return blindboxImageService.getAllBlindboxImages();
     }
 
-    @GetMapping("/blindbox/{blindboxId}")
-    public List<BlindboxImage> getImagesByBlindboxId(@PathVariable Long blindboxId) {
+    @GetMapping("/blindbox/{blindboxID}")
+    public List<BlindboxImage> getImagesByBlindboxId(@PathVariable Integer blindboxId) {
         return blindboxImageService.getImagesByBlindboxId(blindboxId);
     }
 
     @GetMapping("/{id}")
-    public BlindboxImage getBlindboxImageById(@PathVariable Long id) {
+    public BlindboxImage getBlindboxImageById(@PathVariable Integer id) {
         return blindboxImageService.getBlindboxImageById(id);
     }
 
@@ -35,12 +35,12 @@ public class BlindboxImageController {
     }
 
     @PutMapping("/{id}")
-    public BlindboxImage updateBlindboxImage(@PathVariable Long id, @RequestBody BlindboxImage blindboxImage) {
+    public BlindboxImage updateBlindboxImage(@PathVariable Integer id, @RequestBody BlindboxImage blindboxImage) {
         return blindboxImageService.updateBlindboxImage(id, blindboxImage);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBlindboxImage(@PathVariable Long id) {
+    public void deleteBlindboxImage(@PathVariable Integer id) {
         blindboxImageService.deleteBlindboxImage(id);
     }
 }

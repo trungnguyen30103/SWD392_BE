@@ -20,7 +20,7 @@ public class DiscountController {
     }
 
     @GetMapping("/{id}")
-    public Discount getDiscountById(@PathVariable Long id) {
+    public Discount getDiscountById(@PathVariable Integer id) {
         return discountService.getDiscountById(id);
     }
 
@@ -30,12 +30,12 @@ public class DiscountController {
     }
 
     @PutMapping("/{id}")
-    public Discount updateDiscount(@PathVariable Long id, @RequestBody Discount discount) {
+    public Discount updateDiscount(@PathVariable Integer id, @RequestBody Discount discount) {
         return discountService.updateDiscount(id, discount);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteDiscount(@PathVariable Long id) {
+    public void deleteDiscount(@PathVariable Integer id) {
         discountService.deleteDiscount(id);
     }
 }

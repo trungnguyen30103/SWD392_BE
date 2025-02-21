@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BlindboxRepository extends JpaRepository<Blindbox, Long> {
+public interface BlindboxRepository extends JpaRepository<Blindbox, Integer> {
 }

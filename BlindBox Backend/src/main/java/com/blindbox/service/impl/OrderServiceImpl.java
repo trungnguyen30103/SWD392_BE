@@ -25,12 +25,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Optional<Order> getOrderById(Long orderID) {
+    public Optional<Order> getOrderById(Integer orderID) {
         return orderRepository.findById(orderID);
     }
 
     @Override
-    public void deleteOrder(Long orderID) {
+    public void deleteOrder(Integer orderID) {
         orderRepository.deleteById(orderID);
     }
 }

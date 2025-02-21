@@ -21,12 +21,12 @@ public class WishlistServiceImpl implements WishlistService {
     }
 
     @Override
-    public List<Wishlist> getWishlistsByUserId(Long userId) {
+    public List<Wishlist> getWishlistsByUserId(Integer userId) {
         return wishlistRepository.findByUserId(userId);
     }
 
     @Override
-    public Wishlist getWishlistById(Long id) {
+    public Wishlist getWishlistById(Integer id) {
         Optional<Wishlist> wishlist = wishlistRepository.findById(id);
         return wishlist.orElse(null);
     }
@@ -37,7 +37,7 @@ public class WishlistServiceImpl implements WishlistService {
     }
 
     @Override
-    public void deleteWishlist(Long id) {
+    public void deleteWishlist(Integer id) {
         wishlistRepository.deleteById(id);
     }
 }

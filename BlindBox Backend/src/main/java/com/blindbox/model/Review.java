@@ -5,15 +5,28 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "reviews")
+@Table(name = "review")
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reviewID;
-    private Long userID;
-    private Long blindboxID;
-    private Long productID;
+    private Integer reviewID;
+    @ManyToOne
+    @JoinColumn(name = "userID", referencedColumnName = "userID")
+    private User user;
+    @ManyToOne
+    @JoinColumn(name = "blindboxID", referencedColumnName = "blindboxID", nullable = false)
+    private Blindbox blindbox;
+
+    @ManyToOne
+    @JoinColumn(name = "productID", referencedColumnName = "productID", nullable = false)
+    private Product product;
+
     private Integer rating;
     private String comment;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+
+
 }

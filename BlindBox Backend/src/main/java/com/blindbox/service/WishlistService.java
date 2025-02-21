@@ -5,8 +5,8 @@ import java.util.List;
 
 public interface WishlistService {
     List<Wishlist> getAllWishlists();
-    List<Wishlist> getWishlistsByUserId(Long userId);
-    Wishlist getWishlistById(Long id);
+    List<Wishlist> getWishlistsByUserId(Integer userId);
+    Wishlist getWishlistById(Integer id);
     Wishlist createWishlist(Wishlist wishlist);
-    void deleteWishlist(Long id);
+    void deleteWishlist(Integer id);
 }

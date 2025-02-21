@@ -5,17 +5,16 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "blindbox_image")
+@Table(name = "blindboximage")
 public class BlindboxImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long blindboxImageId;
+    private Integer blindboxImageId;
 
-    @ManyToOne
-    @JoinColumn(name = "blindbox_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL) // Đảm bảo ảnh bị xóa khi Blindbox bị xóa
+    @JoinColumn(name = "blindboxID", referencedColumnName = "blindboxID", nullable = false)
     private Blindbox blindbox;
-
 
     @Column(nullable = false)
     private String imageUrl;

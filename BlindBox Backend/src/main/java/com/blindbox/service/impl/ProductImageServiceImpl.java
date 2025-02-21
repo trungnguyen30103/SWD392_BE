@@ -21,12 +21,12 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
-    public List<ProductImage> getImagesByProductId(Long productId) {
+    public List<ProductImage> getImagesByProductId(Integer productId) {
         return productImageRepository.findByProductId(productId);
     }
 
     @Override
-    public ProductImage getProductImageById(Long id) {
+    public ProductImage getProductImageById(Integer id) {
         Optional<ProductImage> productImage = productImageRepository.findById(id);
         return productImage.orElse(null);
     }
@@ -37,7 +37,7 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
-    public void deleteProductImage(Long id) {
+    public void deleteProductImage(Integer id) {
         productImageRepository.deleteById(id);
     }
 }

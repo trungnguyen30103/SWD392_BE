@@ -5,8 +5,8 @@ import java.util.List;
 
 public interface ShipmentService {
     List<Shipment> getAllShipments();
-    Shipment getShipmentById(Long id);
+    Shipment getShipmentById(Integer id);
     Shipment createShipment(Shipment shipment);
-    Shipment updateShipment(Long id, Shipment shipment);
-    void deleteShipment(Long id);
+    Shipment updateShipment(Integer id, Shipment shipment);
+    void deleteShipment(Integer id);
 }

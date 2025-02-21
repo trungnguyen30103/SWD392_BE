@@ -1,10 +1,8 @@
 package com.blindbox.model;
 
-
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
-
 
 @Data
 @Entity
@@ -12,10 +10,10 @@ import java.time.LocalDateTime;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userID;
+    private Integer userID;
     private String userName;
     private String password;
-    private String phone;
+    private Integer phone;
     private String address;
     private String email;
     private String role;

@@ -20,7 +20,7 @@ public class PaymentController {
     }
 
     @GetMapping("/{id}")
-    public Payment getPaymentById(@PathVariable Long id) {
+    public Payment getPaymentById(@PathVariable Integer id) {
         return paymentService.getPaymentById(id);
     }
 
@@ -30,12 +30,12 @@ public class PaymentController {
     }
 
     @PutMapping("/{id}")
-    public Payment updatePayment(@PathVariable Long id, @RequestBody Payment payment) {
+    public Payment updatePayment(@PathVariable Integer id, @RequestBody Payment payment) {
         return paymentService.updatePayment(id, payment);
     }
 
     @DeleteMapping("/{id}")
-    public void deletePayment(@PathVariable Long id) {
+    public void deletePayment(@PathVariable Integer id) {
         paymentService.deletePayment(id);
     }
 }

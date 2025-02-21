@@ -5,9 +5,9 @@ import java.util.List;
 
 public interface BlindboxImageService {
     List<BlindboxImage> getAllBlindboxImages();
-    List<BlindboxImage> getImagesByBlindboxId(Long blindboxId);
-    BlindboxImage getBlindboxImageById(Long id);
+    List<BlindboxImage> getImagesByBlindboxId(Integer blindboxId);
+    BlindboxImage getBlindboxImageById(Integer id);
     BlindboxImage createBlindboxImage(BlindboxImage blindboxImage);
-    BlindboxImage updateBlindboxImage(Long id, BlindboxImage blindboxImage);
-    void deleteBlindboxImage(Long id);
+    BlindboxImage updateBlindboxImage(Integer id, BlindboxImage blindboxImage);
+    void deleteBlindboxImage(Integer id);
 }

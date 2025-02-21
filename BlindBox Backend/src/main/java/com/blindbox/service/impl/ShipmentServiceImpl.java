@@ -21,7 +21,7 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
 
     @Override
-    public Shipment getShipmentById(Long id) {
+    public Shipment getShipmentById(Integer id) {
         Optional<Shipment> shipment = shipmentRepository.findById(id);
         return shipment.orElse(null);
     }
@@ -32,7 +32,7 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
 
     @Override
-    public Shipment updateShipment(Long id, Shipment shipment) {
+    public Shipment updateShipment(Integer id, Shipment shipment) {
         if (shipmentRepository.existsById(id)) {
             shipment.setShipmentID(id);
             return shipmentRepository.save(shipment);
@@ -41,7 +41,7 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
 
     @Override
-    public void deleteShipment(Long id) {
+    public void deleteShipment(Integer id) {
         shipmentRepository.deleteById(id);
     }
 }

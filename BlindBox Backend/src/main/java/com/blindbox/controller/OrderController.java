@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/order")
 public class OrderController {
 
     @Autowired
@@ -28,13 +28,13 @@ public class OrderController {
 
     // Lấy đơn hàng theo ID
     @GetMapping("/{orderID}")
-    public Optional<Order> getOrderById(@PathVariable Long orderID) {
+    public Optional<Order> getOrderById(@PathVariable Integer orderID) {
         return orderService.getOrderById(orderID);
     }
 
     // Xóa đơn hàng theo ID
     @DeleteMapping("/{orderID}")
-    public void deleteOrder(@PathVariable Long orderID) {
+    public void deleteOrder(@PathVariable Integer orderID) {
         orderService.deleteOrder(orderID);
     }
 }

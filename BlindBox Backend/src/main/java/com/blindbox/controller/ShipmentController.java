@@ -20,7 +20,7 @@ public class ShipmentController {
     }
 
     @GetMapping("/{id}")
-    public Shipment getShipmentById(@PathVariable Long id) {
+    public Shipment getShipmentById(@PathVariable Integer id) {
         return shipmentService.getShipmentById(id);
     }
 
@@ -30,12 +30,12 @@ public class ShipmentController {
     }
 
     @PutMapping("/{id}")
-    public Shipment updateShipment(@PathVariable Long id, @RequestBody Shipment shipment) {
+    public Shipment updateShipment(@PathVariable Integer id, @RequestBody Shipment shipment) {
         return shipmentService.updateShipment(id, shipment);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteShipment(@PathVariable Long id) {
+    public void deleteShipment(@PathVariable Integer id) {
         shipmentService.deleteShipment(id);
     }
 }

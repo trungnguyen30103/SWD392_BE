@@ -5,8 +5,8 @@ import java.util.List;
 
 public interface BlindboxService {
     List<Blindbox> getAllBlindboxes();
-    Blindbox getBlindboxById(Long id);
+    Blindbox getBlindboxById(Integer id);
     Blindbox createBlindbox(Blindbox blindbox);
-    Blindbox updateBlindbox(Long id, Blindbox blindbox);
-    void deleteBlindbox(Long id);
+    Blindbox updateBlindbox(Integer id, Blindbox blindbox);
+    void deleteBlindbox(Integer id);
 }

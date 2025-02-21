@@ -21,7 +21,7 @@ public class BlindboxServiceImpl implements BlindboxService {
     }
 
     @Override
-    public Blindbox getBlindboxById(Long id) {
+    public Blindbox getBlindboxById(Integer id) {
         Optional<Blindbox> blindbox = blindboxRepository.findById(id);
         return blindbox.orElse(null);
     }
@@ -32,7 +32,7 @@ public class BlindboxServiceImpl implements BlindboxService {
     }
 
     @Override
-    public Blindbox updateBlindbox(Long id, Blindbox blindbox) {
+    public Blindbox updateBlindbox(Integer id, Blindbox blindbox) {
         if (blindboxRepository.existsById(id)) {
             blindbox.setBlindboxID(id);
             return blindboxRepository.save(blindbox);
@@ -41,7 +41,7 @@ public class BlindboxServiceImpl implements BlindboxService {
     }
 
     @Override
-    public void deleteBlindbox(Long id) {
+    public void deleteBlindbox(Integer id) {
         blindboxRepository.deleteById(id);
     }
 }

@@ -19,23 +19,23 @@ public class ReviewController {
         return reviewService.getAllReviews();
     }
 
-    @GetMapping("/user/{userId}")
-    public List<Review> getReviewsByUserId(@PathVariable Long userId) {
+    @GetMapping("/user/{userID}")
+    public List<Review> getReviewsByUserId(@PathVariable Integer userId) {
         return reviewService.getReviewsByUserId(userId);
     }
 
-    @GetMapping("/blinkbox/{blinkboxId}")
-    public List<Review> getReviewsByBlinkboxId(@PathVariable Long blinkboxId) {
+    @GetMapping("/blinkbox/{blindboxID}")
+    public List<Review> getReviewsByBlinkboxId(@PathVariable Integer blinkboxId) {
         return reviewService.getReviewsByBlinkboxId(blinkboxId);
     }
 
-    @GetMapping("/product/{productId}")
-    public List<Review> getReviewsByProductId(@PathVariable Long productId) {
+    @GetMapping("/product/{productID}")
+    public List<Review> getReviewsByProductId(@PathVariable Integer productId) {
         return reviewService.getReviewsByProductId(productId);
     }
 
     @GetMapping("/{id}")
-    public Review getReviewById(@PathVariable Long id) {
+    public Review getReviewById(@PathVariable Integer id) {
         return reviewService.getReviewById(id);
     }
 
@@ -45,7 +45,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteReview(@PathVariable Long id) {
+    public void deleteReview(@PathVariable Integer id) {
         reviewService.deleteReview(id);
     }
 }

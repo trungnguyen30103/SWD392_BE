@@ -21,22 +21,22 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<Review> getReviewsByUserId(Long userId) {
+    public List<Review> getReviewsByUserId(Integer userId) {
         return reviewRepository.findByUserId(userId);
     }
 
     @Override
-    public List<Review> getReviewsByBlinkboxId(Long blinkboxId) {
+    public List<Review> getReviewsByBlinkboxId(Integer blinkboxId) {
         return reviewRepository.findByBlindboxId(blinkboxId);
     }
 
     @Override
-    public List<Review> getReviewsByProductId(Long productId) {
+    public List<Review> getReviewsByProductId(Integer productId) {
         return reviewRepository.findByProductId(productId);
     }
 
     @Override
-    public Review getReviewById(Long id) {
+    public Review getReviewById(Integer id) {
         Optional<Review> review = reviewRepository.findById(id);
         return review.orElse(null);
     }
@@ -47,7 +47,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void deleteReview(Long id) {
+    public void deleteReview(Integer id) {
         reviewRepository.deleteById(id);
     }
 }

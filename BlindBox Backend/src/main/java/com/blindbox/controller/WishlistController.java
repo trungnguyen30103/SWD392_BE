@@ -19,13 +19,13 @@ public class WishlistController {
         return wishlistService.getAllWishlists();
     }
 
-    @GetMapping("/user/{userId}")
-    public List<Wishlist> getWishlistsByUserId(@PathVariable Long userId) {
+    @GetMapping("/user/{userID}")
+    public List<Wishlist> getWishlistsByUserId(@PathVariable Integer userId) {
         return wishlistService.getWishlistsByUserId(userId);
     }
 
     @GetMapping("/{id}")
-    public Wishlist getWishlistById(@PathVariable Long id) {
+    public Wishlist getWishlistById(@PathVariable Integer id) {
         return wishlistService.getWishlistById(id);
     }
 
@@ -35,7 +35,7 @@ public class WishlistController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteWishlist(@PathVariable Long id) {
+    public void deleteWishlist(@PathVariable Integer id) {
         wishlistService.deleteWishlist(id);
     }
 }

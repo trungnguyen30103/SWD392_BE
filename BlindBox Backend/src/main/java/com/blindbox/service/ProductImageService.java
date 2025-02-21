@@ -5,8 +5,8 @@ import java.util.List;
 
 public interface ProductImageService {
     List<ProductImage> getAllProductImages();
-    List<ProductImage> getImagesByProductId(Long productId);
-    ProductImage getProductImageById(Long id);
+    List<ProductImage> getImagesByProductId(Integer productId);
+    ProductImage getProductImageById(Integer id);
     ProductImage createProductImage(ProductImage productImage);
-    void deleteProductImage(Long id);
+    void deleteProductImage(Integer id);
 }

@@ -14,8 +14,8 @@ public interface OrderDetailService {
     List<OrderDetail> getAllOrderDetails();
 
     // Lấy chi tiết đơn hàng theo ID
-    Optional<OrderDetail> getOrderDetailById(Long orderDetailID);
+    Optional<OrderDetail> getOrderDetailById(Integer orderDetailID);
 
     // Xóa chi tiết đơn hàng theo ID
-    void deleteOrderDetail(Long orderDetailID);
+    void deleteOrderDetail(Integer orderDetailID);
 }

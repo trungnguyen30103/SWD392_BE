@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/blindboxes")
+@RequestMapping("/api/blindbox")
 public class BlindboxController {
 
     @Autowired
@@ -20,7 +20,7 @@ public class BlindboxController {
     }
 
     @GetMapping("/{id}")
-    public Blindbox getBlindboxById(@PathVariable Long id) {
+    public Blindbox getBlindboxById(@PathVariable Integer id) {
         return blindboxService.getBlindboxById(id);
     }
 
@@ -30,12 +30,12 @@ public class BlindboxController {
     }
 
     @PutMapping("/{id}")
-    public Blindbox updateBlindbox(@PathVariable Long id, @RequestBody Blindbox blindbox) {
+    public Blindbox updateBlindbox(@PathVariable Integer id, @RequestBody Blindbox blindbox) {
         return blindboxService.updateBlindbox(id, blindbox);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBlindbox(@PathVariable Long id) {
+    public void deleteBlindbox(@PathVariable Integer id) {
         blindboxService.deleteBlindbox(id);
     }
 }

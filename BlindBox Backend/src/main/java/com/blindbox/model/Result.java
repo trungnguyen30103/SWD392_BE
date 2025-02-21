@@ -4,29 +4,39 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "results")
+@Table(name = "result")
 public class Result {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long resultID;
+    private Integer resultID;
 
     @ManyToOne
-    @JoinColumn(name = "orderid", referencedColumnName = "orderID")
-    private Order order;  // Giả sử bạn đã có lớp Order
+    @JoinColumn(name = "orderID", referencedColumnName = "orderID")
+    private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "blindboxid", referencedColumnName = "blindboxID")
-    private Blindbox blindbox;  // Giả sử bạn đã có lớp Blindbox
+    @JoinColumn(name = "blindboxID", referencedColumnName = "blindboxID")
+    private Blindbox blindbox;
 
     private LocalDateTime drawTime;
 
+    // Constructors
+    public Result() {
+    }
+
+    public Result(Order order, Blindbox blindbox, LocalDateTime drawTime) {
+        this.order = order;
+        this.blindbox = blindbox;
+        this.drawTime = drawTime;
+    }
+
     // Getters and Setters
-    public Long getResultID() {
+    public Integer getResultID() {
         return resultID;
     }
 
-    public void setResultID(Long resultID) {
+    public void setResultID(Integer resultID) {
         this.resultID = resultID;
     }
 

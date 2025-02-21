@@ -21,7 +21,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Payment getPaymentById(Long id) {
+    public Payment getPaymentById(Integer id) {
         Optional<Payment> payment = paymentRepository.findById(id);
         return payment.orElse(null);
     }
@@ -32,7 +32,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Payment updatePayment(Long id, Payment payment) {
+    public Payment updatePayment(Integer id, Payment payment) {
         if (paymentRepository.existsById(id)) {
             payment.setPaymentId(id);
             return paymentRepository.save(payment);
@@ -41,7 +41,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public void deletePayment(Long id) {
+    public void deletePayment(Integer id) {
         paymentRepository.deleteById(id);
     }
 }

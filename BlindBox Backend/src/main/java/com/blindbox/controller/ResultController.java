@@ -3,13 +3,13 @@ package com.blindbox.controller;
 import com.blindbox.model.Result;
 import com.blindbox.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/results")
+@RequestMapping("/api/result")
 public class ResultController {
 
     @Autowired
@@ -20,18 +20,31 @@ public class ResultController {
         return resultService.getAllResults();
     }
 
-    @GetMapping("/{resultID}")
-    public Optional<Result> getResultById(@PathVariable Long resultID) {
-        return resultService.getResultById(resultID);
+    @GetMapping("/{id}")
+    public ResponseEntity<Result> getResultById(@PathVariable Integer id) {
+        return resultService.getResultById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public Result createResult(@RequestBody Result result) {
-        return resultService.saveResult(result);
+        return resultService.createResult(result);
     }
 
-    @DeleteMapping("/{resultID}")
-    public void deleteResult(@PathVariable Long resultID) {
-        resultService.deleteResult(resultID);
+    @PutMapping("/{id}")
+    public ResponseEntity<Result> updateResult(@PathVariable Integer id, @RequestBody Result result) {
+        Result updatedResult = resultService.updateResult(id, result);
+        if (updatedResult != null) {
+            return ResponseEntity.ok(updatedResult);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteResult(@PathVariable Integer id) {
+        resultService.deleteResult(id);
+        return ResponseEntity.noContent().build();
     }
 }

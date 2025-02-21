@@ -12,18 +12,22 @@ public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long paymentId;
+    private Integer paymentId;
 
     @ManyToOne
-    @JoinColumn(name = "orderId", referencedColumnName = "orderId")
+    @JoinColumn(name = "orderID", nullable = false)  // Kết nối với bảng Order
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "userId", referencedColumnName = "userId")
+    @JoinColumn(name = "userID", nullable = false)  // Kết nối với bảng User
     private User user;
 
+    @Column(precision = 10, scale = 2)  // Định nghĩa kiểu DECIMAL(10,2)
     private BigDecimal amount;
+
     private String status;
+
     private String paymentMethod;
+
     private LocalDateTime createdAt;
 }

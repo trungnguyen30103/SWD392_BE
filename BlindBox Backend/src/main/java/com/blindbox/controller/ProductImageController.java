@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/product-images")
+@RequestMapping("/api/productimages")
 public class ProductImageController {
 
     @Autowired
@@ -19,13 +19,13 @@ public class ProductImageController {
         return productImageService.getAllProductImages();
     }
 
-    @GetMapping("/product/{productId}")
-    public List<ProductImage> getImagesByProductId(@PathVariable Long productId) {
+    @GetMapping("/product/{productID}")
+    public List<ProductImage> getImagesByProductId(@PathVariable Integer productId) {
         return productImageService.getImagesByProductId(productId);
     }
 
     @GetMapping("/{id}")
-    public ProductImage getProductImageById(@PathVariable Long id) {
+    public ProductImage getProductImageById(@PathVariable Integer id) {
         return productImageService.getProductImageById(id);
     }
 
@@ -35,7 +35,7 @@ public class ProductImageController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProductImage(@PathVariable Long id) {
+    public void deleteProductImage(@PathVariable Integer id) {
         productImageService.deleteProductImage(id);
     }
 }

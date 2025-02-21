@@ -21,7 +21,7 @@ public class DiscountServiceImpl implements DiscountService {
     }
 
     @Override
-    public Discount getDiscountById(Long id) {
+    public Discount getDiscountById(Integer id) {
         Optional<Discount> discount = discountRepository.findById(id);
         return discount.orElse(null);
     }
@@ -32,7 +32,7 @@ public class DiscountServiceImpl implements DiscountService {
     }
 
     @Override
-    public Discount updateDiscount(Long id, Discount discount) {
+    public Discount updateDiscount(Integer id, Discount discount) {
         if (discountRepository.existsById(id)) {
             discount.setDiscountId(id);
             return discountRepository.save(discount);
@@ -41,7 +41,7 @@ public class DiscountServiceImpl implements DiscountService {
     }
 
     @Override
-    public void deleteDiscount(Long id) {
+    public void deleteDiscount(Integer id) {
         discountRepository.deleteById(id);
     }
 }

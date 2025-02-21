@@ -21,7 +21,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public CustomerSupport getSupportById(Long id) {
+    public CustomerSupport getSupportById(Integer id) {
         Optional<CustomerSupport> support = supportRepository.findById(id);
         return support.orElse(null);
     }
@@ -32,7 +32,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public CustomerSupport updateSupport(Long id, CustomerSupport support) {
+    public CustomerSupport updateSupport(Integer id, CustomerSupport support) {
         if (supportRepository.existsById(id)) {
             support.setSupportID(id);
             return supportRepository.save(support);
@@ -41,7 +41,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     }
 
     @Override
-    public void deleteSupport(Long id) {
+    public void deleteSupport(Integer id) {
         supportRepository.deleteById(id);
     }
 }

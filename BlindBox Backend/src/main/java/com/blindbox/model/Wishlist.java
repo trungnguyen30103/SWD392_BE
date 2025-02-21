@@ -10,17 +10,17 @@ public class Wishlist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long wishlistId;
+    private Integer wishlistId;
 
     @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "userID", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "blindboxId", nullable = true)
+    @JoinColumn(name = "blindboxID", nullable = true)
     private Blindbox blindbox;
 
     @ManyToOne
-    @JoinColumn(name = "productId", nullable = true)
+    @JoinColumn(name = "productID", nullable = true)
     private Product product;
 }

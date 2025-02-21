@@ -28,13 +28,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     // Lấy chi tiết đơn hàng theo ID
     @Override
-    public Optional<OrderDetail> getOrderDetailById(Long orderDetailID) {
+    public Optional<OrderDetail> getOrderDetailById(Integer orderDetailID) {
         return orderDetailRepository.findById(orderDetailID);
     }
 
     // Xóa chi tiết đơn hàng theo ID
     @Override
-    public void deleteOrderDetail(Long orderDetailID) {
+    public void deleteOrderDetail(Integer orderDetailID) {
         orderDetailRepository.deleteById(orderDetailID);
     }
 }

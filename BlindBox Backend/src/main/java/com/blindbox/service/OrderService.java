@@ -10,7 +10,7 @@ public interface OrderService {
 
     List<Order> getAllOrders();
 
-    Optional<Order> getOrderById(Long orderID);
+    Optional<Order> getOrderById(Integer orderID);
 
-    void deleteOrder(Long orderID);
+    void deleteOrder(Integer orderID);
 }

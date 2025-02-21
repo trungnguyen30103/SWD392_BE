@@ -21,13 +21,13 @@ public class BlindboxImageServiceImpl implements BlindboxImageService {
     }
 
     @Override
-    public List<BlindboxImage> getImagesByBlindboxId(Long blindboxId) {
+    public List<BlindboxImage> getImagesByBlindboxId(Integer blindboxId) {
         return blindboxImageRepository.findByBlindbox_BlindboxID(blindboxId);
     }
 
 
     @Override
-    public BlindboxImage getBlindboxImageById(Long id) {
+    public BlindboxImage getBlindboxImageById(Integer id) {
         Optional<BlindboxImage> blindboxImage = blindboxImageRepository.findById(id);
         return blindboxImage.orElse(null);
     }
@@ -38,7 +38,7 @@ public class BlindboxImageServiceImpl implements BlindboxImageService {
     }
 
     @Override
-    public BlindboxImage updateBlindboxImage(Long id, BlindboxImage blindboxImage) {
+    public BlindboxImage updateBlindboxImage(Integer id, BlindboxImage blindboxImage) {
         if (blindboxImageRepository.existsById(id)) {
             blindboxImage.setBlindboxImageId(id);
             return blindboxImageRepository.save(blindboxImage);
@@ -47,7 +47,7 @@ public class BlindboxImageServiceImpl implements BlindboxImageService {
     }
 
     @Override
-    public void deleteBlindboxImage(Long id) {
+    public void deleteBlindboxImage(Integer id) {
         blindboxImageRepository.deleteById(id);
     }
 }
