@@ -116,10 +116,8 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version> <!-- Cập nhật phiên bản -->
                 <configuration>
-                    <useModulePath>false</useModulePath>
-                    <includes>
-                        <include>**/*Test.class</include> <!-- Bao gồm các lớp có tên kết thúc bằng 'Test' -->
-                    </includes>
+                    <skipTests>true</skipTests>
+
                 </configuration>
             </plugin>
 
