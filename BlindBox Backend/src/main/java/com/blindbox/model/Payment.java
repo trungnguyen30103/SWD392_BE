@@ -30,4 +30,6 @@ public class Payment {
     private String paymentMethod;
 
     private LocalDateTime createdAt;
+
+    private String transactionId;
 }

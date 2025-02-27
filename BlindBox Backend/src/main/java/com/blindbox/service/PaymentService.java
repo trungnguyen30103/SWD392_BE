@@ -9,4 +9,5 @@ public interface PaymentService {
     Payment createPayment(Payment payment);
     Payment updatePayment(Integer id, Payment payment);
     void deletePayment(Integer id);
+    //Payment getPaymentByTransactionId(String transactionId);
 }
