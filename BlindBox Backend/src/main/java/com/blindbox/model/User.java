@@ -17,8 +17,7 @@ public class User {
     private String address;
     private String email;
     private String role;
-    private String firstName;
-    private String lastName;
+    private String fullName;
     private LocalDateTime createdAt;
     private String status;
     private LocalDateTime updatedAt;

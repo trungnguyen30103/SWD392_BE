@@ -22,7 +22,10 @@ public class Order {
     private BigDecimal totalAmount;
 
     @Enumerated(EnumType.STRING)  // Chuyển status thành Enum để tránh lỗi dữ liệu
-    private OrderStatus status;
+    private PaymentStatus paymentStatus;
+
+    @Enumerated(EnumType.STRING)  // Chuyển status thành Enum để tránh lỗi dữ liệu
+    private ShippingStatus shippingStatus;
 
     @ManyToOne
     @JoinColumn(name = "shipmentID")
