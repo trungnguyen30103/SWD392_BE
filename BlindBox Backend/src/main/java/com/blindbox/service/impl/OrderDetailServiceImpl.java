@@ -1,7 +1,8 @@
-package com.blindbox.service;
+package com.blindbox.service.impl;
 
 import com.blindbox.model.OrderDetail;
 import com.blindbox.repository.OrderDetailRepository;
+import com.blindbox.service.OrderDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,27 +15,37 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Autowired
     private OrderDetailRepository orderDetailRepository;
 
-    // Tạo chi tiết đơn hàng mới
-    @Override
-    public OrderDetail createOrderDetail(OrderDetail orderDetail) {
-        return orderDetailRepository.save(orderDetail);
-    }
-
-    // Lấy tất cả chi tiết đơn hàng
     @Override
     public List<OrderDetail> getAllOrderDetails() {
         return orderDetailRepository.findAll();
     }
 
-    // Lấy chi tiết đơn hàng theo ID
     @Override
-    public Optional<OrderDetail> getOrderDetailById(Integer orderDetailID) {
-        return orderDetailRepository.findById(orderDetailID);
+    public OrderDetail getOrderDetailById(Integer id) {
+        Optional<OrderDetail> orderDetail = orderDetailRepository.findById(id);
+        return orderDetail.orElse(null);
     }
 
-    // Xóa chi tiết đơn hàng theo ID
     @Override
-    public void deleteOrderDetail(Integer orderDetailID) {
-        orderDetailRepository.deleteById(orderDetailID);
+    public OrderDetail createOrderDetail(OrderDetail orderDetail) {
+        return orderDetailRepository.save(orderDetail);
+    }
+
+    @Override
+    public OrderDetail updateOrderDetail(Integer id, OrderDetail orderDetail) {
+        if (orderDetailRepository.existsById(id)) {
+            orderDetail.setOrderDetailID(id);
+            return orderDetailRepository.save(orderDetail);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean deleteOrderDetail(Integer id) {
+        if (orderDetailRepository.existsById(id)) {
+            orderDetailRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

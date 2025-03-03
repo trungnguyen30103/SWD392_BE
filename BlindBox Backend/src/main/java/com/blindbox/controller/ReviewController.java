@@ -3,49 +3,62 @@ package com.blindbox.controller;
 import com.blindbox.model.Review;
 import com.blindbox.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/review")
+@RequestMapping("/reviews")
 public class ReviewController {
 
     @Autowired
     private ReviewService reviewService;
 
+    // Lấy tất cả đánh giá
     @GetMapping
-    public List<Review> getAllReviews() {
-        return reviewService.getAllReviews();
+    public ResponseEntity<List<Review>> getAllReviews() {
+        List<Review> reviews = reviewService.getAllReviews();
+        return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 
-    @GetMapping("/user/{userID}")
-    public List<Review> getReviewsByUserId(@PathVariable Integer userId) {
-        return reviewService.getReviewsByUserId(userId);
-    }
-
-    @GetMapping("/blinkbox/{blindboxID}")
-    public List<Review> getReviewsByBlinkboxId(@PathVariable Integer blinkboxId) {
-        return reviewService.getReviewsByBlinkboxId(blinkboxId);
-    }
-
-    @GetMapping("/product/{productID}")
-    public List<Review> getReviewsByProductId(@PathVariable Integer productId) {
-        return reviewService.getReviewsByProductId(productId);
-    }
-
+    // Lấy đánh giá theo ID
     @GetMapping("/{id}")
-    public Review getReviewById(@PathVariable Integer id) {
-        return reviewService.getReviewById(id);
+    public ResponseEntity<Review> getReviewById(@PathVariable Integer id) {
+        Review review = reviewService.getReviewById(id);
+        if (review != null) {
+            return new ResponseEntity<>(review, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
+    // Tạo mới đánh giá
     @PostMapping
-    public Review createReview(@RequestBody Review review) {
-        return reviewService.createReview(review);
+    public ResponseEntity<Review> createReview(@RequestBody Review review) {
+        Review createdReview = reviewService.createReview(review);
+        return new ResponseEntity<>(createdReview, HttpStatus.CREATED);
     }
 
+    // Cập nhật đánh giá
+    @PutMapping("/{id}")
+    public ResponseEntity<Review> updateReview(@PathVariable Integer id, @RequestBody Review review) {
+        Review updatedReview = reviewService.updateReview(id, review);
+        if (updatedReview != null) {
+            return new ResponseEntity<>(updatedReview, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // Xóa đánh giá
     @DeleteMapping("/{id}")
-    public void deleteReview(@PathVariable Integer id) {
-        reviewService.deleteReview(id);
+    public ResponseEntity<Void> deleteReview(@PathVariable Integer id) {
+        if (reviewService.deleteReview(id)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

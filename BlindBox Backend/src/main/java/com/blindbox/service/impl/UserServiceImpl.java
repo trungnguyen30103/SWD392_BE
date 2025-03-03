@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Integer id) {
         Optional<User> user = userRepository.findById(id);
-        return user.orElse(null); // Trả về null nếu không tìm thấy người dùng
+        return user.orElse(null);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
             user.setUserID(id);
             return userRepository.save(user);
         }
-        return null; // Trả về null nếu không tìm thấy người dùng
+        return null;
     }
 
     @Override
@@ -46,6 +46,6 @@ public class UserServiceImpl implements UserService {
             userRepository.deleteById(id);
             return true;
         }
-        return false; // Trả về false nếu không tìm thấy người dùng
+        return false;
     }
 }

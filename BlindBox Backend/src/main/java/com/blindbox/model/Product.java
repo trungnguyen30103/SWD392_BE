@@ -9,24 +9,31 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "product")
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
     private Integer productID;
 
+    @Column(name = "name", nullable = false, length = 255)
     private String productName;
 
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "categoryID", nullable = false)  // Quan hệ với bảng Category
-    private Category category;  // Liên kết với bảng Category
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
-    @Column(precision = 10, scale = 2)  // Định nghĩa kiểu DECIMAL(10,2)
+    @Column(name = "price", precision = 10, scale = 2, nullable = false)
     private BigDecimal price;
 
+    @Column(name = "stock_quantity", nullable = false)
     private Integer stock;
 
-    private LocalDateTime createdAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Column(name = "updated_at", insertable = false)
     private LocalDateTime lastUpdated;
 }

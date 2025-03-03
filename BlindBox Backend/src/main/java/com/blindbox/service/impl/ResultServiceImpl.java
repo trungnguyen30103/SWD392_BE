@@ -1,7 +1,8 @@
-package com.blindbox.service;
+package com.blindbox.service.impl;
 
 import com.blindbox.model.Result;
 import com.blindbox.repository.ResultRepository;
+import com.blindbox.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,9 @@ public class ResultServiceImpl implements ResultService {
     }
 
     @Override
-    public Optional<Result> getResultById(Integer id) {
-        return resultRepository.findById(id);
+    public Result getResultById(Integer id) {
+        Optional<Result> result = resultRepository.findById(id);
+        return result.orElse(null);
     }
 
     @Override
@@ -31,20 +33,19 @@ public class ResultServiceImpl implements ResultService {
 
     @Override
     public Result updateResult(Integer id, Result result) {
-        Optional<Result> existing = resultRepository.findById(id);
-        if(existing.isPresent()){
-            Result existingResult = existing.get();
-            existingResult.setOrder(result.getOrder());
-            existingResult.setBlindbox(result.getBlindbox());
-            existingResult.setDrawTime(result.getDrawTime());
-            return resultRepository.save(existingResult);
-        } else {
-            return null;
+        if (resultRepository.existsById(id)) {
+            result.setResultID(id);
+            return resultRepository.save(result);
         }
+        return null;
     }
 
     @Override
-    public void deleteResult(Integer id) {
-        resultRepository.deleteById(id);
+    public boolean deleteResult(Integer id) {
+        if (resultRepository.existsById(id)) {
+            resultRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

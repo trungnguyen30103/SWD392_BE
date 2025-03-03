@@ -3,38 +3,62 @@ package com.blindbox.controller;
 import com.blindbox.model.OrderDetail;
 import com.blindbox.service.OrderDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/orderdetail")
+@RequestMapping("/order-details")
 public class OrderDetailController {
 
     @Autowired
     private OrderDetailService orderDetailService;
 
-    // Tạo chi tiết đơn hàng mới
-    @PostMapping
-    public OrderDetail createOrderDetail(@RequestBody OrderDetail orderDetail) {
-        return orderDetailService.createOrderDetail(orderDetail);
-    }
-
-    // Lấy tất cả chi tiết đơn hàng
+    // Lấy tất cả OrderDetails
     @GetMapping
-    public List<OrderDetail> getAllOrderDetails() {
-        return orderDetailService.getAllOrderDetails();
+    public ResponseEntity<List<OrderDetail>> getAllOrderDetails() {
+        List<OrderDetail> orderDetails = orderDetailService.getAllOrderDetails();
+        return new ResponseEntity<>(orderDetails, HttpStatus.OK);
     }
 
-    // Lấy chi tiết đơn hàng theo ID
-    @GetMapping("/{orderDetailID}")
-    public Optional<OrderDetail> getOrderDetailById(@PathVariable Integer orderDetailID) {
-        return orderDetailService.getOrderDetailById(orderDetailID);
+    // Lấy OrderDetail theo ID
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderDetail> getOrderDetailById(@PathVariable Integer id) {
+        OrderDetail orderDetail = orderDetailService.getOrderDetailById(id);
+        if (orderDetail != null) {
+            return new ResponseEntity<>(orderDetail, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    // Xóa chi tiết đơn hàng theo ID
-    @DeleteMapping("/{orderDetailID}")
-    public void deleteOrderDetail(@PathVariable Integer orderDetailID) {
-        orderDetailService.deleteOrderDetail(orderDetailID);
+    // Tạo mới OrderDetail
+    @PostMapping
+    public ResponseEntity<OrderDetail> createOrderDetail(@RequestBody OrderDetail orderDetail) {
+        OrderDetail createdOrderDetail = orderDetailService.createOrderDetail(orderDetail);
+        return new ResponseEntity<>(createdOrderDetail, HttpStatus.CREATED);
+    }
+
+    // Cập nhật OrderDetail
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderDetail> updateOrderDetail(@PathVariable Integer id, @RequestBody OrderDetail orderDetail) {
+        OrderDetail updatedOrderDetail = orderDetailService.updateOrderDetail(id, orderDetail);
+        if (updatedOrderDetail != null) {
+            return new ResponseEntity<>(updatedOrderDetail, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // Xóa OrderDetail
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOrderDetail(@PathVariable Integer id) {
+        if (orderDetailService.deleteOrderDetail(id)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

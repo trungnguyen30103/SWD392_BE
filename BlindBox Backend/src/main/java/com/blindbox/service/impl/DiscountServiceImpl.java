@@ -33,15 +33,19 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public Discount updateDiscount(Integer id, Discount discount) {
-        if (discountRepository.existsById(id)) {
-            discount.setDiscountId(id);
-            return discountRepository.save(discount);
+        if (!discountRepository.existsById(id)) {
+            return null;
         }
-        return null;
+        discount.setDiscountId(id);
+        return discountRepository.save(discount);
     }
 
     @Override
-    public void deleteDiscount(Integer id) {
+    public boolean deleteDiscount(Integer id) {
+        if (!discountRepository.existsById(id)) {
+            return false;
+        }
         discountRepository.deleteById(id);
+        return true;
     }
 }

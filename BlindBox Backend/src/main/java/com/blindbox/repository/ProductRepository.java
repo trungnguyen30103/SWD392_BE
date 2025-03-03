@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
+    // Các truy vấn đặc biệt có thể được viết tại đây nếu cần
 }

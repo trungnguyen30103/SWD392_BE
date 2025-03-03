@@ -34,14 +34,16 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category updateCategory(Integer id, Category category) {
         if (categoryRepository.existsById(id)) {
-            category.setCategoryID(id);
+            category.setCategoryId(id); // Đảm bảo ID không bị thay đổi
             return categoryRepository.save(category);
         }
-        return null;
+        return null; // Không tìm thấy ID cần cập nhật
     }
 
     @Override
     public void deleteCategory(Integer id) {
-        categoryRepository.deleteById(id);
+        if (categoryRepository.existsById(id)) {
+            categoryRepository.deleteById(id);
+        }
     }
 }

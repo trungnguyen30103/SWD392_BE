@@ -3,44 +3,51 @@ package com.blindbox.controller;
 import com.blindbox.model.BlindboxImage;
 import com.blindbox.service.BlindboxImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/blindboximages")
+@RequestMapping("/api/blindbox-images")
 public class BlindboxImageController {
 
-    @Autowired
-    private BlindboxImageService blindboxImageService;
+    private final BlindboxImageService blindboxImageService;
 
-    @GetMapping
-    public List<BlindboxImage> getAllBlindboxImages() {
-        return blindboxImageService.getAllBlindboxImages();
+    @Autowired
+    public BlindboxImageController(BlindboxImageService blindboxImageService) {
+        this.blindboxImageService = blindboxImageService;
     }
 
-    @GetMapping("/blindbox/{blindboxID}")
-    public List<BlindboxImage> getImagesByBlindboxId(@PathVariable Integer blindboxId) {
-        return blindboxImageService.getImagesByBlindboxId(blindboxId);
+    @GetMapping
+    public ResponseEntity<List<BlindboxImage>> getAllImages() {
+        List<BlindboxImage> images = blindboxImageService.getAllImages();
+        return new ResponseEntity<>(images, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public BlindboxImage getBlindboxImageById(@PathVariable Integer id) {
-        return blindboxImageService.getBlindboxImageById(id);
+    public ResponseEntity<BlindboxImage> getImageById(@PathVariable Integer id) {
+        BlindboxImage image = blindboxImageService.getImageById(id);
+        return new ResponseEntity<>(image, HttpStatus.OK);
     }
 
     @PostMapping
-    public BlindboxImage createBlindboxImage(@RequestBody BlindboxImage blindboxImage) {
-        return blindboxImageService.createBlindboxImage(blindboxImage);
+    public ResponseEntity<BlindboxImage> createImage(@RequestBody BlindboxImage image) {
+        BlindboxImage createdImage = blindboxImageService.createImage(image);
+        return new ResponseEntity<>(createdImage, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public BlindboxImage updateBlindboxImage(@PathVariable Integer id, @RequestBody BlindboxImage blindboxImage) {
-        return blindboxImageService.updateBlindboxImage(id, blindboxImage);
+    public ResponseEntity<BlindboxImage> updateImage(@PathVariable Integer id, @RequestBody BlindboxImage image) {
+        image.setBlindboxImageId(id);
+        BlindboxImage updatedImage = blindboxImageService.updateImage(image);
+        return new ResponseEntity<>(updatedImage, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBlindboxImage(@PathVariable Integer id) {
-        blindboxImageService.deleteBlindboxImage(id);
+    public ResponseEntity<Void> deleteImage(@PathVariable Integer id) {
+        blindboxImageService.deleteImage(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

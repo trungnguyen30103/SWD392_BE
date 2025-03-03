@@ -5,14 +5,19 @@ import com.blindbox.repository.OrderRepository;
 import com.blindbox.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
+    private final OrderRepository orderRepository;
+
     @Autowired
-    private OrderRepository orderRepository;
+    public OrderServiceImpl(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
 
     @Override
     public Order createOrder(Order order) {
@@ -25,12 +30,26 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Optional<Order> getOrderById(Integer orderID) {
-        return orderRepository.findById(orderID);
+    public Order getOrderById(Integer orderId) {
+        Optional<Order> order = orderRepository.findById(orderId);
+        return order.orElse(null);
     }
 
     @Override
-    public void deleteOrder(Integer orderID) {
-        orderRepository.deleteById(orderID);
+    public Order updateOrder(Integer orderId, Order order) {
+        if (orderRepository.existsById(orderId)) {
+            order.setOrderID(orderId);
+            return orderRepository.save(order);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean deleteOrder(Integer orderId) {
+        if (orderRepository.existsById(orderId)) {
+            orderRepository.deleteById(orderId);
+            return true;
+        }
+        return false;
     }
 }

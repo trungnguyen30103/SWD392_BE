@@ -14,28 +14,27 @@ public class WishlistController {
     @Autowired
     private WishlistService wishlistService;
 
+    // Get all wishlist items
     @GetMapping
-    public List<Wishlist> getAllWishlists() {
-        return wishlistService.getAllWishlists();
+    public List<Wishlist> getAllWishlistItems() {
+        return wishlistService.getAllWishlistItems();
     }
 
-    @GetMapping("/user/{userID}")
-    public List<Wishlist> getWishlistsByUserId(@PathVariable Integer userId) {
-        return wishlistService.getWishlistsByUserId(userId);
-    }
-
-    @GetMapping("/{id}")
-    public Wishlist getWishlistById(@PathVariable Integer id) {
-        return wishlistService.getWishlistById(id);
-    }
-
+    // Add a new product to wishlist
     @PostMapping
-    public Wishlist createWishlist(@RequestBody Wishlist wishlist) {
-        return wishlistService.createWishlist(wishlist);
+    public Wishlist addProductToWishlist(@RequestBody Wishlist wishlist) {
+        return wishlistService.addProductToWishlist(wishlist);
     }
 
+    // Get wishlist item by ID
+    @GetMapping("/{id}")
+    public Wishlist getWishlistItemById(@PathVariable Integer id) {
+        return wishlistService.getWishlistItemById(id);
+    }
+
+    // Remove product from wishlist
     @DeleteMapping("/{id}")
-    public void deleteWishlist(@PathVariable Integer id) {
-        wishlistService.deleteWishlist(id);
+    public void removeProductFromWishlist(@PathVariable Integer id) {
+        wishlistService.removeProductFromWishlist(id);
     }
 }

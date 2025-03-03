@@ -1,21 +1,12 @@
 package com.blindbox.service;
 
 import com.blindbox.model.OrderDetail;
-
 import java.util.List;
-import java.util.Optional;
 
 public interface OrderDetailService {
-
-    // Tạo chi tiết đơn hàng mới
-    OrderDetail createOrderDetail(OrderDetail orderDetail);
-
-    // Lấy tất cả chi tiết đơn hàng
     List<OrderDetail> getAllOrderDetails();
-
-    // Lấy chi tiết đơn hàng theo ID
-    Optional<OrderDetail> getOrderDetailById(Integer orderDetailID);
-
-    // Xóa chi tiết đơn hàng theo ID
-    void deleteOrderDetail(Integer orderDetailID);
+    OrderDetail getOrderDetailById(Integer id);
+    OrderDetail createOrderDetail(OrderDetail orderDetail);
+    OrderDetail updateOrderDetail(Integer id, OrderDetail orderDetail);
+    boolean deleteOrderDetail(Integer id);
 }

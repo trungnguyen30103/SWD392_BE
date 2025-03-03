@@ -13,35 +13,37 @@ import java.util.Optional;
 public class CustomerSupportServiceImpl implements CustomerSupportService {
 
     @Autowired
-    private CustomerSupportRepository supportRepository;
+    private CustomerSupportRepository customerSupportRepository;
 
     @Override
-    public List<CustomerSupport> getAllSupports() {
-        return supportRepository.findAll();
+    public List<CustomerSupport> getAllCustomerSupports() {
+        return customerSupportRepository.findAll();
     }
 
     @Override
-    public CustomerSupport getSupportById(Integer id) {
-        Optional<CustomerSupport> support = supportRepository.findById(id);
-        return support.orElse(null);
+    public CustomerSupport getCustomerSupportById(Integer id) {
+        Optional<CustomerSupport> customerSupport = customerSupportRepository.findById(id);
+        return customerSupport.orElse(null);
     }
 
     @Override
-    public CustomerSupport createSupport(CustomerSupport support) {
-        return supportRepository.save(support);
+    public CustomerSupport createCustomerSupport(CustomerSupport customerSupport) {
+        return customerSupportRepository.save(customerSupport);
     }
 
     @Override
-    public CustomerSupport updateSupport(Integer id, CustomerSupport support) {
-        if (supportRepository.existsById(id)) {
-            support.setSupportID(id);
-            return supportRepository.save(support);
+    public CustomerSupport updateCustomerSupport(Integer id, CustomerSupport customerSupport) {
+        if (customerSupportRepository.existsById(id)) {
+            customerSupport.setSupportId(id); // Đảm bảo ID không bị thay đổi
+            return customerSupportRepository.save(customerSupport);
         }
-        return null;
+        return null; // Nếu không tìm thấy ID để cập nhật
     }
 
     @Override
-    public void deleteSupport(Integer id) {
-        supportRepository.deleteById(id);
+    public void deleteCustomerSupport(Integer id) {
+        if (customerSupportRepository.existsById(id)) {
+            customerSupportRepository.deleteById(id);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.blindbox.service;
 
 import com.blindbox.model.Category;
+
 import java.util.List;
 
 public interface CategoryService {

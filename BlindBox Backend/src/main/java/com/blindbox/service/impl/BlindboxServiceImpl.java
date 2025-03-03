@@ -12,8 +12,12 @@ import java.util.Optional;
 @Service
 public class BlindboxServiceImpl implements BlindboxService {
 
+    private final BlindboxRepository blindboxRepository;
+
     @Autowired
-    private BlindboxRepository blindboxRepository;
+    public BlindboxServiceImpl(BlindboxRepository blindboxRepository) {
+        this.blindboxRepository = blindboxRepository;
+    }
 
     @Override
     public List<Blindbox> getAllBlindboxes() {
@@ -23,7 +27,7 @@ public class BlindboxServiceImpl implements BlindboxService {
     @Override
     public Blindbox getBlindboxById(Integer id) {
         Optional<Blindbox> blindbox = blindboxRepository.findById(id);
-        return blindbox.orElse(null);
+        return blindbox.orElseThrow(() -> new RuntimeException("Blindbox not found"));
     }
 
     @Override
@@ -32,12 +36,11 @@ public class BlindboxServiceImpl implements BlindboxService {
     }
 
     @Override
-    public Blindbox updateBlindbox(Integer id, Blindbox blindbox) {
-        if (blindboxRepository.existsById(id)) {
-            blindbox.setBlindboxID(id);
-            return blindboxRepository.save(blindbox);
+    public Blindbox updateBlindbox(Blindbox blindbox) {
+        if (!blindboxRepository.existsById(blindbox.getBlindboxId())) {
+            throw new RuntimeException("Blindbox not found");
         }
-        return null;
+        return blindboxRepository.save(blindbox);
     }
 
     @Override

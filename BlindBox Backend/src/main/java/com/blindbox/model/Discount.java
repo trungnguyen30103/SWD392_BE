@@ -14,21 +14,20 @@ public class Discount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer discountId;
 
-    @Column(nullable = false, precision = 5, scale = 2)  // Không cho phép NULL
-    private BigDecimal discountPercentage;
+    @Column(nullable = false, precision = 4, scale = 2)
+    private BigDecimal discountPercentage;  // Percentage of the discount
 
     @Column(nullable = false)
-    private LocalDateTime startDate;
+    private LocalDateTime startDate;  // Discount start date
 
     @Column(nullable = false)
-    private LocalDateTime endDate;
+    private LocalDateTime endDate;  // Discount end date
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private DiscountStatus status;
+    private DiscountStatus status;  // Enum for discount status (ACTIVE, EXPIRED)
 
-    // Nếu giảm giá áp dụng cho một sản phẩm cụ thể
     @ManyToOne
-    @JoinColumn(name = "blindboxID", referencedColumnName = "blindboxID")
-    private Blindbox blindbox;
+    @JoinColumn(name = "blindbox_id", referencedColumnName = "blindbox_id")
+    private Blindbox blindbox;  // Reference to Blindbox
 }

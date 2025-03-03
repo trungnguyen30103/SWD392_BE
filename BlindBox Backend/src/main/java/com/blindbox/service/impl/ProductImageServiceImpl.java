@@ -21,11 +21,6 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
-    public List<ProductImage> getImagesByProductId(Integer productId) {
-        return productImageRepository.findByProductId(productId);
-    }
-
-    @Override
     public ProductImage getProductImageById(Integer id) {
         Optional<ProductImage> productImage = productImageRepository.findById(id);
         return productImage.orElse(null);
@@ -37,7 +32,20 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
-    public void deleteProductImage(Integer id) {
-        productImageRepository.deleteById(id);
+    public ProductImage updateProductImage(Integer id, ProductImage productImage) {
+        if (productImageRepository.existsById(id)) {
+            productImage.setProductImageId(id);
+            return productImageRepository.save(productImage);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean deleteProductImage(Integer id) {
+        if (productImageRepository.existsById(id)) {
+            productImageRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

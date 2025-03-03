@@ -1,6 +1,7 @@
 package com.blindbox.service;
 
 import com.blindbox.model.Product;
+
 import java.util.List;
 
 public interface ProductService {
@@ -8,5 +9,5 @@ public interface ProductService {
     Product getProductById(Integer id);
     Product createProduct(Product product);
     Product updateProduct(Integer id, Product product);
-    void deleteProduct(Integer id);
+    boolean deleteProduct(Integer id);
 }

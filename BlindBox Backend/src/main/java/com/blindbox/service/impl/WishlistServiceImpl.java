@@ -16,28 +16,23 @@ public class WishlistServiceImpl implements WishlistService {
     private WishlistRepository wishlistRepository;
 
     @Override
-    public List<Wishlist> getAllWishlists() {
+    public List<Wishlist> getAllWishlistItems() {
         return wishlistRepository.findAll();
     }
 
     @Override
-    public List<Wishlist> getWishlistsByUserId(Integer userId) {
-        return wishlistRepository.findByUserId(userId);
-    }
-
-    @Override
-    public Wishlist getWishlistById(Integer id) {
-        Optional<Wishlist> wishlist = wishlistRepository.findById(id);
-        return wishlist.orElse(null);
-    }
-
-    @Override
-    public Wishlist createWishlist(Wishlist wishlist) {
+    public Wishlist addProductToWishlist(Wishlist wishlist) {
         return wishlistRepository.save(wishlist);
     }
 
     @Override
-    public void deleteWishlist(Integer id) {
+    public Wishlist getWishlistItemById(Integer id) {
+        Optional<Wishlist> wishlist = wishlistRepository.findById(id);
+        return wishlist.orElse(null); // Nếu không tìm thấy sẽ trả về null
+    }
+
+    @Override
+    public void removeProductFromWishlist(Integer id) {
         wishlistRepository.deleteById(id);
     }
 }

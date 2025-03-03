@@ -12,42 +12,39 @@ import java.util.Optional;
 @Service
 public class BlindboxImageServiceImpl implements BlindboxImageService {
 
+    private final BlindboxImageRepository blindboxImageRepository;
+
     @Autowired
-    private BlindboxImageRepository blindboxImageRepository;
+    public BlindboxImageServiceImpl(BlindboxImageRepository blindboxImageRepository) {
+        this.blindboxImageRepository = blindboxImageRepository;
+    }
 
     @Override
-    public List<BlindboxImage> getAllBlindboxImages() {
+    public List<BlindboxImage> getAllImages() {
         return blindboxImageRepository.findAll();
     }
 
     @Override
-    public List<BlindboxImage> getImagesByBlindboxId(Integer blindboxId) {
-        return blindboxImageRepository.findByBlindbox_BlindboxID(blindboxId);
-    }
-
-
-    @Override
-    public BlindboxImage getBlindboxImageById(Integer id) {
-        Optional<BlindboxImage> blindboxImage = blindboxImageRepository.findById(id);
-        return blindboxImage.orElse(null);
+    public BlindboxImage getImageById(Integer id) {
+        Optional<BlindboxImage> image = blindboxImageRepository.findById(id);
+        return image.orElseThrow(() -> new RuntimeException("Image not found"));
     }
 
     @Override
-    public BlindboxImage createBlindboxImage(BlindboxImage blindboxImage) {
-        return blindboxImageRepository.save(blindboxImage);
+    public BlindboxImage createImage(BlindboxImage image) {
+        return blindboxImageRepository.save(image);
     }
 
     @Override
-    public BlindboxImage updateBlindboxImage(Integer id, BlindboxImage blindboxImage) {
-        if (blindboxImageRepository.existsById(id)) {
-            blindboxImage.setBlindboxImageId(id);
-            return blindboxImageRepository.save(blindboxImage);
+    public BlindboxImage updateImage(BlindboxImage image) {
+        if (!blindboxImageRepository.existsById(image.getBlindboxImageId())) {
+            throw new RuntimeException("Image not found");
         }
-        return null;
+        return blindboxImageRepository.save(image);
     }
 
     @Override
-    public void deleteBlindboxImage(Integer id) {
+    public void deleteImage(Integer id) {
         blindboxImageRepository.deleteById(id);
     }
 }

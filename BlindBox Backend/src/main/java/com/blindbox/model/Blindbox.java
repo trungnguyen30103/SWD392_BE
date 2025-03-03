@@ -11,18 +11,41 @@ public class Blindbox {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer blindboxID;
+    private Integer blindboxId;  // ✅ Đổi tên theo camelCase
 
+    @Column(nullable = false, length = 255)
     private String blindboxName;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
+
+    @Column(nullable = false)
     private Double price;
+
     private Byte rating;
+
+    @Column(nullable = false)
     private Integer stock;
+
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
     private LocalDateTime lastUpdated;
 
     // Thiết lập quan hệ với Category
     @ManyToOne
-    @JoinColumn(name = "categoryID", referencedColumnName = "categoryID", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false) // ✅ Tên cột nên dùng snake_case
     private Category category;
+
+    // Tự động cập nhật thời gian
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.lastUpdated = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.lastUpdated = LocalDateTime.now();
+    }
 }

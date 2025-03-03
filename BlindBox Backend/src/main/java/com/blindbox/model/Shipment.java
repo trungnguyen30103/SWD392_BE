@@ -15,20 +15,20 @@ public class Shipment {
 
     @ManyToOne
     @JoinColumn(name = "orderID", referencedColumnName = "orderID", nullable = false)
-    private Order order;
+    private Order order;  // Liên kết với bảng Order
 
-    private String trackingNumber;
-    private String carrier;
+    @Column(nullable = false)
+    private String address;  // Địa chỉ giao hàng, không được null
 
-    @Enumerated(EnumType.STRING)
-    private ShipmentStatus status;
+    @Column(nullable = false)
+    private String method;  // Phương thức giao hàng (standard, express)
 
-
-    private LocalDateTime shippedAt;
+    @Column(nullable = false)
+    private String status;  // Trạng thái giao hàng (pending, shipped, delivered)
 
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();  // Thời gian tạo mặc định
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;  // Thời gian cập nhật giao hàng
+
 }

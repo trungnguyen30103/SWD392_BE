@@ -1,8 +1,8 @@
 package com.blindbox.model;
 
-public enum PaymentStatus {
+public enum OrderStatus {
     PENDING,
     COMPLETED,
-    FAILED,
+    CANCELLED,
     REFUNDED
 }

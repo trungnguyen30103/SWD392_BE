@@ -41,7 +41,11 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
 
     @Override
-    public void deleteShipment(Integer id) {
-        shipmentRepository.deleteById(id);
+    public boolean deleteShipment(Integer id) {
+        if (shipmentRepository.existsById(id)) {
+            shipmentRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

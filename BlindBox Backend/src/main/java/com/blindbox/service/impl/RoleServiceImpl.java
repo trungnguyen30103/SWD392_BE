@@ -1,4 +1,4 @@
-package com.blindbox.service.imlp;
+package com.blindbox.service.impl;
 
 import com.blindbox.model.Role;
 import com.blindbox.repository.RoleRepository;
@@ -21,8 +21,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Optional<Role> getRoleById(Integer id) {
-        return roleRepository.findById(id);
+    public Role getRoleById(Integer id) {
+        Optional<Role> role = roleRepository.findById(id);
+        return role.orElse(null);
     }
 
     @Override
@@ -32,19 +33,19 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role updateRole(Integer id, Role role) {
-        Optional<Role> existing = roleRepository.findById(id);
-        if (existing.isPresent()) {
-            Role existingRole = existing.get();
-            existingRole.setUser(role.getUser());
-            existingRole.setRoleName(role.getRoleName());
-            return roleRepository.save(existingRole);
-        } else {
-            return null;
+        if (roleRepository.existsById(id)) {
+            role.setRoleID(id);
+            return roleRepository.save(role);
         }
+        return null;
     }
 
     @Override
-    public void deleteRole(Integer id) {
-        roleRepository.deleteById(id);
+    public boolean deleteRole(Integer id) {
+        if (roleRepository.existsById(id)) {
+            roleRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

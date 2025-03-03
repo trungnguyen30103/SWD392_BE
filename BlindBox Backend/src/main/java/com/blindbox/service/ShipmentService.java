@@ -1,6 +1,7 @@
 package com.blindbox.service;
 
 import com.blindbox.model.Shipment;
+
 import java.util.List;
 
 public interface ShipmentService {
@@ -8,5 +9,5 @@ public interface ShipmentService {
     Shipment getShipmentById(Integer id);
     Shipment createShipment(Shipment shipment);
     Shipment updateShipment(Integer id, Shipment shipment);
-    void deleteShipment(Integer id);
+    boolean deleteShipment(Integer id);
 }

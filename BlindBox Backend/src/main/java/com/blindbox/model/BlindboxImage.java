@@ -5,17 +5,17 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "blindboximage")
+@Table(name = "blindbox_image") // Sử dụng snake_case cho chuẩn SQL
 public class BlindboxImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer blindboxImageId;
 
-    @ManyToOne(cascade = CascadeType.ALL) // Đảm bảo ảnh bị xóa khi Blindbox bị xóa
-    @JoinColumn(name = "blindboxID", referencedColumnName = "blindboxID", nullable = false)
+    @ManyToOne(cascade = CascadeType.MERGE) // Tránh xóa nhầm Blindbox
+    @JoinColumn(name = "blindbox_id", referencedColumnName = "blindboxId", nullable = false)
     private Blindbox blindbox;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 500) // Định nghĩa độ dài tối đa
     private String imageUrl;
 }

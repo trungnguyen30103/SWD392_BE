@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BlindboxRepository extends JpaRepository<Blindbox, Integer> {
+    // Có thể thêm các truy vấn đặc biệt nếu cần
 }

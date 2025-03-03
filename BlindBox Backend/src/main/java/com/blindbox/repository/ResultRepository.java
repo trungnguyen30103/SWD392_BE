@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ResultRepository extends JpaRepository<Result, Integer> {
-    // Thêm các phương thức truy vấn tùy chỉnh nếu cần
+    // Các truy vấn đặc biệt có thể được viết tại đây nếu cần
 }

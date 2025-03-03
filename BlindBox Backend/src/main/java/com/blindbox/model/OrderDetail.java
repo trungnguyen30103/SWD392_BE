@@ -3,30 +3,32 @@ package com.blindbox.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "orderdetail")
+@Table(name = "order_detail")
 public class OrderDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_detail_id")
     private Integer orderDetailID;
 
-    @ManyToOne
-    @JoinColumn(name = "orderID", nullable = false)
-    private Order order;  // Thay vì Integer orderID
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "blindboxID", nullable = false)
-    private Blindbox blindbox;  // Thay vì Integer blindboxID
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
-    @ManyToOne
-    @JoinColumn(name = "productID", nullable = false)
-    private Product product;  // Thay vì Integer productID
-
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @Column(precision = 10, scale = 2)  // Định nghĩa kiểu DECIMAL(10,2)
+    @Column(name = "price", precision = 10, scale = 2, nullable = false)
     private BigDecimal price;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

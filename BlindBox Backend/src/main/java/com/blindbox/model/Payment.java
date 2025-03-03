@@ -12,24 +12,29 @@ public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "payment_id")
     private Integer paymentId;
 
-    @ManyToOne
-    @JoinColumn(name = "orderID", nullable = false)  // Kết nối với bảng Order
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "userID", nullable = false)  // Kết nối với bảng User
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(precision = 10, scale = 2)  // Định nghĩa kiểu DECIMAL(10,2)
+    @Column(name = "amount", precision = 10, scale = 2, nullable = false)
     private BigDecimal amount;
 
+    @Column(name = "status", nullable = false, length = 50)
     private String status;
 
+    @Column(name = "method", nullable = false, length = 50)
     private String paymentMethod;
 
-    private LocalDateTime createdAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Column(name = "transaction_id", nullable = false, length = 100, unique = true)
     private String transactionId;
 }
