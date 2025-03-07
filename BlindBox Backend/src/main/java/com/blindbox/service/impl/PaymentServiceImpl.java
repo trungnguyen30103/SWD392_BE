@@ -34,7 +34,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Payment updatePayment(Integer id, Payment payment) {
         if (paymentRepository.existsById(id)) {
-            payment.setPaymentId(id);
+            payment.setPaymentID(id);
             return paymentRepository.save(payment);
         }
         return null;

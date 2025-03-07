@@ -11,7 +11,7 @@ public class Blindbox {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer blindboxId;  // ✅ Đổi tên theo camelCase
+    private Integer blindboxID;  // ✅ Đổi tên theo camelCase
 
     @Column(nullable = false, length = 255)
     private String blindboxName;

@@ -28,6 +28,10 @@ public class Discount {
     private DiscountStatus status;  // Enum for discount status (ACTIVE, EXPIRED)
 
     @ManyToOne
-    @JoinColumn(name = "blindbox_id", referencedColumnName = "blindbox_id")
+    @JoinColumn(name = "blindbox_id")
     private Blindbox blindbox;  // Reference to Blindbox
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;  // Reference to Product
 }

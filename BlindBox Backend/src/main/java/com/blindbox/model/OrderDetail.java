@@ -20,8 +20,12 @@ public class OrderDetail {
     private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id", referencedColumnName = "productID", nullable = false)
     private Product product;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "blindbox_id", referencedColumnName = "blindboxID", nullable = false)
+    private Blindbox blindbox;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;

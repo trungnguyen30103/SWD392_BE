@@ -12,15 +12,15 @@ public class CustomerSupport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer supportId; // ✅ Đổi thành camelCase
+    private Integer supportID; // ✅ Đổi thành camelCase
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "userId", nullable = false)
+    @JoinColumn(name = "user_id",nullable = false)
     @JsonIgnore // ✅ Tránh vòng lặp vô hạn trong JSON
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", referencedColumnName = "orderId", nullable = false)
+    @JoinColumn(name = "order_id",nullable = false)
     @JsonIgnore // ✅ Tránh vòng lặp vô hạn trong JSON
     private Order order;
 

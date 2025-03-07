@@ -37,7 +37,7 @@ public class BlindboxImageServiceImpl implements BlindboxImageService {
 
     @Override
     public BlindboxImage updateImage(BlindboxImage image) {
-        if (!blindboxImageRepository.existsById(image.getBlindboxImageId())) {
+        if (!blindboxImageRepository.existsById(image.getBlindboxImageID())) {
             throw new RuntimeException("Image not found");
         }
         return blindboxImageRepository.save(image);

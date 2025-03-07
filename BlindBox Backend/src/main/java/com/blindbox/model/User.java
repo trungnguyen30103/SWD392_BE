@@ -22,6 +22,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String phone;
 
+    @Column(nullable = false, unique = true)
     private String address;
 
     @Column(nullable = false, unique = true)
@@ -30,6 +31,10 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 
     @Column(name = "fullname", nullable = false)
     private String fullName;

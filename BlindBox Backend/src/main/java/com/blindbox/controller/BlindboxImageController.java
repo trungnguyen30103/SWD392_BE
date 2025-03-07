@@ -40,7 +40,7 @@ public class BlindboxImageController {
 
     @PutMapping("/{id}")
     public ResponseEntity<BlindboxImage> updateImage(@PathVariable Integer id, @RequestBody BlindboxImage image) {
-        image.setBlindboxImageId(id);
+        image.setBlindboxImageID(id);
         BlindboxImage updatedImage = blindboxImageService.updateImage(image);
         return new ResponseEntity<>(updatedImage, HttpStatus.OK);
     }

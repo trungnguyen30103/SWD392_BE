@@ -40,7 +40,7 @@ public class BlindboxController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Blindbox> updateBlindbox(@PathVariable Integer id, @RequestBody Blindbox blindbox) {
-        blindbox.setBlindboxId(id);
+        blindbox.setBlindboxID(id);
         Blindbox updatedBlindbox = blindboxService.updateBlindbox(blindbox);
         return new ResponseEntity<>(updatedBlindbox, HttpStatus.OK);
     }

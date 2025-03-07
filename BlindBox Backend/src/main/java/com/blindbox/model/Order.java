@@ -19,7 +19,6 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_id")
     private Integer orderID;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -14,7 +14,7 @@ public class Shipment {
     private Integer shipmentID;
 
     @ManyToOne
-    @JoinColumn(name = "orderID", referencedColumnName = "orderID", nullable = false)
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;  // Liên kết với bảng Order
 
     @Column(nullable = false)
