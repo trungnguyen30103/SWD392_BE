@@ -18,7 +18,7 @@ public class Role {
     private String roleName;  // Tên của vai trò, không được null
 
     // Quan hệ giữa Role và User (Many-to-Many)
-    @ManyToMany(mappedBy = "roles")  // Liên kết với quan hệ ManyToMany trong lớp User
+    @OneToMany(mappedBy = "role")  // Liên kết với quan hệ ManyToMany trong lớp User
     private Set<User> user;  // Một role có thể có nhiều user
 
 }

@@ -34,7 +34,7 @@ public class ProductImageServiceImpl implements ProductImageService {
     @Override
     public ProductImage updateProductImage(Integer id, ProductImage productImage) {
         if (productImageRepository.existsById(id)) {
-            productImage.setProductImageId(id);
+            productImage.setProductImageID(id);
             return productImageRepository.save(productImage);
         }
         return null;

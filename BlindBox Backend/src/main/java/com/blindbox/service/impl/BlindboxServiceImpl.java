@@ -37,7 +37,7 @@ public class BlindboxServiceImpl implements BlindboxService {
 
     @Override
     public Blindbox updateBlindbox(Blindbox blindbox) {
-        if (!blindboxRepository.existsById(blindbox.getBlindboxId())) {
+        if (!blindboxRepository.existsById(blindbox.getBlindboxID())) {
             throw new RuntimeException("Blindbox not found");
         }
         return blindboxRepository.save(blindbox);

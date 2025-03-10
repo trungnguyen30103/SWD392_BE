@@ -14,7 +14,7 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer categoryId; // ✅ Sử dụng camelCase
+    private Integer categoryID; // ✅ Sử dụng camelCase
 
     @Column(nullable = false, unique = true, length = 255) // ✅ Giới hạn độ dài
     private String categoryName;

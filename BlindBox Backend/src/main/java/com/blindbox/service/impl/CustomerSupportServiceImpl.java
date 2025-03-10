@@ -34,7 +34,7 @@ public class CustomerSupportServiceImpl implements CustomerSupportService {
     @Override
     public CustomerSupport updateCustomerSupport(Integer id, CustomerSupport customerSupport) {
         if (customerSupportRepository.existsById(id)) {
-            customerSupport.setSupportId(id); // Đảm bảo ID không bị thay đổi
+            customerSupport.setSupportID(id); // Đảm bảo ID không bị thay đổi
             return customerSupportRepository.save(customerSupport);
         }
         return null; // Nếu không tìm thấy ID để cập nhật
