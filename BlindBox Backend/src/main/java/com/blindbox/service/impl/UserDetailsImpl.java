@@ -2,9 +2,11 @@ package com.blindbox.service.impl;
 
 import com.blindbox.model.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public class UserDetailsImpl implements UserDetails {
 
@@ -16,8 +18,8 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Bạn có thể trả về quyền của người dùng ở đây
-        return null;  // Tạm thời trả về null
+        // Trả về quyền của người dùng
+        return Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getRoleName()));
     }
 
     @Override
@@ -32,22 +34,22 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;  // Cần kiểm tra thời gian hết hạn tài khoản, trả về true cho trường hợp này
+        return true;  // Kiểm tra tài khoản hết hạn
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;  // Kiểm tra trạng thái khóa tài khoản
+        return true;  // Kiểm tra tài khoản bị khóa hay không
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;  // Kiểm tra hết hạn chứng chỉ của người dùng
+        return true;  // Kiểm tra chứng chỉ của người dùng có hết hạn không
     }
 
     @Override
     public boolean isEnabled() {
-        return true;  // Kiểm tra trạng thái kích hoạt tài khoản
+        return true;  // Kiểm tra trạng thái tài khoản
     }
 
     public User getUser() {

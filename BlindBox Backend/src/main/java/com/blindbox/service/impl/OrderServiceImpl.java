@@ -38,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order updateOrder(Integer orderId, Order order) {
         if (orderRepository.existsById(orderId)) {
-            order.setOrderID(orderId);
+            order.setOrderId(orderId);
             return orderRepository.save(order);
         }
         return null;
