@@ -33,7 +33,7 @@ public class User {
     private Role role;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private Order order;
 
     @Column(name = "fullname", nullable = false)
