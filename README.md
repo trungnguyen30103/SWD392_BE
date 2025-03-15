@@ -5,7 +5,7 @@
 ![JDK 20](https://img.shields.io/badge/JDK-20-brightgreen.svg)
 ![Maven](https://img.shields.io/badge/Maven-3.9.7-yellowgreen.svg)
 ![license](https://img.shields.io/crates/l/rustc-serialize/0.3.24.svg)
-
+name: BlindBox Sale System (CI included) | 2025 by trungnguyen30103
 # Blindbox Backend
 
 ## Giới thiệu
