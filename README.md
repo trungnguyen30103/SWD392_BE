@@ -1,4 +1,4 @@
-[![Build and deploy JAR app to Azure Web App - Blinkbox Backend](https://github.com/yourusername/yourrepository/actions/workflows/main.yml/badge.svg)](https://github.com/yourusername/yourrepository/actions/workflows/main.yml)
+[![Build and deploy JAR app to Azure Web App - Blindbox Backend](https://github.com/yourusername/yourrepository/actions/workflows/main.yml/badge.svg)](https://github.com/yourusername/yourrepository/actions/workflows/main.yml)
 
 ![Spring Boot 3.2.5](https://img.shields.io/badge/Spring%20Boot-3.2.5-brightgreen.svg)
 ![Mysql 8.0](https://img.shields.io/badge/Mysql-8.0-blue.svg)
@@ -10,7 +10,7 @@
 
 ## Giới thiệu
 
-Blinkbox Backend là phần backend của dự án Blinkbox, sử dụng **Spring Boot** để xây dựng API và **MySQL** làm cơ sở dữ liệu. Dự án này hỗ trợ việc quản lý các sản phẩm, đơn hàng, người dùng và các chức năng liên quan trong một hệ thống bán hàng online.
+Blindbox Backend là phần backend của dự án Blinkbox, sử dụng **Spring Boot** để xây dựng API và **MySQL** làm cơ sở dữ liệu. Dự án này hỗ trợ việc quản lý các sản phẩm, đơn hàng, người dùng và các chức năng liên quan trong một hệ thống bán hàng online.
 
 ## Các công nghệ sử dụng
 
