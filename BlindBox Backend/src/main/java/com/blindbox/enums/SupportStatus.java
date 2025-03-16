@@ -1,4 +1,4 @@
-package com.blindbox.model;
+package com.blindbox.enums;
 
 public enum SupportStatus {
     PENDING,    // Đang xử lý

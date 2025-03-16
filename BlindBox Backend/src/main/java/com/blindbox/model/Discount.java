@@ -1,5 +1,6 @@
 package com.blindbox.model;
 
+import com.blindbox.enums.DiscountStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;

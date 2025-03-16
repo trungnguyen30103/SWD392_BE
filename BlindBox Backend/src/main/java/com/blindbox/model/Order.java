@@ -1,5 +1,8 @@
 package com.blindbox.model;
 
+import com.blindbox.enums.OrderStatus;
+import com.blindbox.enums.PaymentStatus;
+import com.blindbox.enums.ShippingStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

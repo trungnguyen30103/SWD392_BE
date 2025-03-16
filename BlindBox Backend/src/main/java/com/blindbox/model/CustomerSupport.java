@@ -1,5 +1,6 @@
 package com.blindbox.model;
 
+import com.blindbox.enums.SupportStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnore;

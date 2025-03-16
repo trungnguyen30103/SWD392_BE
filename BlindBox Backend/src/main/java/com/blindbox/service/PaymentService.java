@@ -1,13 +1,10 @@
 package com.blindbox.service;
 
+import com.blindbox.model.User;
+import com.blindbox.model.Order;
 import com.blindbox.model.Payment;
-
-import java.util.List;
+import java.math.BigDecimal;
 
 public interface PaymentService {
-    List<Payment> getAllPayments();
-    Payment getPaymentById(Integer id);
-    Payment createPayment(Payment payment);
-    Payment updatePayment(Integer id, Payment payment);
-    boolean deletePayment(Integer id);
+    Payment processPayment(User user, Order order, BigDecimal amount, String paymentMethod);
 }

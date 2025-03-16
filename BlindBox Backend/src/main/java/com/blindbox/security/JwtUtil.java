@@ -3,7 +3,6 @@ package com.blindbox.security;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -13,7 +12,10 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
+    // Secret key
     private static final String SECRET = "bM+UfHGnPziISDp2Nw1P5t5OcUq29LcsC3P6mKH7ybo=";
+
+    // Create SecretKey from the base64-encoded string
     private static final SecretKey secretKey = Keys.hmacShaKeyFor(Base64.getDecoder().decode(SECRET));
 
     // Generate Token
@@ -28,12 +30,16 @@ public class JwtUtil {
 
     // Extract Username from Token
     public String extractUserName(String token) {
-        return Jwts.parser()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+        try {
+            return Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getSubject();
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid token", e);
+        }
     }
 
     // Validate Token
@@ -55,5 +61,4 @@ public class JwtUtil {
                 .getBody()
                 .getExpiration();
     }
-
 }

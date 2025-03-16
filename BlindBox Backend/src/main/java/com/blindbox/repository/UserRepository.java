@@ -7,4 +7,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Integer> {
     // Đảm bảo phương thức trả về Optional<User>
     Optional<User> findByUserName(String username);
+    Optional<User> findByEmail(String email);
+
 }

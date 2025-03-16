@@ -1,4 +1,4 @@
-package com.blindbox.model;
+package com.blindbox.enums;
 
 public enum DiscountStatus {
     ACTIVE,
