@@ -7,11 +7,14 @@ import com.blindbox.repository.UserRepository;
 import com.blindbox.service.PaymentService;
 import com.blindbox.controller.PaymentRequest;
 import com.blindbox.model.Payment;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
+@Tag(name = "Payment Management System", description = "Operations pertaining to payments in the Payment Management System")
 @RestController
 @RequestMapping("/payment")
 public class PaymentController {
@@ -26,6 +29,7 @@ public class PaymentController {
     private OrderRepository orderRepository;
 
     // API thanh toán
+    @Operation(summary = "Process a payment", description = "Process a payment for an order")
     @PostMapping("/process")
     public Payment processPayment(@RequestBody PaymentRequest request) {
         // Lấy thông tin người dùng (từ JWT hoặc session, giả sử là userId)
