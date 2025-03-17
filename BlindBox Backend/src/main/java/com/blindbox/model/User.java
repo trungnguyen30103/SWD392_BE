@@ -11,6 +11,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Integer userID;
 
     @Column(name = "username", nullable = false, unique = true)
@@ -33,7 +34,7 @@ public class User {
     private Role role;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     @Column(name = "fullname", nullable = false)

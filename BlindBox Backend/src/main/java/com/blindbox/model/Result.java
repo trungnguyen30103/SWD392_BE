@@ -26,7 +26,7 @@ public class Result {
     private Order order;  // Liên kết với bảng Order
 
     @ManyToOne
-    @JoinColumn(name = "blindbox_id", referencedColumnName = "blindboxID", nullable = false)
+    @JoinColumn(name = "blindbox_id", nullable = false)
     private Blindbox blindbox;  // Liên kết với bảng Blindbox
 
     @Column(name = "result_text", columnDefinition = "TEXT")

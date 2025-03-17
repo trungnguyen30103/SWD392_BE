@@ -26,14 +26,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/auth/login").permitAll()
-                        .requestMatchers("/swagger-ui.html", "/v2/api-docs", "/swagger-resources/**", "/webjars/**").permitAll()
-                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
-                        .requestMatchers("/user/**").hasAuthority("USER")
-                        .anyRequest().authenticated())
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+//                .authorizeHttpRequests(authz -> authz
+//                        .requestMatchers("/auth/login").permitAll()
+//                        .requestMatchers("/swagger-ui.html", "/v2/api-docs", "/swagger-resources/**", "/webjars/**").permitAll()
+//                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
+//                        .requestMatchers("/user/**").hasAuthority("USER")
+//                        .anyRequest().authenticated())
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
 
         return http.build();
     }

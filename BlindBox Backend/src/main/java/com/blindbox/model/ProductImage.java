@@ -15,7 +15,7 @@ public class ProductImage {
     private Integer productImageID;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", referencedColumnName = "productID", nullable = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;  // Khóa ngoại liên kết với bảng Product
 
     @Column(name = "image_url", nullable = false, length = 255)

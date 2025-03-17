@@ -2,6 +2,8 @@ package com.blindbox.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+
 import java.time.LocalDateTime;
 
 @Data
@@ -11,6 +13,7 @@ public class Blindbox {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "blindbox_id")
     private Integer blindboxID;  // ✅ Đổi tên theo camelCase
 
     @Column(nullable = false, length = 255)

@@ -2,6 +2,7 @@ package com.blindbox.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -20,11 +21,11 @@ public class OrderDetail {
     private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", referencedColumnName = "productID", nullable = false)
+    @JoinColumn(name = "product_id", nullable = true)
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "blindbox_id", referencedColumnName = "blindboxID", nullable = false)
+    @JoinColumn(name = "blindbox_id", nullable = true)
     private Blindbox blindbox;
 
     @Column(name = "quantity", nullable = false)

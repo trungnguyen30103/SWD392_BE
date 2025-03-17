@@ -13,7 +13,7 @@ public class BlindboxImage {
     private Integer blindboxImageID;
 
     @ManyToOne(cascade = CascadeType.MERGE) // Tránh xóa nhầm Blindbox
-    @JoinColumn(name = "blindbox_id", referencedColumnName = "blindboxID", nullable = false)
+    @JoinColumn(name = "blindbox_id", nullable = false)
     private Blindbox blindbox;
 
     @Column(nullable = false, length = 500) // Định nghĩa độ dài tối đa

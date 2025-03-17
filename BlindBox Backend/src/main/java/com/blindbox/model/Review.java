@@ -17,15 +17,15 @@ public class Review {
     private Integer reviewID;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "userID", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;  // Liên kết với bảng User
 
     @ManyToOne
-    @JoinColumn(name = "blindbox_id", referencedColumnName = "blindboxID", nullable = false)
+    @JoinColumn(name = "blindbox_id", nullable = false)
     private Blindbox blindbox;  // Liên kết với bảng Blindbox
 
     @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "productID", nullable = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;  // Liên kết với bảng Product
 
     @Column(name = "rating")
