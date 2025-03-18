@@ -3,8 +3,11 @@ package com.blindbox.model;
 import jakarta.persistence.Table;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.math.BigDecimal;
 
+@Data
 @Entity
 @Table(name = "cart_item")
 

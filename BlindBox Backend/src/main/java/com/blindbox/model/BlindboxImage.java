@@ -10,6 +10,7 @@ public class BlindboxImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "blindbox_image_id")
     private Integer blindboxImageID;
 
     @ManyToOne(cascade = CascadeType.MERGE) // Tránh xóa nhầm Blindbox

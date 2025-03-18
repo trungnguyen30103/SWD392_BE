@@ -11,6 +11,7 @@ public class Shipment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "shipment_id")
     private Integer shipmentID;
 
     @ManyToOne

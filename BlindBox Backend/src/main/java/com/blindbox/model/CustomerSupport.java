@@ -13,6 +13,7 @@ public class CustomerSupport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "support_id")
     private Integer supportID; // ✅ Đổi thành camelCase
 
     @ManyToOne
