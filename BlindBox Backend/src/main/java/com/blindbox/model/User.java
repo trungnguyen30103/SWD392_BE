@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "user_id")
     private Integer userID;
 
@@ -33,9 +33,6 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
 
     @Column(name = "fullname", nullable = false)
     private String fullName;
@@ -46,6 +43,6 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    // Status có thể được dùng để chỉ trạng thái của người dùng (e.g., active, inactive)
+
     private String status;
 }

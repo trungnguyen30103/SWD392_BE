@@ -11,22 +11,22 @@ import java.time.LocalDateTime;
 public class Wishlist {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "wishlist_id")
-    private Integer wishlistId;  // Unique identifier for the wishlist
+    private Integer wishlistId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;  // Foreign key referring to the User table
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    private Product product;  // Foreign key referring to the Product table
+    private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "blindbox_id", nullable = false)
-    private Blindbox blindbox;  // Foreign key referring to the Blindbox table
+    private Blindbox blindbox;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();  // Date and time when the product was added to the wishlist
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

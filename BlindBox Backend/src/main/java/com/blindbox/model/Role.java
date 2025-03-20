@@ -11,14 +11,14 @@ import java.util.Set;
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer roleID;
 
-    @Column(name = "role_name", nullable = false, length = 50)
-    private String roleName;  // Tên của vai trò, không được null
+    @Column(name = "name", nullable = false, length = 50)
+    private String roleName;
 
-    // Quan hệ giữa Role và User (Many-to-Many)
-    @OneToMany(mappedBy = "role")  // Liên kết với quan hệ ManyToMany trong lớp User
-    private Set<User> user;  // Một role có thể có nhiều user
+
+    @OneToMany(mappedBy = "role")
+    private Set<User> user;
 
 }

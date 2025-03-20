@@ -12,27 +12,21 @@ import java.time.LocalDateTime;
 public class Discount {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer discountId;
 
     @Column(nullable = false, precision = 4, scale = 2)
-    private BigDecimal discountPercentage;  // Percentage of the discount
+    private BigDecimal discountPercentage;
 
     @Column(nullable = false)
-    private LocalDateTime startDate;  // Discount start date
+    private LocalDateTime startDate;
 
     @Column(nullable = false)
-    private LocalDateTime endDate;  // Discount end date
+    private LocalDateTime endDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private DiscountStatus status;  // Enum for discount status (ACTIVE, EXPIRED)
+    private DiscountStatus status;
 
-    @ManyToOne
-    @JoinColumn(name = "blindbox_id")
-    private Blindbox blindbox;  // Reference to Blindbox
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;  // Reference to Product
 }

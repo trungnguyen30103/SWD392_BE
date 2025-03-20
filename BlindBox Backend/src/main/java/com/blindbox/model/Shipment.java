@@ -10,25 +10,25 @@ import java.time.LocalDateTime;
 public class Shipment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer shipmentID;
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
-    private Order order;  // Liên kết với bảng Order
+    private Order order;
 
     @Column(nullable = false)
-    private String address;  // Địa chỉ giao hàng, không được null
+    private String address;
 
     @Column(nullable = false)
-    private String method;  // Phương thức giao hàng (standard, express)
+    private String method;
 
     @Column(nullable = false)
-    private String status;  // Trạng thái giao hàng (pending, shipped, delivered)
+    private String status;
 
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();  // Thời gian tạo mặc định
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    private LocalDateTime updatedAt;  // Thời gian cập nhật giao hàng
+    private LocalDateTime updatedAt;
 
 }

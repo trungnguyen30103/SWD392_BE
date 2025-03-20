@@ -8,21 +8,20 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "customer_support") // ✅ Sử dụng snake_case cho MySQL
+@Table(name = "customersupport")
 public class CustomerSupport {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer supportID; // ✅ Đổi thành camelCase
 
+    private Integer supportID;
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)
-    @JsonIgnore // ✅ Tránh vòng lặp vô hạn trong JSON
+    @JsonIgnore
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "order_id",nullable = false)
-    @JsonIgnore // ✅ Tránh vòng lặp vô hạn trong JSON
+    @JsonIgnore
     private Order order;
 
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -37,6 +36,6 @@ public class CustomerSupport {
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now(); // ✅ Tự động gán thời gian tạo
+        this.createdAt = LocalDateTime.now();
     }
 }
