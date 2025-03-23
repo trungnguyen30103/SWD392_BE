@@ -48,6 +48,5 @@ public class User {
     private String status;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
     private List<Order> orders;
 }

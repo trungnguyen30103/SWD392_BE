@@ -22,7 +22,7 @@ public class Payment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "amount", precision = 10, scale = 2, nullable = false)
+    @Column(name = "amount", nullable = false)
     private Double amount;
 
     @Column(name = "status", nullable = false, length = 50)

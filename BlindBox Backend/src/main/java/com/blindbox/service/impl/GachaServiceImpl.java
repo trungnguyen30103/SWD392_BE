@@ -30,7 +30,7 @@ public class GachaServiceImpl implements GachaService {
     @Override
     public String openBlindBox(Integer userId) {
 
-        UserAccount userAccount = userAccountRepository.findByUserUserId(userId);
+        UserAccount userAccount = userAccountRepository.findByUserUserID(userId);
         if (userAccount == null) {
             return "Người dùng không tồn tại.";
         }

@@ -25,7 +25,7 @@ public interface BlindboxRepository extends JpaRepository<Blindbox, Integer> {
     @EntityGraph(attributePaths = "blindboxImages")
     List<Blindbox> findByCategory_CategoryID(@Param("categoryID") Integer categoryID);
 
-    @Query("SELECT b FROM Blindbox b WHERE LOWER(b.blindboxName) LIKE LOWER(CONCAT('%', :name, '%'))")
+    @Query("SELECT b FROM Blindbox b WHERE LOWER(b.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     @EntityGraph(attributePaths = "blindboxImages")
     List<Blindbox> findByBlindboxNameContainingIgnoreCase(@Param("name") String name);
 
