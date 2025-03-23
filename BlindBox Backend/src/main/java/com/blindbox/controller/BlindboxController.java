@@ -48,10 +48,10 @@ public class BlindboxController {
 
     // Update an existing blindbox
     @Operation(summary = "Update an existing blindbox", description = "Update an existing blindbox using its ID")
-    @PutMapping("/{id}")
-    public ResponseEntity<ResponseData> updateBlindbox(@PathVariable Integer id, @RequestBody BlindboxUpdateRequest request) {
+    @PutMapping("/{blindboxID}")
+    public ResponseEntity<ResponseData> updateBlindbox(@PathVariable Integer blindboxID, @RequestBody BlindboxUpdateRequest request) {
         try {
-            Blindbox updatedBlindbox = blindboxService.updateBlindbox(id, request);
+            Blindbox updatedBlindbox = blindboxService.updateBlindbox(blindboxID, request);
             return ResponseEntity.ok(new ResponseData(200, true, "Blindbox updated successfully", updatedBlindbox, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -61,9 +61,9 @@ public class BlindboxController {
 
     // Delete a blindbox by ID
     @Operation(summary = "Delete a blindbox by ID")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBlindbox(@PathVariable Integer id) {
-        blindboxService.deleteBlindbox(id);
+    @DeleteMapping("/{blindboxID}")
+    public ResponseEntity<Void> deleteBlindbox(@PathVariable Integer blindboxID) {
+        blindboxService.deleteBlindbox(blindboxID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -82,10 +82,10 @@ public class BlindboxController {
 
     // Get a blindbox by ID
     @Operation(summary = "Get a blindbox by ID", description = "Retrieve a single blindbox using its ID")
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseData> getBlindboxById(@PathVariable Integer id) {
+    @GetMapping("/{blindboxID}")
+    public ResponseEntity<ResponseData> getBlindboxById(@PathVariable Integer blindboxID) {
         try {
-            Blindbox blindbox = blindboxService.getBlindboxById(id);
+            Blindbox blindbox = blindboxService.getBlindboxById(blindboxID);
             return ResponseEntity.ok(new ResponseData(200, true, "Blindbox retrieved successfully", blindbox, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -107,6 +107,22 @@ public class BlindboxController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseData(500, false, "Failed to search blindboxes", null, null));
+        }
+    }
+
+    @Operation(summary = "Get blindboxes by category", description = "Retrieve blindboxes by category ID")
+    @GetMapping("/category/{categoryID}")
+    public ResponseEntity<ResponseData> getBlindboxesByCategory(@PathVariable Integer categoryID) {
+        try {
+            List<Blindbox> blindboxes = blindboxService.getBlindboxByCategory(categoryID);
+            if (blindboxes.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseData(404, false, "No blindboxes found for category ID: " + categoryID, null, null));
+            }
+            return ResponseEntity.ok(new ResponseData(200, true, "Blindboxes retrieved successfully", blindboxes, null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseData(500, false, "Failed to retrieve blindboxes", null, null));
         }
     }
 

@@ -137,8 +137,13 @@ public class BlindboxServiceImpl implements BlindboxService {
     // Get blindbox by name
     @Override
     public List<Blindbox> getBlindboxByName(String name) {
-        String regex = ".*" + name + ".*";
-        return blindboxRepository.findByBlindboxNameRegexIgnoreCase(regex);
+        return blindboxRepository.findByBlindboxNameContainingIgnoreCase(name);
+    }
+
+    // Get blindbox by category
+    @Override
+    public List<Blindbox> getBlindboxByCategory(Integer categoryID) {
+        return blindboxRepository.findByCategory_CategoryID(categoryID);
     }
 
 

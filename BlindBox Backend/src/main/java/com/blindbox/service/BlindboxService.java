@@ -28,6 +28,8 @@ public interface BlindboxService {
 
     List<Blindbox> getBlindboxByName(String name);
 
+    List<Blindbox> getBlindboxByCategory(Integer categoryID);
+
 
     /* Blindbox Image */
     @NonNull
