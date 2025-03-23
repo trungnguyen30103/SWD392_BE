@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "blindbox_image") // Sử dụng snake_case cho chuẩn SQL
+@Table(name = "blindboximage")
 public class BlindboxImage {
 
     @Id
@@ -13,7 +13,7 @@ public class BlindboxImage {
     @Column(name = "blindbox_image_id")
     private Integer blindboxImageID;
 
-    @ManyToOne(cascade = CascadeType.MERGE) // Tránh xóa nhầm Blindbox
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "blindbox_id", nullable = false)
     private Blindbox blindbox;
 

@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "order_id")
     private Integer orderId;
 
@@ -36,8 +36,10 @@ public class Order {
     @JoinColumn(name = "discount_id")
     private Discount discount;
 
+
+
     @Column(name = "order_date", nullable = false)
-    private LocalDateTime orderDate = LocalDateTime.now(); // Mặc định là thời gian hiện tại
+    private LocalDateTime orderDate = LocalDateTime.now();
 
     @Column(name = "total_amount", precision = 10, scale = 2, nullable = false)
     private BigDecimal totalAmount;
