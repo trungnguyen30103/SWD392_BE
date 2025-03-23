@@ -12,34 +12,21 @@ import java.time.LocalDateTime;
 public class Discount {
 
     @Id
-<<<<<<< HEAD
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "discount_id")
     private Integer discountId;
 
     @Column(nullable = false, length = 50)
     private String code;
 
     @Column(name = "percentage", nullable = false, precision = 4, scale = 2)
-    private BigDecimal percentage;
+    private BigDecimal percentage; // Percentage of the discount
 
     @Column(name = "valid_from", nullable = false)
     private LocalDateTime validFrom;
 
     @Column(name = "valid_until", nullable = false)
     private LocalDateTime validUntil;
-=======
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "discount_id")
-    private Integer discountId;
-
-    @Column(nullable = false, precision = 4, scale = 2)
-    private BigDecimal discountPercentage;  // Percentage of the discount
-
-    @Column(nullable = false)
-    private LocalDateTime startDate;  // Discount start date
-
-    @Column(nullable = false)
-    private LocalDateTime endDate;  // Discount end date
->>>>>>> 3ce307c8d5da7a526da900cc48537fd49c86ff5c
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

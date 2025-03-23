@@ -19,7 +19,7 @@ public class BlindboxImage {
     @JoinColumn(name = "blindbox_id", nullable = false)
     private Blindbox blindbox;
 
-    @Column(nullable = false, length = 500) // Định nghĩa độ dài tối đa
+    @Column(name = "image_url", nullable = false, length = 500) // Định nghĩa độ dài tối đa
     private String imageUrl;
 
     @Column(name = "alt_text", length = 255)

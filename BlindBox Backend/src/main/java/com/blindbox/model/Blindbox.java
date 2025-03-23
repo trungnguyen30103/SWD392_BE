@@ -30,32 +30,30 @@ public class Blindbox {
     @Column(nullable = false)
     private Integer stock;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    private LocalDateTime lastUpdated;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-<<<<<<< HEAD
-=======
     // Connect Blindbox and Blindbox_image
     @OneToMany(mappedBy = "blindbox", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<BlindboxImage> blindboxImages;
 
     // Tự động cập nhật thời gian
->>>>>>> 3ce307c8d5da7a526da900cc48537fd49c86ff5c
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
-        this.lastUpdated = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.lastUpdated = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 }

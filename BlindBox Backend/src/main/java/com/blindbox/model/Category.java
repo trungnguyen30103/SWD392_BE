@@ -17,7 +17,7 @@ public class Category {
     @Column(name = "category_id")
     private Integer categoryID; // ✅ Sử dụng camelCase
 
-    @Column(nullable = false, unique = true, length = 255) // ✅ Giới hạn độ dài
+    @Column(name = "name", nullable = false, unique = true, length = 255) // ✅ Giới hạn độ dài
     private String categoryName;
 
     @Column(columnDefinition = "TEXT")

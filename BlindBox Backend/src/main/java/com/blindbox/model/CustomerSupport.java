@@ -27,13 +27,19 @@ public class CustomerSupport {
     private Order order;
 
     @Column(nullable = false, columnDefinition = "TEXT")
+    private String question;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String response;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private SupportStatus status;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @PrePersist
