@@ -41,12 +41,11 @@ package com.blindbox.request;
 //}
 import lombok.Data;
 
-import java.math.BigDecimal;
 
 @Data
 public class PaymentRequest {
     private Integer userId;
     private Integer orderId;
-    private BigDecimal amount;
+    private Double amount;
     private String paymentMethod;
 }

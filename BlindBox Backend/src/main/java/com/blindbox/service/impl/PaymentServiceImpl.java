@@ -23,8 +23,8 @@ public class PaymentServiceImpl implements PaymentService {
     private OrderRepository orderRepository;
 
     @Override
-    public Payment processPayment(User user, Order order, BigDecimal amount, String paymentMethod) {
-        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+    public Payment processPayment(User user, Order order, Double amount, String paymentMethod) {
+        if (amount.compareTo(Double.valueOf(0)) <= 0) {
             throw new IllegalArgumentException("Invalid payment amount");
         }
 
