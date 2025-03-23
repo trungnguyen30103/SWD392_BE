@@ -2,9 +2,9 @@ package com.blindbox.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class Blindbox {
 
     @Id
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "blindbox_id")
     private Integer blindboxID;
 
@@ -40,6 +40,14 @@ public class Blindbox {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+<<<<<<< HEAD
+=======
+    // Connect Blindbox and Blindbox_image
+    @OneToMany(mappedBy = "blindbox", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<BlindboxImage> blindboxImages;
+
+    // Tự động cập nhật thời gian
+>>>>>>> 3ce307c8d5da7a526da900cc48537fd49c86ff5c
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();

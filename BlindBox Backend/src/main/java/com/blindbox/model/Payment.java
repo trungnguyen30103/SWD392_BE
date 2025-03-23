@@ -11,6 +11,10 @@ import java.time.LocalDateTime;
 public class Payment {
 
     @Id
+<<<<<<< HEAD
+=======
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+>>>>>>> 3ce307c8d5da7a526da900cc48537fd49c86ff5c
     @Column(name = "payment_id")
     private Integer paymentID;
 

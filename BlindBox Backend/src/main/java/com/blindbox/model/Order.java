@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public class Order {
 
     @Id
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Integer orderId;
 
@@ -29,7 +29,7 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "gacha_type", nullable = false, length = 50)
+    @Column(name = "gacha_type", nullable = true, length = 50)
     private String gachaType;
 
     @ManyToOne(fetch = FetchType.LAZY)

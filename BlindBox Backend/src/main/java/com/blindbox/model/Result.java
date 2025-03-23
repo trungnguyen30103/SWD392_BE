@@ -1,13 +1,11 @@
 package com.blindbox.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Data
 @Entity
 @Table(name = "result")
 @Getter
@@ -17,7 +15,7 @@ import java.time.LocalDateTime;
 public class Result {
 
     @Id
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "result_id")
     private Integer resultID;
 

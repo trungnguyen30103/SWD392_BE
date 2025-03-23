@@ -34,6 +34,8 @@ public class SecurityConfig {
 //                        .anyRequest().authenticated())
 //                .sessionManagement(session -> session
 //                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                /* Use for testing */
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
 
