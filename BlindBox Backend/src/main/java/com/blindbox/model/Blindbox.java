@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -38,6 +39,10 @@ public class Blindbox {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false) // ✅ Tên cột nên dùng snake_case
     private Category category;
+
+    // Connect Blindbox and Blindbox_image
+    @OneToMany(mappedBy = "blindbox", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<BlindboxImage> blindboxImages;
 
     // Tự động cập nhật thời gian
     @PrePersist
