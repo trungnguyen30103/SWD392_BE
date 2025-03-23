@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 public class Payment {
 
     @Id
-
     @Column(name = "payment_id")
     private Integer paymentID;
 

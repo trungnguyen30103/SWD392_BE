@@ -12,17 +12,19 @@ import java.time.LocalDateTime;
 public class Discount {
 
     @Id
-
     private Integer discountId;
 
-    @Column(nullable = false, precision = 4, scale = 2)
-    private BigDecimal discountPercentage;
+    @Column(nullable = false, length = 50)
+    private String code;
 
-    @Column(nullable = false)
-    private LocalDateTime startDate;
+    @Column(name = "percentage", nullable = false, precision = 4, scale = 2)
+    private BigDecimal percentage;
 
-    @Column(nullable = false)
-    private LocalDateTime endDate;
+    @Column(name = "valid_from", nullable = false)
+    private LocalDateTime validFrom;
+
+    @Column(name = "valid_until", nullable = false)
+    private LocalDateTime validUntil;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
