@@ -6,11 +6,11 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "productimage")
+@Table(name = "product_image")
 public class ProductImage {
 
     @Id
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_image_id")
     private Integer productImageID;
 

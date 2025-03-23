@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "blindboximage")
+@Table(name = "blindbox_image")
 public class BlindboxImage {
 
     @Id
