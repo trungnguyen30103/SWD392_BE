@@ -42,7 +42,7 @@ public class BlindboxServiceImpl implements BlindboxService {
         Blindbox blindbox = new Blindbox();
 
         // Set
-        blindbox.setBlindboxName(request.getBlindboxName());
+        blindbox.setName(request.getBlindboxName());
         blindbox.setDescription(request.getDescription());
         blindbox.setPrice(request.getPrice());
         blindbox.setStock(request.getStock());
@@ -60,6 +60,7 @@ public class BlindboxServiceImpl implements BlindboxService {
                 BlindboxImage image = new BlindboxImage();
                 image.setImageUrl(imgReq.getImageUrl());
                 image.setBlindbox(blindbox); // ✅ Required to set back-reference
+                image.setAltText(imgReq.getAltText());
                 blindboxImageRepository.save(image);
                 images.add(image);
             }
@@ -79,7 +80,7 @@ public class BlindboxServiceImpl implements BlindboxService {
                 .orElseThrow(() -> new RuntimeException("Blindbox not found"));
 
         // Update
-        if (request.getBlindboxName() != null) existingBlindbox.setBlindboxName(request.getBlindboxName());
+        if (request.getBlindboxName() != null) existingBlindbox.setName(request.getBlindboxName());
         if (request.getPrice() != null) existingBlindbox.setPrice(request.getPrice());
         if (request.getDescription() != null) existingBlindbox.setDescription(request.getDescription());
         if (request.getStock() != null) existingBlindbox.setStock(request.getStock());
@@ -93,9 +94,10 @@ public class BlindboxServiceImpl implements BlindboxService {
         // Only add more
         if (request.getBlindboxImages() != null) {
             List<BlindboxImage> updateImages = new ArrayList<>();
-            for (BlindboxImageCreateRequest imgReq : request.getBlindboxImages()) {
+            for (BlindboxImageUpdateRequest imgReq : request.getBlindboxImages()) {
                 BlindboxImage image = new BlindboxImage();
                 image.setImageUrl(imgReq.getImageUrl());
+                image.setAltText(imgReq.getAltText());
                 image.setBlindbox(existingBlindbox); // ✅ Required to set back-reference
 
                 // Save new image
@@ -118,6 +120,7 @@ public class BlindboxServiceImpl implements BlindboxService {
         blindboxRepository.deleteById(id);
         blindboxImageRepository.deleteAllByBlindbox_BlindboxID(id);
     }
+
 
     // Get all blindboxes
     @Override
@@ -160,6 +163,8 @@ public class BlindboxServiceImpl implements BlindboxService {
                     .orElseThrow(() -> new RuntimeException("Blindbox not found"));
             image.setBlindbox(blindbox);
         }
+
+        if (request.getAltText() != null) image.setAltText(request.getAltText());
 
         if (request.getImageUrl() != null) image.setImageUrl(request.getImageUrl());
 

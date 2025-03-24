@@ -30,6 +30,7 @@ public class Shipment {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();  // Thời gian tạo mặc định
 
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;  // Thời gian cập nhật giao hàng
 
 }
