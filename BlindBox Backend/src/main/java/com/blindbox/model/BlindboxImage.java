@@ -22,7 +22,7 @@ public class BlindboxImage {
     @Column(name = "image_url", nullable = false, length = 500) // Định nghĩa độ dài tối đa
     private String imageUrl;
 
-    @Column(name = "alt_text", length = 255)
+    @Column(name = "alt_text")
     private String altText;
 
     @Column(name = "created_at", nullable = false, updatable = false)

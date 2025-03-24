@@ -3,7 +3,6 @@ package com.blindbox.model;
 import com.blindbox.enums.DiscountStatus;
 import jakarta.persistence.*;
 import lombok.Data;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -17,8 +16,8 @@ public class Discount {
     @Column(name = "discount_id")
     private Integer discountId;
 
-    @Column(nullable = false, precision = 4, scale = 2)
-    private BigDecimal discountPercentage;  // Percentage of the discount
+    @Column(name = "percentage", nullable = false)
+    private Double discountPercentage;  // Percentage of the discount
 
     @Column(nullable = false)
     private LocalDateTime valid_from;  // Discount start date

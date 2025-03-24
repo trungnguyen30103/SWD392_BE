@@ -2,7 +2,6 @@ package com.blindbox.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,7 +15,7 @@ public class Product {
     @Column(name = "product_id")
     private Integer productID;
 
-    @Column(name = "name", nullable = false, length = 255)
+    @Column(name = "name", nullable = false)
     private String productName;
 
     @Column(name = "description", columnDefinition = "TEXT")
@@ -26,7 +25,7 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @Column(name = "price", precision = 10, scale = 2, nullable = false)
+    @Column(name = "price", nullable = false)
     private double price;
 
     @Column(name = "stock_quantity", nullable = false)
@@ -41,8 +40,4 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductImage> productImages;
 
-    // Thêm setter cho productImages nếu chưa có
-    public void setProductImages(List<ProductImage> productImages) {
-        this.productImages = productImages;
-    }
 }

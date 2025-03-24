@@ -18,10 +18,10 @@ public class ProductImage {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @Column(name = "image_url", nullable = false, length = 255)
+    @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
-    @Column(name = "alt_text", length = 255)
+    @Column(name = "alt_text")
     private String altText;
 
     @Column(name = "created_at", nullable = false, updatable = false)

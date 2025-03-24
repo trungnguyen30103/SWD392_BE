@@ -10,16 +10,18 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BlindboxUpdateRequest {
 
-    private String blindboxName;
+    String blindboxName;
 
-    private String description;
+    String description;
 
-    private Double price;
+    Double price;
 
-    private Integer stock;
+    Integer stock;
 
-    private Integer categoryID;
+    Integer categoryID;
 
-    private List<BlindboxImageUpdateRequest> blindboxImages;
+    List<BlindboxImageUpdateRequest> blindboxImages;
+
+    List<BlindboxItemUpdateRequest> blindboxItem;
 
 }

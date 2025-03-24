@@ -15,7 +15,7 @@ import java.util.List;
 public class BlindboxCreateRequest {
 
     @NotBlank
-    String blindboxName;
+    String name;
 
     String description;
 
@@ -31,5 +31,7 @@ public class BlindboxCreateRequest {
     Integer categoryID;
 
     List<BlindboxImageCreateRequest> blindboxImages;
+
+    List<BlindboxItemCreateRequest> blindboxItem;
 
 }

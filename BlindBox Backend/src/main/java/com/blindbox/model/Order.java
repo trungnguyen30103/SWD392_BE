@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -29,7 +28,7 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "gacha_type", nullable = true, length = 50)
+    @Column(name = "gacha_type", length = 50)
     private String gachaType;
 
     @ManyToOne(fetch = FetchType.LAZY)

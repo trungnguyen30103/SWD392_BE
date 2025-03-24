@@ -11,7 +11,11 @@ public class BlindBoxItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "blindbox_item_id")
-    private Integer id;
+    private Integer blindboxItemID;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "blindbox_id", nullable = false)
+    private Blindbox blindbox;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -19,7 +23,4 @@ public class BlindBoxItem {
     @Column(name = "rarity", nullable = false)
     private Integer rarity;
 
-    // Thay đổi từ BigDecimal thành double
-    @Column(name = "price", nullable = false)
-    private double price;
 }

@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BlindboxImageUpdateRequest {
 
+    Integer blindboxImageID;
     Integer blindboxID;
     String imageUrl;
     String altText;

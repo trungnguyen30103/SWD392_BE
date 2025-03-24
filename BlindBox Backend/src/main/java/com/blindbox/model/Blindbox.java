@@ -16,8 +16,8 @@ public class Blindbox {
     @Column(name = "blindbox_id")
     private Integer blindboxID;
 
-    @Column(nullable = false, length = 255)
-    private String blindboxName;
+    @Column(nullable = false)
+    private String name;
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -43,10 +43,8 @@ public class Blindbox {
     @OneToMany(mappedBy = "blindbox", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BlindboxImage> blindboxImages;
 
-    public void setBlindboxImages(List<BlindboxImage> blindboxImages) {
-        this.blindboxImages = blindboxImages;
-    }
-
+    @OneToMany(mappedBy = "blindbox", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BlindBoxItem> blindBoxItems;
 
     @PrePersist
     protected void onCreate() {

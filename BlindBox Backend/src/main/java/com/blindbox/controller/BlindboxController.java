@@ -1,9 +1,11 @@
 package com.blindbox.controller;
 
+import com.blindbox.model.BlindBoxItem;
 import com.blindbox.model.Blindbox;
 import com.blindbox.model.BlindboxImage;
 import com.blindbox.request.Create.Blindbox.BlindboxCreateRequest;
 import com.blindbox.request.Update.Blindbox.BlindboxImageUpdateRequest;
+import com.blindbox.request.Update.Blindbox.BlindboxItemUpdateRequest;
 import com.blindbox.request.Update.Blindbox.BlindboxUpdateRequest;
 import com.blindbox.response.ResponseData;
 import com.blindbox.service.BlindboxService;
@@ -154,6 +156,30 @@ public class BlindboxController {
     @DeleteMapping("/{blindboxID}/blindbox-images/{imageID}")
     public ResponseEntity<Void> deleteImage(@PathVariable Integer blindboxID, @PathVariable Integer imageID) {
         blindboxService.deleteImage(blindboxID, imageID);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    /* Blindbox Item
+    * */
+
+    // Update an existing item
+    @Operation(summary = "Update an existing item", description = "Update an existing item using its ID")
+    @PutMapping("/{blindboxID}/blindbox-items/{itemID}")
+    public ResponseEntity<ResponseData> updateItem(@PathVariable Integer blindboxID, @PathVariable Integer itemID, @Valid @RequestBody BlindboxItemUpdateRequest request) {
+        try {
+            BlindBoxItem item = blindboxService.updateItem(blindboxID, itemID, request);
+            return ResponseEntity.ok(new ResponseData(200, true, "Item updated", item, null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseData(500, false, "Fail to update item with itemID '" + itemID + "' and blindboxID '" + blindboxID + "'.", null, null));
+        }
+    }
+
+    // Delete an item by ID
+    @Operation(summary = "Delete an item by ID")
+    @DeleteMapping("/{blindboxID}/blindbox-items/{itemID}")
+    public ResponseEntity<Void> deleteItem(@PathVariable Integer blindboxID, @PathVariable Integer itemID) {
+        blindboxService.deleteItem(blindboxID, itemID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
