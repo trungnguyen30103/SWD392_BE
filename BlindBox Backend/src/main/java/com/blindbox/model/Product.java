@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -36,4 +37,12 @@ public class Product {
 
     @Column(name = "updated_at", insertable = false)
     private LocalDateTime lastUpdated;
+    // Thêm trường productImages
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ProductImage> productImages;
+
+    // Thêm setter cho productImages nếu chưa có
+    public void setProductImages(List<ProductImage> productImages) {
+        this.productImages = productImages;
+    }
 }

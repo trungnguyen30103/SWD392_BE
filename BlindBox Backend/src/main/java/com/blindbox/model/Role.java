@@ -16,10 +16,17 @@ public class Role {
     private Integer roleID;
 
     @Column(name = "name", nullable = false, length = 50)
-    private String roleName;  // Tên của vai trò, không được null
+    private String name;  // Tên của vai trò, không được null
 
     // Quan hệ giữa Role và User (Many-to-Many)
     @OneToMany(mappedBy = "role")  // Liên kết với quan hệ ManyToMany trong lớp User
     private Set<User> user;  // Một role có thể có nhiều user
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

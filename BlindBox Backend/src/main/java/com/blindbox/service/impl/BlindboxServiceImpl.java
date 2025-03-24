@@ -42,7 +42,7 @@ public class BlindboxServiceImpl implements BlindboxService {
         Blindbox blindbox = new Blindbox();
 
         // Set
-        blindbox.setName(request.getBlindboxName());
+        blindbox.setBlindboxName(request.getBlindboxName());
         blindbox.setDescription(request.getDescription());
         blindbox.setPrice(request.getPrice());
         blindbox.setStock(request.getStock());
@@ -80,7 +80,7 @@ public class BlindboxServiceImpl implements BlindboxService {
                 .orElseThrow(() -> new RuntimeException("Blindbox not found"));
 
         // Update
-        if (request.getBlindboxName() != null) existingBlindbox.setName(request.getBlindboxName());
+        if (request.getBlindboxName() != null) existingBlindbox.setBlindboxName(request.getBlindboxName());
         if (request.getPrice() != null) existingBlindbox.setPrice(request.getPrice());
         if (request.getDescription() != null) existingBlindbox.setDescription(request.getDescription());
         if (request.getStock() != null) existingBlindbox.setStock(request.getStock());
