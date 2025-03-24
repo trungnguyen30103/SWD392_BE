@@ -15,7 +15,7 @@ public class Role {
     @Column(name = "role_id")
     private Integer roleID;
 
-    @Column(name = "role_name", nullable = false, length = 50)
+    @Column(name = "name", nullable = false, length = 50)
     private String roleName;  // Tên của vai trò, không được null
 
     // Quan hệ giữa Role và User (Many-to-Many)

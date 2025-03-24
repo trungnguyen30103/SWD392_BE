@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserAccountRepository extends JpaRepository<UserAccount, Integer> {
 
-    UserAccount findByUserUserId(Integer userId);
+    UserAccount findByUserUserID(Integer userId);
 }

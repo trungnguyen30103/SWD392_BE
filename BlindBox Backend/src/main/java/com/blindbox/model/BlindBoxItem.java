@@ -3,8 +3,6 @@ package com.blindbox.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 @Data
 @Entity
 @Table(name = "blindbox_item")
@@ -21,6 +19,7 @@ public class BlindBoxItem {
     @Column(name = "rarity", nullable = false)
     private Integer rarity;
 
+    // Thay đổi từ BigDecimal thành double
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private double price;
 }

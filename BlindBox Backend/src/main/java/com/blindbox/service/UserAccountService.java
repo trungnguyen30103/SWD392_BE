@@ -1,11 +1,10 @@
 package com.blindbox.service;
-
-import java.math.BigDecimal;
-
+import org.springframework.stereotype.Service;
+@Service
 public interface UserAccountService {
 
 
-    void createUserAccount(Integer userId, BigDecimal initialBalance);
+    void createUserAccount(Integer userId,double initialBalance);
 
 
 }

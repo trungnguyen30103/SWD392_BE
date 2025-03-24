@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
+
 
 @Data
 @Entity
@@ -33,5 +33,5 @@ public class CartItem {
     private int quantity;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal price;
+    private double price;
 }

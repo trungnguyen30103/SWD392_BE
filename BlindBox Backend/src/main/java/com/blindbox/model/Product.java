@@ -26,7 +26,7 @@ public class Product {
     private Category category;
 
     @Column(name = "price", precision = 10, scale = 2, nullable = false)
-    private BigDecimal price;
+    private double price;
 
     @Column(name = "stock_quantity", nullable = false)
     private Integer stock;

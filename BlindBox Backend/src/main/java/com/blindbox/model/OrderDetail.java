@@ -3,7 +3,7 @@ package com.blindbox.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.math.BigDecimal;
+
 import java.time.LocalDateTime;
 
 @Data
@@ -32,7 +32,7 @@ public class OrderDetail {
     private Integer quantity;
 
     @Column(name = "price", precision = 10, scale = 2, nullable = false)
-    private BigDecimal price;
+    private double price;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

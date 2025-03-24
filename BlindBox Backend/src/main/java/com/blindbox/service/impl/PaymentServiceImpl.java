@@ -9,7 +9,6 @@ import com.blindbox.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -23,15 +22,15 @@ public class PaymentServiceImpl implements PaymentService {
     private OrderRepository orderRepository;
 
     @Override
-    public Payment processPayment(User user, Order order, BigDecimal amount, String paymentMethod) {
-        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+    public Payment processPayment(User user, Order order, double amount, String paymentMethod) {
+        if (amount <= 0) {
             throw new IllegalArgumentException("Invalid payment amount");
         }
 
         Payment payment = new Payment();
         payment.setUser(user);
         payment.setOrder(order);
-        payment.setAmount(amount);
+        payment.setAmount(amount);  // Sử dụng amount kiểu double
         payment.setPaymentMethod(paymentMethod);
         payment.setStatus("Pending");  // Trạng thái ban đầu
         payment.setTransactionId(UUID.randomUUID().toString());

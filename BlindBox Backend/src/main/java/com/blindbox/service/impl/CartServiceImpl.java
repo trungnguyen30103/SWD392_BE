@@ -9,8 +9,6 @@ import com.blindbox.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-
 @Service
 public class CartServiceImpl {
 
@@ -30,12 +28,12 @@ public class CartServiceImpl {
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Sản phẩm không tồn tại"));
 
         // Tạo một CartItem mới và tính giá trị
-        BigDecimal price = product.getPrice();
+        double price = product.getPrice();  // Lấy giá sản phẩm (kiểu double)
         CartItem cartItem = new CartItem();
         cartItem.setCart(cart);
         cartItem.setProduct(product);
         cartItem.setQuantity(quantity);
-        cartItem.setPrice(price.multiply(new BigDecimal(quantity)));
+        cartItem.setPrice(price * quantity);  // Tính tổng tiền (sử dụng double)
 
         // Lưu CartItem vào cơ sở dữ liệu
         return cartItemRepository.save(cartItem);

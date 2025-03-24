@@ -5,14 +5,12 @@ import com.blindbox.model.Order;
 import com.blindbox.repository.OrderRepository;
 import com.blindbox.repository.UserRepository;
 import com.blindbox.service.PaymentService;
-import com.blindbox.controller.PaymentRequest;
 import com.blindbox.model.Payment;
+import com.blindbox.request.PaymentRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
 
 @Tag(name = "Payment Management System", description = "Operations pertaining to payments in the Payment Management System")
 @RestController
@@ -38,7 +36,7 @@ public class PaymentController {
         // Lấy thông tin đơn hàng (Order)
         Order order = orderRepository.findById(request.getOrderId()).orElseThrow(() -> new RuntimeException("Order not found"));
 
-        // Xử lý thanh toán
+        // Xử lý thanh toán, truyền amount kiểu double
         return paymentService.processPayment(user, order, request.getAmount(), request.getPaymentMethod());
     }
 }
