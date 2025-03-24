@@ -23,19 +23,30 @@ public class CartServiceImpl {
 
     // Thêm sản phẩm vào giỏ hàng
     public CartItem addProductToCart(Integer cartId, Integer productId, int quantity) {
-        // Lấy giỏ hàng và sản phẩm từ cơ sở dữ liệu
         Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new RuntimeException("Giỏ hàng không tồn tại"));
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Sản phẩm không tồn tại"));
 
-        // Tạo một CartItem mới và tính giá trị
-        double price = product.getPrice();  // Lấy giá sản phẩm (kiểu double)
+        double price = product.getPrice();
         CartItem cartItem = new CartItem();
         cartItem.setCart(cart);
         cartItem.setProduct(product);
         cartItem.setQuantity(quantity);
-        cartItem.setPrice(price * quantity);  // Tính tổng tiền (sử dụng double)
+        cartItem.setPrice(price * quantity);
 
-        // Lưu CartItem vào cơ sở dữ liệu
         return cartItemRepository.save(cartItem);
+    }
+
+    // Lấy giỏ hàng của người dùng
+    public Cart getCart(Integer cartId) {
+        return cartRepository.findById(cartId).orElse(null);
+    }
+
+    // Xóa sản phẩm khỏi giỏ hàng
+    public void removeProductFromCart(Integer cartId, Integer cartItemId) {
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(() -> new RuntimeException("Sản phẩm trong giỏ hàng không tồn tại"));
+        if (!cartItem.getCart().getCartId().equals(cartId)) {
+            throw new RuntimeException("Giỏ hàng không khớp");
+        }
+        cartItemRepository.delete(cartItem);
     }
 }
