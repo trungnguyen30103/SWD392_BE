@@ -1,5 +1,6 @@
 package com.blindbox.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Table;
 
 import jakarta.persistence.*;
@@ -21,10 +22,12 @@ public class CartItem {
     @Column(name = "cart_item_id")
     private Integer cartItemId;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;

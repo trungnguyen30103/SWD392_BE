@@ -3,7 +3,6 @@ package com.blindbox.service.impl;
 import com.blindbox.model.*;
 import com.blindbox.repository.*;
 import com.blindbox.service.GachaService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,36 +11,37 @@ import java.util.Random;
 @Service
 public class GachaServiceImpl implements GachaService {
 
-    @Autowired
-    private BlindBoxItemRepository blindBoxItemRepository;
+    private final BlindBoxItemRepository blindBoxItemRepository;
 
-    @Autowired
-    private GachaHistoryRepository gachaHistoryRepository;
+    private final GachaHistoryRepository gachaHistoryRepository;
 
-    @Autowired
-    private UserAccountRepository userAccountRepository;
+    private final UserRepository userRepository;
 
     private static final double GACHA_COST = 5.00;  // Sử dụng double thay vì BigDecimal
     private static final int GACHA_BOUNDS = 100;
 
     private final Random random = new Random();
 
+    public GachaServiceImpl(BlindBoxItemRepository blindBoxItemRepository, GachaHistoryRepository gachaHistoryRepository, UserRepository userRepository) {
+        this.blindBoxItemRepository = blindBoxItemRepository;
+        this.gachaHistoryRepository = gachaHistoryRepository;
+        this.userRepository = userRepository;
+    }
+
     @Override
     public String openBlindBox(Integer userId) {
 
-        UserAccount userAccount = userAccountRepository.findByUserUserID(userId);
-        if (userAccount == null) {
-            return "Người dùng không tồn tại.";
-        }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         // So sánh số dư với GACHA_COST (kiểu double)
-        if (userAccount.getBalance() < GACHA_COST) {
+        if (user.getBalance() < GACHA_COST) {
             return "Bạn không đủ tiền để mở hộp gacha! Vui lòng nạp thêm tiền.";
         }
 
         // Cập nhật số dư sau khi trừ GACHA_COST
-        userAccount.setBalance(userAccount.getBalance() - GACHA_COST);
-        userAccountRepository.save(userAccount);
+        user.setBalance(user.getBalance() - GACHA_COST);
+        userRepository.save(user);
 
         // Lấy danh sách các vật phẩm trong blindbox
         List<BlindBoxItem> items = blindBoxItemRepository.findAll();

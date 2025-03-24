@@ -1,5 +1,6 @@
 package com.blindbox.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -19,6 +20,7 @@ public class Role {
     private String name;  // Tên của vai trò, không được null
 
     // Quan hệ giữa Role và User (Many-to-Many)
+    @JsonIgnore
     @OneToMany(mappedBy = "role")  // Liên kết với quan hệ ManyToMany trong lớp User
     private Set<User> user;  // Một role có thể có nhiều user
 

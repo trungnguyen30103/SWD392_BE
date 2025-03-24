@@ -1,5 +1,6 @@
 package com.blindbox.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ public class Shipment {
     @Column(name = "shipment_id")
     private Integer shipmentID;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;  // Liên kết với bảng Order

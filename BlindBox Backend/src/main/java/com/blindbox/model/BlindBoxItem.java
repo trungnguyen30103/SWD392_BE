@@ -1,5 +1,6 @@
 package com.blindbox.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -13,6 +14,7 @@ public class BlindBoxItem {
     @Column(name = "blindbox_item_id")
     private Integer blindboxItemID;
 
+    @JsonBackReference
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "blindbox_id", nullable = false)
     private Blindbox blindbox;

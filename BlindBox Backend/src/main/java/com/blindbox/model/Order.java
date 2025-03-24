@@ -3,6 +3,7 @@ package com.blindbox.model;
 import com.blindbox.enums.OrderStatus;
 import com.blindbox.enums.PaymentStatus;
 import com.blindbox.enums.ShippingStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class Order {
     @Column(name = "order_id")
     private Integer orderId;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -31,6 +33,7 @@ public class Order {
     @Column(name = "gacha_type", length = 50)
     private String gachaType;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "discount_id")
     private Discount discount;

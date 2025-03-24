@@ -64,9 +64,10 @@ public class BlindboxController {
     // Delete a blindbox by ID
     @Operation(summary = "Delete a blindbox by ID")
     @DeleteMapping("/{blindboxID}")
-    public ResponseEntity<Void> deleteBlindbox(@PathVariable Integer blindboxID) {
+    public ResponseEntity<ResponseData> deleteBlindbox(@PathVariable Integer blindboxID) {
         blindboxService.deleteBlindbox(blindboxID);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(new ResponseData(204, true, "Blindbox deleted", null,null));
     }
 
     // Get all blindboxes

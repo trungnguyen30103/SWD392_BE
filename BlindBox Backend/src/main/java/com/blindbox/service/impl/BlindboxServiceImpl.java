@@ -15,8 +15,13 @@ import com.blindbox.request.Update.Blindbox.BlindboxImageUpdateRequest;
 import com.blindbox.request.Update.Blindbox.BlindboxItemUpdateRequest;
 import com.blindbox.request.Update.Blindbox.BlindboxUpdateRequest;
 import com.blindbox.service.BlindboxService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +29,9 @@ import java.util.Optional;
 
 @Service
 public class BlindboxServiceImpl implements BlindboxService {
+
+    private static final Logger logger = LoggerFactory.getLogger(BlindboxServiceImpl.class);
+
 
     private final BlindboxRepository blindboxRepository;
 
@@ -59,6 +67,9 @@ public class BlindboxServiceImpl implements BlindboxService {
 
         blindbox.setCategory(category);
 
+        // Save first
+        blindbox = blindboxRepository.save(blindbox);
+
         // Set images
         List<BlindboxImage> images = new ArrayList<>();
         if (request.getBlindboxImages() != null) {
@@ -67,12 +78,9 @@ public class BlindboxServiceImpl implements BlindboxService {
                 image.setImageUrl(imgReq.getImageUrl());
                 image.setBlindbox(blindbox); // ✅ Required to set back-reference
                 image.setAltText(imgReq.getAltText());
-                blindboxImageRepository.save(image);
                 images.add(image);
             }
         }
-
-        blindbox.setBlindboxImages(images);
 
         // Set items
         List<BlindBoxItem> items = new ArrayList<>();
@@ -82,10 +90,11 @@ public class BlindboxServiceImpl implements BlindboxService {
                 item.setBlindbox(blindbox);
                 item.setName(itemCreateRequest.getName());
                 item.setRarity(itemCreateRequest.getRarity());
-                blindBoxItemRepository.save(item);
                 items.add(item);
             }
         }
+
+        blindbox.setBlindboxImages(images);
 
         blindbox.setBlindBoxItems(items);
 
@@ -134,7 +143,7 @@ public class BlindboxServiceImpl implements BlindboxService {
         if (request.getBlindboxItem() != null) {
             List<BlindBoxItem> updateItems = new ArrayList<>();
             for (BlindboxItemUpdateRequest itemUpdateRequest : request.getBlindboxItem()) {
-                BlindBoxItem item = blindBoxItemRepository.findByBlindbox_BlindboxIDAndAndBlindboxItemID(blindboxID, itemUpdateRequest.getBlindboxItemID())
+                BlindBoxItem item = blindBoxItemRepository.findByBlindbox_BlindboxIDAndBlindboxItemID(blindboxID, itemUpdateRequest.getBlindboxItemID())
                         .orElseThrow(() -> new RuntimeException("Blindbox Item not found"));
                 item.setName(itemUpdateRequest.getName());
                 item.setRarity(itemUpdateRequest.getRarity());
@@ -165,8 +174,23 @@ public class BlindboxServiceImpl implements BlindboxService {
     // Get all blindboxes
     @Override
     @NonNull
+    @Transactional(readOnly = true)
     public List<Blindbox> getAllBlindboxes() {
-        return blindboxRepository.findAll();
+        logger.info("Entering getAllBlindboxes method");
+        try {
+            List<Blindbox> blindboxes = blindboxRepository.findAll();
+            blindboxes.forEach(blindbox -> {
+                // Fetch blindboxImages separately
+                blindbox.setBlindboxImages(blindboxImageRepository.findBlindboxImagesByBlindbox_BlindboxID(blindbox.getBlindboxID()));
+                // Fetch blindBoxItems separately
+                blindbox.setBlindBoxItems(blindBoxItemRepository.findBlindBoxItemsByBlindbox_BlindboxID(blindbox.getBlindboxID()));
+            });
+            logger.info("Successfully retrieved blindboxes: {}", blindboxes);
+            return blindboxes;
+        } catch (Exception e) {
+            logger.error("Error occurred while retrieving blindboxes", e);
+            throw e; // Ensure the exception is propagated correctly
+        }
     }
 
     // Get blindbox by ID
@@ -222,7 +246,7 @@ public class BlindboxServiceImpl implements BlindboxService {
     @Override
     @NonNull
     public BlindBoxItem updateItem(@NonNull Integer blindboxID, @NonNull Integer itemID, @NonNull BlindboxItemUpdateRequest request) {
-        BlindBoxItem item = blindBoxItemRepository.findByBlindbox_BlindboxIDAndAndBlindboxItemID(blindboxID, itemID)
+        BlindBoxItem item = blindBoxItemRepository.findByBlindbox_BlindboxIDAndBlindboxItemID(blindboxID, itemID)
                 .orElseThrow(() -> new RuntimeException("Blindbox Item not found"));
 
         if (request.getBlindboxID() != null) {

@@ -10,9 +10,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BlindboxImageCreateRequest {
 
-    @NotNull
-    Integer blindboxID;
-
     @NotBlank
     String imageUrl;
 

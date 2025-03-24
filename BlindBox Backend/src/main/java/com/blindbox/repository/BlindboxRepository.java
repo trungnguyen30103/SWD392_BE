@@ -14,19 +14,19 @@ import java.util.Optional;
 @Repository
 public interface BlindboxRepository extends JpaRepository<Blindbox, Integer> {
 
-    @EntityGraph(attributePaths = {"blindboxImages", "blindboxItem"})
+    @EntityGraph(attributePaths = {"blindboxImages", "blindBoxItems"})
     @NonNull
     List<Blindbox> findAll();
 
-    @EntityGraph(attributePaths = {"blindboxImages", "blindboxItem"})
+    @EntityGraph(attributePaths = {"blindboxImages", "blindBoxItems"})
     @NonNull
     Optional<Blindbox> findById(@NonNull Integer id);
 
-    @EntityGraph(attributePaths = {"blindboxImages", "blindboxItem"})
+    @EntityGraph(attributePaths = {"blindboxImages", "blindBoxItems"})
     List<Blindbox> findByCategory_CategoryID(@Param("categoryID") Integer categoryID);
 
     @Query("SELECT b FROM Blindbox b WHERE LOWER(b.name) LIKE LOWER(CONCAT('%', :name, '%'))")
-    @EntityGraph(attributePaths = {"blindboxImages", "blindboxItem"})
+    @EntityGraph(attributePaths = {"blindboxImages", "blindBoxItems"})
     List<Blindbox> findByBlindboxNameContainingIgnoreCase(@Param("name") String name);
 
     // Có thể thêm các truy vấn đặc biệt nếu cần
