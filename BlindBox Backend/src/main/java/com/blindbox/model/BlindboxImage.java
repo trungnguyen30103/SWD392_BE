@@ -1,12 +1,14 @@
 package com.blindbox.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "blindbox_image")
 public class BlindboxImage {
@@ -16,9 +18,9 @@ public class BlindboxImage {
     @Column(name = "blindbox_image_id")
     private Integer blindboxImageID;
 
-    @JsonBackReference
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "blindbox_id", nullable = false)
+    @JsonIgnore // Prevents recursion
     private Blindbox blindbox;
 
     @Column(name = "image_url", nullable = false, length = 500) // Định nghĩa độ dài tối đa
@@ -29,4 +31,5 @@ public class BlindboxImage {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
 }

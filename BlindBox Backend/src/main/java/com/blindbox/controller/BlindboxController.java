@@ -89,10 +89,11 @@ public class BlindboxController {
     public ResponseEntity<ResponseData> getBlindboxById(@PathVariable Integer blindboxID) {
         try {
             Blindbox blindbox = blindboxService.getBlindboxById(blindboxID);
+            System.out.println("✅ Fetch Successful: " + blindbox);
             return ResponseEntity.ok(new ResponseData(200, true, "Blindbox retrieved successfully", blindbox, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseData(404, false, "Blindbox not found", null, null));
+                    .body(new ResponseData(404, false, "Blindbox not found: " + e.getMessage(), null, null));
         }
     }
 

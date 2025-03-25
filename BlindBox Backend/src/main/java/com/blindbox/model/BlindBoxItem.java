@@ -1,10 +1,12 @@
 package com.blindbox.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "blindbox_item")
 public class BlindBoxItem {
@@ -14,9 +16,9 @@ public class BlindBoxItem {
     @Column(name = "blindbox_item_id")
     private Integer blindboxItemID;
 
-    @JsonBackReference
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "blindbox_id", nullable = false)
+    @JsonIgnore // Prevents recursion
     private Blindbox blindbox;
 
     @Column(name = "name", nullable = false)

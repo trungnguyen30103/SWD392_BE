@@ -8,7 +8,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -30,8 +30,8 @@ public class BlindboxCreateRequest {
     @NotNull
     Integer categoryID;
 
-    List<BlindboxImageCreateRequest> blindboxImages;
+    Set<BlindboxImageCreateRequest> blindboxImages;
 
-    List<BlindboxItemCreateRequest> blindboxItem;
+    Set<BlindboxItemCreateRequest> blindboxItem;
 
 }

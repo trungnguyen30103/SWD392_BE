@@ -1,18 +1,17 @@
 package com.blindbox.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
-import lombok.Data;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
-@Data
 @Entity
+@Getter
+@Setter
 @Table(name = "blindbox")
 public class Blindbox {
 
@@ -45,17 +44,13 @@ public class Blindbox {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "blindbox", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @BatchSize(size = 10)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<BlindboxImage> blindboxImages;
+    @OneToMany(mappedBy = "blindbox", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("blindbox") // Prevents infinite loop
+    private Set<BlindboxImage> blindboxImages = new CopyOnWriteArraySet<>();
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "blindbox", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @BatchSize(size = 10)
-    @Fetch(FetchMode.SUBSELECT)
-    private List<BlindBoxItem> blindBoxItems;
+    @OneToMany(mappedBy = "blindbox", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("blindbox") // Prevents infinite loop
+    private Set<BlindBoxItem> blindBoxItems = new CopyOnWriteArraySet<>();
 
     @PrePersist
     protected void onCreate() {
@@ -67,4 +62,5 @@ public class Blindbox {
     protected void onUpdate() {
         this.lastUpdated = LocalDateTime.now();
     }
+
 }

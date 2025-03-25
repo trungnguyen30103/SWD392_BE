@@ -14,7 +14,7 @@ import java.util.List;
 public interface BlindboxService {
 
     /* Blindbox */
-    @NonNull
+
     Blindbox createBlindbox(@NonNull BlindboxCreateRequest request);
 
     @NonNull

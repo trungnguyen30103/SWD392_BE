@@ -16,22 +16,14 @@ import com.blindbox.request.Update.Blindbox.BlindboxItemUpdateRequest;
 import com.blindbox.request.Update.Blindbox.BlindboxUpdateRequest;
 import com.blindbox.service.BlindboxService;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BlindboxServiceImpl implements BlindboxService {
-
-    private static final Logger logger = LoggerFactory.getLogger(BlindboxServiceImpl.class);
-
 
     private final BlindboxRepository blindboxRepository;
 
@@ -51,7 +43,7 @@ public class BlindboxServiceImpl implements BlindboxService {
 
     // Create a new blindbox
     @Override
-    @NonNull
+    @Transactional
     public Blindbox createBlindbox(@NonNull BlindboxCreateRequest request) {
         Blindbox blindbox = new Blindbox();
 
@@ -71,19 +63,20 @@ public class BlindboxServiceImpl implements BlindboxService {
         blindbox = blindboxRepository.save(blindbox);
 
         // Set images
-        List<BlindboxImage> images = new ArrayList<>();
+        Set<BlindboxImage> images = new HashSet<>();
         if (request.getBlindboxImages() != null) {
             for (BlindboxImageCreateRequest imgReq : request.getBlindboxImages()) {
                 BlindboxImage image = new BlindboxImage();
                 image.setImageUrl(imgReq.getImageUrl());
-                image.setBlindbox(blindbox); // ✅ Required to set back-reference
+                image.setBlindbox(blindbox);
                 image.setAltText(imgReq.getAltText());
                 images.add(image);
             }
+            blindboxImageRepository.saveAll(images);
         }
 
         // Set items
-        List<BlindBoxItem> items = new ArrayList<>();
+        Set<BlindBoxItem> items = new HashSet<>();
         if (request.getBlindboxItem() != null) {
             for (BlindboxItemCreateRequest itemCreateRequest : request.getBlindboxItem()) {
                 BlindBoxItem item = new BlindBoxItem();
@@ -92,6 +85,7 @@ public class BlindboxServiceImpl implements BlindboxService {
                 item.setRarity(itemCreateRequest.getRarity());
                 items.add(item);
             }
+            blindBoxItemRepository.saveAll(items);
         }
 
         blindbox.setBlindboxImages(images);
@@ -123,7 +117,7 @@ public class BlindboxServiceImpl implements BlindboxService {
 
         // Update image
         if (request.getBlindboxImages() != null) {
-            List<BlindboxImage> updateImages = new ArrayList<>();
+            Set<BlindboxImage> updateImages = new HashSet<>();
             for (BlindboxImageUpdateRequest imgReq : request.getBlindboxImages()) {
                 BlindboxImage image = blindboxImageRepository.findByBlindbox_BlindboxIDAndBlindboxImageID(blindboxID, imgReq.getBlindboxImageID())
                         .orElseThrow(() -> new RuntimeException("Blindbox Image not found"));
@@ -133,7 +127,7 @@ public class BlindboxServiceImpl implements BlindboxService {
                 // Save new image
                 blindboxImageRepository.save(image);
 
-                // Add image to the list
+                // Add image to the set
                 updateImages.add(image);
             }
             existingBlindbox.setBlindboxImages(updateImages);
@@ -141,17 +135,17 @@ public class BlindboxServiceImpl implements BlindboxService {
 
         // Update item
         if (request.getBlindboxItem() != null) {
-            List<BlindBoxItem> updateItems = new ArrayList<>();
+            Set<BlindBoxItem> updateItems = new HashSet<>();
             for (BlindboxItemUpdateRequest itemUpdateRequest : request.getBlindboxItem()) {
                 BlindBoxItem item = blindBoxItemRepository.findByBlindbox_BlindboxIDAndBlindboxItemID(blindboxID, itemUpdateRequest.getBlindboxItemID())
                         .orElseThrow(() -> new RuntimeException("Blindbox Item not found"));
                 item.setName(itemUpdateRequest.getName());
                 item.setRarity(itemUpdateRequest.getRarity());
 
-                // Save new image
+                // Save new item
                 blindBoxItemRepository.save(item);
 
-                // Add image to the list
+                // Add item to the set
                 updateItems.add(item);
             }
             existingBlindbox.setBlindBoxItems(updateItems);
@@ -176,29 +170,16 @@ public class BlindboxServiceImpl implements BlindboxService {
     @NonNull
     @Transactional(readOnly = true)
     public List<Blindbox> getAllBlindboxes() {
-        logger.info("Entering getAllBlindboxes method");
-        try {
-            List<Blindbox> blindboxes = blindboxRepository.findAll();
-            blindboxes.forEach(blindbox -> {
-                // Fetch blindboxImages separately
-                blindbox.setBlindboxImages(blindboxImageRepository.findBlindboxImagesByBlindbox_BlindboxID(blindbox.getBlindboxID()));
-                // Fetch blindBoxItems separately
-                blindbox.setBlindBoxItems(blindBoxItemRepository.findBlindBoxItemsByBlindbox_BlindboxID(blindbox.getBlindboxID()));
-            });
-            logger.info("Successfully retrieved blindboxes: {}", blindboxes);
-            return blindboxes;
-        } catch (Exception e) {
-            logger.error("Error occurred while retrieving blindboxes", e);
-            throw e; // Ensure the exception is propagated correctly
-        }
+        return blindboxRepository.findAll();
     }
 
     // Get blindbox by ID
     @Override
     @NonNull
+    @Transactional(readOnly = true)
     public Blindbox getBlindboxById(@NonNull Integer id) {
-        Optional<Blindbox> blindbox = blindboxRepository.findById(id);
-        return blindbox.orElseThrow(() -> new RuntimeException("Blindbox not found"));
+        return blindboxRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Blindbox not found"));
     }
 
     // Get blindbox by name
