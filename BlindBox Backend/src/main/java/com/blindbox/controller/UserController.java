@@ -38,7 +38,7 @@ public class UserController {
                     .body(new ResponseData(201, true, "Admin created successfully", createdAdmin, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseData(500, false, "Failed to create customer", null, null));
+                    .body(new ResponseData(500, false, "Failed to create admin", null, null));
         }
     }
 
