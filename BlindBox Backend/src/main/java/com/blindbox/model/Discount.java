@@ -17,7 +17,7 @@ public class Discount {
     @Column(name = "discount_id")
     private Integer discountId;
 
-    @Column(name = "percentage", nullable = false)
+    @Column(name = "discount_percentage", nullable = false)
     private Double discountPercentage;  // Percentage of the discount
 
     @Column(nullable = false)
