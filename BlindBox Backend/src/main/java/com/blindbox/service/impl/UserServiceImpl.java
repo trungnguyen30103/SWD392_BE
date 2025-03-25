@@ -8,6 +8,7 @@ import com.blindbox.request.Create.User.UserCreateRequest;
 import com.blindbox.request.Update.User.UserUpdateRequest;
 import com.blindbox.service.UserService;
 import org.springframework.lang.NonNull;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,10 +19,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl (UserRepository userRepository, RoleRepository roleRepository) {
+    public UserServiceImpl (UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /* Admin
@@ -32,7 +35,8 @@ public class UserServiceImpl implements UserService {
     public User createAdmin(@NonNull UserCreateRequest request) {
         User admin = new User();
         admin.setUserName(request.getUserName());
-        admin.setPassword(request.getPassword());
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        admin.setPassword(encodedPassword);
         admin.setPhone(request.getPhone());
         admin.setAddress(request.getAddress());
         admin.setEmail(request.getEmail());
@@ -97,7 +101,8 @@ public class UserServiceImpl implements UserService {
     public User createCustomer(@NonNull UserCreateRequest request) {
         User customer = new User();
         customer.setUserName(request.getUserName());
-        customer.setPassword(request.getPassword());
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        customer.setPassword(encodedPassword);
         customer.setPhone(request.getPhone());
         customer.setAddress(request.getAddress());
         customer.setEmail(request.getEmail());
