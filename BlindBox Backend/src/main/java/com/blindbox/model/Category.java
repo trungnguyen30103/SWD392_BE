@@ -17,7 +17,7 @@ public class Category {
     @Column(name = "category_id")
     private Integer categoryID; // ✅ Sử dụng camelCase
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "category_name", nullable = false, unique = true)
     private String categoryName;
 
     @Column(columnDefinition = "TEXT")

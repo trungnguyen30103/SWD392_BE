@@ -32,7 +32,7 @@ public class Payment {
     @Column(name = "status", nullable = false, length = 50)
     private String status;
 
-    @Column(name = "method", nullable = false, length = 50)
+    @Column(name = "payment_method", nullable = false, length = 50)
     private String paymentMethod;
 
     @Column(name = "created_at", nullable = false, updatable = false)

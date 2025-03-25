@@ -17,7 +17,7 @@ public class Product {
     @Column(name = "product_id")
     private Integer productID;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "product_name", nullable = false)
     private String productName;
 
     @Column(name = "description", columnDefinition = "TEXT")
