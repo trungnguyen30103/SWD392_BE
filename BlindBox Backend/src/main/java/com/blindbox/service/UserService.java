@@ -22,6 +22,8 @@ public interface UserService {
 
     User getUserById(Integer id);
 
+    List<User> getUserByRoleID(Integer roleID);
+
     List<User> searchUserByUserName(@NonNull String userName);
 
     List<User> searchUserByFullName(@NonNull String fullName);

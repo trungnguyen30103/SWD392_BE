@@ -18,5 +18,7 @@ public class UserUpdateRequest {
     @Email
     String email;
 
+    double balance;
+
 
 }

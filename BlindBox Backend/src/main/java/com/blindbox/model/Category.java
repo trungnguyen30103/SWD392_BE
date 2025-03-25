@@ -29,5 +29,11 @@ public class Category {
     @EqualsAndHashCode.Exclude
     private List<Blindbox> blindboxes;
 
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // ✅ Tránh vòng lặp vô hạn khi trả về JSON
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<Product> products;
+
     // Bạn có thể thêm phương thức để dễ dàng truy cập hoặc thực hiện logic thêm nếu cần
 }

@@ -29,4 +29,6 @@ public class UserCreateRequest {
     @NotBlank
     String fullName;
 
+    double balance;
+
 }

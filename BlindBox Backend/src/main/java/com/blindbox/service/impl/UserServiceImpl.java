@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
         admin.setAddress(request.getAddress());
         admin.setEmail(request.getEmail());
         admin.setFullName(request.getFullName());
-        admin.setBalance(0.0);
+        if (request.getBalance() != 0) admin.setBalance(request.getBalance());
         admin.setStatus("ACTIVE");
 
         // Update role
@@ -71,6 +71,11 @@ public class UserServiceImpl implements UserService {
     public User getUserById(Integer id) {
         Optional<User> user = userRepository.findById(id);
         return user.orElse(null);
+    }
+
+    @Override
+    public List<User> getUserByRoleID(Integer roleID) {
+        return userRepository.findByRole_RoleID(roleID);
     }
 
     @Override
@@ -107,7 +112,7 @@ public class UserServiceImpl implements UserService {
         customer.setAddress(request.getAddress());
         customer.setEmail(request.getEmail());
         customer.setFullName(request.getFullName());
-        customer.setBalance(0.0);
+        if (request.getBalance() != 0) customer.setBalance(request.getBalance());
         customer.setStatus("ACTIVE");
 
         // Update role
@@ -132,6 +137,7 @@ public class UserServiceImpl implements UserService {
         if (request.getAddress() != null) existingUser.setAddress(request.getAddress());
         if (request.getEmail() != null) existingUser.setEmail(request.getEmail());
         if (request.getFullName() != null) existingUser.setFullName(request.getFullName());
+        if (request.getBalance() != 0) existingUser.setBalance(request.getBalance());
 
         // Save
         return userRepository.save(existingUser);

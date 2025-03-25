@@ -11,10 +11,9 @@ public interface CategoryService {
     List<Category> getAllCategories();
     Category getCategoryById(Integer id);
 
-    @NonNull
     Category createCategory(@NonNull CategoryCreateRequest request);
 
-    Category updateCategory(@NonNull Integer id, @NonNull CategoryUpdateRequest request);
+    Category updateCategory(@NonNull Integer id, CategoryUpdateRequest request);
 
     void deleteCategory(Integer id);
 }

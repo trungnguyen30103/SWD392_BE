@@ -111,7 +111,7 @@ public class UserController {
         }
     }
 
-    // Search user(s) by user name
+    // Search user(s) by roleID
     @Operation(summary = "Search users by user name", description = "Search for users using their user name")
     @GetMapping("/search/userName")
     public ResponseEntity<ResponseData> searchUserByUserName(@RequestParam String userName) {
@@ -120,6 +120,23 @@ public class UserController {
             if (users.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new ResponseData(404, false, "No users found with name '" + userName + "'.", null, null));
+            }
+            return ResponseEntity.ok(new ResponseData(200, true, "Users found", users, null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseData(500, false, "Failed to search users", null, null));
+        }
+    }
+
+    // Search user(s) by user name
+    @Operation(summary = "Search users by roleID", description = "Search for users using roleID")
+    @GetMapping("/search/role")
+    public ResponseEntity<ResponseData> searchUserByUserName(@RequestParam Integer roleID) {
+        try {
+            List<User> users = userService.getUserByRoleID(roleID);
+            if (users.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseData(404, false, "No users found with roleID '" + roleID + "'.", null, null));
             }
             return ResponseEntity.ok(new ResponseData(200, true, "Users found", users, null));
         } catch (Exception e) {

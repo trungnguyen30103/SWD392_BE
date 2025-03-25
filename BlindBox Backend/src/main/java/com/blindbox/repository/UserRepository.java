@@ -9,7 +9,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Integer> {
     // Đảm bảo phương thức trả về Optional<User>
     Optional<User> findByUserName(String username);
-    Optional<User> findByEmail(String email);
 
     List<User> findByUserNameContainingIgnoreCase(String userName);
 
@@ -18,5 +17,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findByPhoneContainingIgnoreCase(String phone);
 
     List<User> findByEmailContainingIgnoreCase(String email);
+
+    List<User> findByRole_RoleID(Integer roleID);
 
 }
