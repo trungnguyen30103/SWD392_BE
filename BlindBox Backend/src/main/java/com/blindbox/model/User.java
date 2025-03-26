@@ -2,6 +2,7 @@ package com.blindbox.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
@@ -34,7 +35,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @JsonBackReference
+    @JsonIgnoreProperties("user")
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;

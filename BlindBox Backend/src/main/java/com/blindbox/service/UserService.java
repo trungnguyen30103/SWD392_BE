@@ -16,6 +16,9 @@ public interface UserService {
     User createAdmin(@NonNull UserCreateRequest request);
 
     @NonNull
+    User createUser_Admin(@NonNull UserCreateRequest request);
+
+    @NonNull
     User updateUser(@NonNull Integer userID, @NonNull UserUpdateRequest request);
 
     boolean deleteUser(Integer id);

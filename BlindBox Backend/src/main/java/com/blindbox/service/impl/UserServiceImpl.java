@@ -1,7 +1,9 @@
 package com.blindbox.service.impl;
 
+import com.blindbox.model.Cart;
 import com.blindbox.model.Role;
 import com.blindbox.model.User;
+import com.blindbox.repository.CartRepository;
 import com.blindbox.repository.RoleRepository;
 import com.blindbox.repository.UserRepository;
 import com.blindbox.request.Create.User.Admin.UserCreateRequest;
@@ -22,11 +24,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CartRepository cartRepository;
 
-    public UserServiceImpl (UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl (UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, CartRepository cartRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.cartRepository = cartRepository;
     }
 
     /* Admin
@@ -48,13 +52,48 @@ public class UserServiceImpl implements UserService {
 
         if (request.getAvatar_url() != null) admin.setAvatar_url(request.getAvatar_url());
 
-        // Update role
+        // Set role ADMIN
         Role role = roleRepository.findById(1) // 1: Admin
                 .orElseThrow(() -> new RuntimeException("Role not found"));
         admin.setRole(role);
 
         // Save
         return userRepository.save((admin));
+    }
+
+    @Override
+    @NonNull
+    public User createUser_Admin(@NonNull UserCreateRequest request) {
+        User user = new User();
+        user.setUserName(request.getUserName());
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        user.setPassword(encodedPassword);
+        user.setPhone(request.getPhone());
+        user.setAddress(request.getAddress());
+        user.setEmail(request.getEmail());
+        user.setFullName(request.getFullName());
+        if (request.getBalance() != 0) user.setBalance(request.getBalance());
+        user.setStatus("ACTIVE");
+
+        if (request.getAvatar_url() != null) user.setAvatar_url(request.getAvatar_url());
+
+        // Set role CUSTOMER
+        Role role = roleRepository.findById(2) // 1: Admin
+                .orElseThrow(() -> new RuntimeException("Role not found"));
+        user.setRole(role);
+
+        // Save customer first to generate ID
+        user = userRepository.save(user);
+
+        // Create cart for the customer
+        Cart cart = new Cart();
+        cart.setUser(user);
+
+        // Save cart in DB
+        cartRepository.save(cart);
+
+        // Save
+        return user;
     }
 
     @Override
@@ -141,13 +180,22 @@ public class UserServiceImpl implements UserService {
         customer.setBalance(0);
         customer.setStatus("ACTIVE");
 
-        // Update role
+        // Set role CUSTOMER
         Role role = roleRepository.findById(2) // 2: Customer
                 .orElseThrow(() -> new RuntimeException("Role not found"));
         customer.setRole(role);
 
-        // Save
-        return userRepository.save((customer));
+        // Save customer first to generate ID
+        customer = userRepository.save(customer);
+
+        // Create cart for the customer
+        Cart cart = new Cart();
+        cart.setUser(customer);
+
+        // Save cart in DB
+        cartRepository.save(cart);
+
+        return customer;
     }
 
     @Override

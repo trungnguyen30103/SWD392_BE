@@ -1,54 +1,90 @@
 package com.blindbox.controller;
 
 import com.blindbox.model.Cart;
-import com.blindbox.model.CartItem;
-import com.blindbox.service.impl.CartServiceImpl;
+import com.blindbox.response.ResponseData;
+import com.blindbox.service.CartService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+@Tag(name = "Cart Management System", description = "Operations pertaining to carts in the Cart Management System")
 @RestController
 @RequestMapping("/api/carts")
 public class CartController {
 
+    private final CartService cartService;
+
     @Autowired
-    private CartServiceImpl cartService;
+    public CartController(CartService cartService) {
+        this.cartService = cartService;
+    }
 
-    // Thêm sản phẩm vào giỏ hàng
-    @PostMapping("/{cartId}/add/{productId}")
-    public ResponseEntity<CartItem> addProductToCart(@PathVariable Integer cartId,
-                                                     @PathVariable Integer productId,
-                                                     @RequestParam int quantity) {
+    @Operation(summary = "Add product to cart", description = "Add a product to the user's cart")
+    @PostMapping("/{userId}/add/{productId}")
+    public ResponseEntity<ResponseData> addProductToCart(@PathVariable Integer userId,
+                                                         @PathVariable Integer productId,
+                                                         @RequestParam int quantity) {
         try {
-            CartItem cartItem = cartService.addProductToCart(cartId, productId, quantity);
-            return ResponseEntity.ok(cartItem);
+            cartService.addProductToCart(userId, productId, quantity);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ResponseData(201, true, "Product added to cart successfully", null, null));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseData(400, false, "Failed to add product to cart", null, null));
         }
     }
 
-    // Lấy giỏ hàng của người dùng
-    @GetMapping("/{cartId}")
-    public ResponseEntity<Cart> getCart(@PathVariable Integer cartId) {
-        Cart cart = cartService.getCart(cartId);
-        if (cart != null) {
-            return ResponseEntity.ok(cart);
-        } else {
-            return ResponseEntity.notFound().build();
+    @Operation(summary = "Get cart by user ID", description = "Retrieve the cart for a given user")
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<ResponseData> getCartByUserID(@PathVariable Integer userId) {
+        try {
+            Cart cart = cartService.getCartByUserID(userId);
+            return ResponseEntity.ok(new ResponseData(200, true, "Cart retrieved successfully", cart, null));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseData(404, false, "Cart not found", null, null));
         }
     }
 
-    // Xóa sản phẩm khỏi giỏ hàng
-    @DeleteMapping("/{cartId}/remove/{cartItemId}")
-    public ResponseEntity<Void> removeProductFromCart(@PathVariable Integer cartId,
-                                                      @PathVariable Integer cartItemId) {
+    @Operation(summary = "Remove product from cart", description = "Remove a product from the user's cart")
+    @DeleteMapping("/{cartId}/remove/{productId}")
+    public ResponseEntity<ResponseData> removeProductFromCart(@PathVariable Integer cartId, @PathVariable Integer productId) {
         try {
-            cartService.removeProductFromCart(cartId, cartItemId);
-            return ResponseEntity.noContent().build();
+            cartService.removeProductFromCart(cartId, productId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseData(204, true, "Product removed from cart", null, null));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseData(400, false, "Failed to remove product from cart", null, null));
+        }
+    }
+
+    @Operation(summary = "Clear entire cart", description = "Clear all items from the user's cart")
+    @DeleteMapping("/{userId}/clear")
+    public ResponseEntity<ResponseData> clearCart(@PathVariable Integer userId) {
+        try {
+            cartService.clearCart(userId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseData(204, true, "Cart cleared successfully", null, null));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseData(400, false, "Failed to clear cart", null, null));
+        }
+    }
+
+    @Operation(summary = "Update cart item", description = "Update the quantity and price of a cart item")
+    @PutMapping("/{cartId}/update/{productId}")
+    public ResponseEntity<ResponseData> updateCartItem(@PathVariable Integer cartId, @PathVariable Integer productId, @RequestParam int quantity) {
+        try {
+            cartService.updateCartItem(cartId, productId, quantity);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseData(204, true, "Cart item updated successfully", null, null));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseData(400, false, "Failed to update cart item" + e.getMessage(), null, null));
         }
     }
 }

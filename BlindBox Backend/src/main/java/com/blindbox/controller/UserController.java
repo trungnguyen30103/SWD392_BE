@@ -44,6 +44,20 @@ public class UserController {
         }
     }
 
+    // Create customer (by Admin)
+    @Operation(summary = "Create customer (by admin)", description = "Create a new customer (by admin)")
+    @PostMapping("/admin/customer")
+    public ResponseEntity<ResponseData> createUserAdmin(@RequestBody UserCreateRequest request) {
+        try {
+            User newUser = userService.createUser_Admin(request);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ResponseData(201, true, "Admin user created successfully", newUser, null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseData(500, false, "Failed to create admin user", null, null));
+        }
+    }
+
     // Cập nhật thông tin người dùng
     @Operation(summary = "Update an existing user", description = "Update an existing user using their ID")
     @PutMapping("/admin/{userID}")
