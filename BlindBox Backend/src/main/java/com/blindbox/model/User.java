@@ -54,6 +54,9 @@ public class User {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "avatar")
+    private String avatar_url;
+
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Order> orders;
