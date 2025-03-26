@@ -2,10 +2,7 @@ package com.blindbox.service;
 
 import com.blindbox.model.BlindBoxItem;
 import com.blindbox.model.Blindbox;
-import com.blindbox.model.BlindboxImage;
 import com.blindbox.request.Create.Blindbox.BlindboxCreateRequest;
-import com.blindbox.request.Update.Blindbox.BlindboxImageUpdateRequest;
-import com.blindbox.request.Update.Blindbox.BlindboxItemUpdateRequest;
 import com.blindbox.request.Update.Blindbox.BlindboxUpdateRequest;
 import org.springframework.lang.NonNull;
 
@@ -53,5 +50,7 @@ public interface BlindboxService {
     List<BlindBoxItem> getDisableBlindboxItem();
 
     List<BlindBoxItem> getOutOfStockBlindboxItem();
+
+    List<Blindbox> getActiveBlindboxByCategoryID(Integer categoryID);
 
 }

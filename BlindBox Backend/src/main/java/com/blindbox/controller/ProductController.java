@@ -1,9 +1,7 @@
 package com.blindbox.controller;
 
 import com.blindbox.model.Product;
-import com.blindbox.model.ProductImage;
 import com.blindbox.request.Create.Product.ProductCreateRequest;
-import com.blindbox.request.Update.Product.ProductImageUpdateRequest;
 import com.blindbox.request.Update.Product.ProductUpdateRequest;
 import com.blindbox.response.ResponseData;
 import com.blindbox.service.ProductService;
@@ -40,7 +38,7 @@ public class ProductController {
                     .body(new ResponseData(201, true, "Product created successfully", createdProduct, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseData(500, false, "Failed to create product", null, null));
+                    .body(new ResponseData(500, false, "Failed to create product" + e.getMessage(), null, null));
         }
     }
 
@@ -56,7 +54,7 @@ public class ProductController {
         }
     }
 
-    @Operation(summary = "Delete a product by ID")
+    @Operation(summary = "Disable a product by ID")
     @DeleteMapping("/{productID}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Integer productID) {
         productService.deleteProduct(productID);
@@ -119,27 +117,42 @@ public class ProductController {
         }
     }
 
-    /* Product Image */
+    @Operation(summary = "Get ACTIVE products", description = "Retrieve a list of all ACTIVE products")
+    @GetMapping("/status/active")
+    public ResponseEntity<ResponseData> getActiveProducts() {
+        List<Product> products = productService.getActiveProduct();
+        return ResponseEntity.ok(new ResponseData(200, true, "Active products retrieved successfully", products, null));
+    }
 
-    @Operation(summary = "Update an existing image", description = "Update an existing image using its ID")
-    @PutMapping("/{productID}/product-images/{imageID}")
-    public ResponseEntity<ResponseData> updateImage(@PathVariable Integer productID, @PathVariable Integer imageID, @RequestBody ProductImageUpdateRequest request) {
+    @Operation(summary = "Get DISABLE products", description = "Retrieve a list of all DISABLE products")
+    @GetMapping("/status/disable")
+    public ResponseEntity<ResponseData> getDisableProducts() {
+        List<Product> products = productService.getDisableProduct();
+        return ResponseEntity.ok(new ResponseData(200, true, "Disabled products retrieved successfully", products, null));
+    }
+
+    @Operation(summary = "Get OUT_OF_STOCK products", description = "Retrieve a list of all OUT_OF_STOCK products")
+    @GetMapping("/status/out-of-stock")
+    public ResponseEntity<ResponseData> getOutOfStockProducts() {
+        List<Product> products = productService.getOutOfStockProduct();
+        return ResponseEntity.ok(new ResponseData(200, true, "Out of stock products retrieved successfully", products, null));
+    }
+
+    @Operation(summary = "Get ACTIVE products by category", description = "Retrieve a list of all ACTIVE products by category ID")
+    @GetMapping("/status/active/category/{categoryID}")
+    public ResponseEntity<ResponseData> getActiveProductsByCategory(@PathVariable Integer categoryID) {
         try {
-            Product product = productService.getProductById(productID);
-            if (product == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new ResponseData(404, false, "Product with ID: " + productID + " not found", null, null));
-            }
-
-            ProductImage image = productService.updateImage(productID, imageID, request);
-            return ResponseEntity.ok(new ResponseData(200, true, "Image updated", image, null));
+            List<Product> products = productService.getActiveProductByCategory(categoryID);
+            return ResponseEntity.ok(new ResponseData(200, true, "Active products by category retrieved successfully", products, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseData(500, false, "Fail to update image with imageID '" + imageID + "' and productID '" + productID + "'.", null, null));
+                    .body(new ResponseData(500, false, "Failed to retrieve active products by category", null, null));
         }
     }
 
-    @Operation(summary = "Delete an image by ID")
+    /* Product Image */
+
+    @Operation(summary = "Delete an image by productID and imageID")
     @DeleteMapping("/{productID}/product-images/{imageID}")
     public ResponseEntity<Void> deleteImage(@PathVariable Integer productID, @PathVariable Integer imageID) {
         productService.deleteImage(productID, imageID);

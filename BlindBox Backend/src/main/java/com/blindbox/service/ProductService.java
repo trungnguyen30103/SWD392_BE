@@ -1,9 +1,7 @@
 package com.blindbox.service;
 
 import com.blindbox.model.Product;
-import com.blindbox.model.ProductImage;
 import com.blindbox.request.Create.Product.ProductCreateRequest;
-import com.blindbox.request.Update.Product.ProductImageUpdateRequest;
 import com.blindbox.request.Update.Product.ProductUpdateRequest;
 import org.springframework.lang.NonNull;
 
@@ -29,9 +27,15 @@ public interface ProductService {
 
     List<Product> getProductByCategory(Integer categoryID);
 
+    List<Product> getActiveProduct();
+
+    List<Product> getDisableProduct();
+
+    List<Product> getOutOfStockProduct();
+
+    List<Product> getActiveProductByCategory(Integer categoryID);
+
     /* Product Image */
-    @NonNull
-    ProductImage updateImage(@NonNull Integer productID, @NonNull Integer imageID, @NonNull ProductImageUpdateRequest request);
 
     void deleteImage(@NonNull Integer productID, @NonNull Integer imageID);
 }
