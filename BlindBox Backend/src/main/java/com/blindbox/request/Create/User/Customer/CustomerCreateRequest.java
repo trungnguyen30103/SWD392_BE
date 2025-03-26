@@ -1,4 +1,4 @@
-package com.blindbox.request.Create.User;
+package com.blindbox.request.Create.User.Customer;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserCreateRequest {
+public class CustomerCreateRequest {
 
     @NotBlank
     String userName;
@@ -29,6 +29,6 @@ public class UserCreateRequest {
     @NotBlank
     String fullName;
 
-    double balance;
+    String avatar_url;
 
 }

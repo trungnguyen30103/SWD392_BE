@@ -1,8 +1,10 @@
 package com.blindbox.controller;
 
 import com.blindbox.model.User;
-import com.blindbox.request.Create.User.UserCreateRequest;
-import com.blindbox.request.Update.User.UserUpdateRequest;
+import com.blindbox.request.Create.User.Admin.UserCreateRequest;
+import com.blindbox.request.Create.User.Customer.CustomerCreateRequest;
+import com.blindbox.request.Update.User.Admin.UserUpdateRequest;
+import com.blindbox.request.Update.User.Customer.CustomerUpdateRequest;
 import com.blindbox.response.ResponseData;
 import com.blindbox.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,13 +44,26 @@ public class UserController {
         }
     }
 
+    // Cập nhật thông tin người dùng
+    @Operation(summary = "Update an existing user", description = "Update an existing user using their ID")
+    @PutMapping("/admin/{userID}")
+    public ResponseEntity<ResponseData> updateUser(@PathVariable Integer userID, @Valid @RequestBody UserUpdateRequest request) {
+        try {
+            User updatedCustomer = userService.updateUser(userID, request);
+            return ResponseEntity.ok(new ResponseData(200, true, "Customer updated successfully", updatedCustomer, null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseData(500, false, "Failed to update customer", null, null));
+        }
+    }
+
     /* Customer
     * */
 
     // Create customer
     @Operation(summary = "Create a new customer", description = "Add a new customer to the system")
     @PostMapping("/customer")
-    public ResponseEntity<ResponseData> createCustomer(@Valid @RequestBody UserCreateRequest request) {
+    public ResponseEntity<ResponseData> createCustomer(@Valid @RequestBody CustomerCreateRequest request) {
         try {
             User createdCustomer = userService.createCustomer(request);
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -59,21 +74,34 @@ public class UserController {
         }
     }
 
-    /* Chung
-    * */
-
-    // Cập nhật thông tin người dùng
-    @Operation(summary = "Update an existing user", description = "Update an existing user using their ID")
-    @PutMapping("/{userID}")
-    public ResponseEntity<ResponseData> updateUser(@PathVariable Integer userID, @Valid @RequestBody UserUpdateRequest request) {
+    // Update customer
+    @Operation(summary = "Update customer", description = "Update customer details by user ID")
+    @PutMapping("/customer/{userID}")
+    public ResponseEntity<ResponseData> updateCustomer(@PathVariable Integer userID, @RequestBody CustomerUpdateRequest request) {
         try {
-            User updatedCustomer = userService.updateUser(userID, request);
-            return ResponseEntity.ok(new ResponseData(200, true, "Customer updated successfully", updatedCustomer, null));
+            User updatedUser = userService.updateCustomer(userID, request);
+            return ResponseEntity.ok(new ResponseData(200, true, "Customer updated successfully", updatedUser, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseData(500, false, "Failed to update customer", null, null));
         }
     }
+
+    // Forgot Password
+    @Operation(summary = "Forgot password", description = "Update password for user by user ID")
+    @PutMapping("/forgot-password/{userID}")
+    public ResponseEntity<ResponseData> forgotPassword(@PathVariable Integer userID, @RequestBody String newPassword) {
+        try {
+            User updatedUser = userService.forgotPassword(userID, newPassword);
+            return ResponseEntity.ok(new ResponseData(200, true, "Password updated successfully", updatedUser, null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseData(500, false, "Failed to update password", null, null));
+        }
+    }
+
+    /* Chung
+    * */
 
     // Xóa người dùng
     @Operation(summary = "Delete a user by ID")
@@ -85,6 +113,10 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
+    /* GET
+    * */
 
     // Lấy tất cả người dùng
     @Operation(summary = "Get all users", description = "Retrieve a list of all registered users")

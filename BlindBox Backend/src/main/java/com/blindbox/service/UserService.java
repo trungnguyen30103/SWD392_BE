@@ -1,8 +1,10 @@
 package com.blindbox.service;
 
 import com.blindbox.model.User;
-import com.blindbox.request.Create.User.UserCreateRequest;
-import com.blindbox.request.Update.User.UserUpdateRequest;
+import com.blindbox.request.Create.User.Admin.UserCreateRequest;
+import com.blindbox.request.Create.User.Customer.CustomerCreateRequest;
+import com.blindbox.request.Update.User.Admin.UserUpdateRequest;
+import com.blindbox.request.Update.User.Customer.CustomerUpdateRequest;
 import org.springframework.lang.NonNull;
 
 import java.util.List;
@@ -35,6 +37,12 @@ public interface UserService {
 
     /* Customer/User */
     @NonNull
-    User createCustomer(@NonNull UserCreateRequest request);
+    User createCustomer(@NonNull CustomerCreateRequest request);
+
+    @NonNull
+    User updateCustomer(@NonNull Integer userID, @NonNull CustomerUpdateRequest request);
+
+    @NonNull
+    User forgotPassword (@NonNull Integer userID, @NonNull String newPassword);
 
 }

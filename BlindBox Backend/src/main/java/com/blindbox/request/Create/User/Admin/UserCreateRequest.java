@@ -1,24 +1,36 @@
-package com.blindbox.request.Update.User;
+package com.blindbox.request.Create.User.Admin;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserUpdateRequest {
+public class UserCreateRequest {
 
+    @NotBlank
     String userName;
+
+    @NotBlank
     String password;
+
+    @NotBlank
     String phone;
+
+    @NotBlank
     String address;
-    String fullName;
 
     @Email
+    @NotBlank
     String email;
+
+    @NotBlank
+    String fullName;
 
     double balance;
 
+    String avatar_url;
 
 }
