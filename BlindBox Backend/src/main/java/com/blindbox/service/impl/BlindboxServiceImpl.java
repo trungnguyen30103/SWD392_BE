@@ -99,13 +99,8 @@ public class BlindboxServiceImpl implements BlindboxService {
                 items.add(item);
             }
             blindBoxItemRepository.saveAll(items);
-            if (totalStock == 0) {
-                blindbox.setTotalStock(0);
-                blindbox.setStatus(BlindboxStatus.OUT_OF_STOCK);
-            } else {
-                blindbox.setTotalStock(totalStock);
-                blindbox.setStatus(BlindboxStatus.ACTIVE);
-            }
+            blindbox.setTotalStock(totalStock);
+            blindbox.setStatus(totalStock == 0 ? BlindboxStatus.OUT_OF_STOCK : BlindboxStatus.ACTIVE);
         }
 
 
@@ -275,6 +270,12 @@ public class BlindboxServiceImpl implements BlindboxService {
     @Override
     public List<Blindbox> getOutOfStockBlindbox() {
         return blindboxRepository.findByStatus(BlindboxStatus.OUT_OF_STOCK);
+    }
+
+    // Get ACTIVE blindboxes by categoryID
+    @Override
+    public List<Blindbox> getActiveBlindboxByCategoryID(Integer categoryID) {
+        return blindboxRepository.findByStatusAndCategory_CategoryID(BlindboxStatus.ACTIVE, categoryID);
     }
 
 

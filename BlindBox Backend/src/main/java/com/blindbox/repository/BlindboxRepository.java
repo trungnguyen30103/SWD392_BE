@@ -33,5 +33,8 @@ public interface BlindboxRepository extends JpaRepository<Blindbox, Integer> {
     @EntityGraph(attributePaths = {"blindboxImages", "blindBoxItems"})
     List<Blindbox> findByStatus(BlindboxStatus status);
 
+    @EntityGraph(attributePaths = {"blindboxImages", "blindBoxItems"})
+    List<Blindbox> findByStatusAndCategory_CategoryID(BlindboxStatus status, Integer categoryID);
+
     // Có thể thêm các truy vấn đặc biệt nếu cần
 }

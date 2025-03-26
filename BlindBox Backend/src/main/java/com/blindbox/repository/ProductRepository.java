@@ -1,5 +1,6 @@
 package com.blindbox.repository;
 
+import com.blindbox.enums.Blindbox.ProductStatus;
 import com.blindbox.model.Product;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,6 +29,12 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("SELECT p FROM Product p WHERE LOWER(p.productName) LIKE LOWER(CONCAT('%', :name, '%'))")
     @EntityGraph(attributePaths = "productImages")
     List<Product> findByProductNameContainingIgnoreCase(@Param("name") String name);
+
+    @EntityGraph(attributePaths = "productImages")
+    List<Product> findByStatus(ProductStatus status);
+
+    @EntityGraph(attributePaths = "productImages")
+    List<Product> findByStatusAndCategory_CategoryID(ProductStatus status, Integer categoryID);
 
     // Các truy vấn đặc biệt có thể được viết tại đây nếu cần
 }

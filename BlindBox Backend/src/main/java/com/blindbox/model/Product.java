@@ -1,7 +1,8 @@
 package com.blindbox.model;
 
+import com.blindbox.enums.Blindbox.ProductStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -32,7 +33,7 @@ public class Product {
     private double price;
 
     @Column(nullable = false)
-    private String status;
+    private ProductStatus status;
 
     @Column(name = "stock_quantity", nullable = false)
     private Integer stock;
@@ -43,7 +44,7 @@ public class Product {
     @Column(name = "updated_at", insertable = false)
     private LocalDateTime lastUpdated;
 
-    @JsonIgnore
+    @JsonIgnoreProperties("product")
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductImage> productImages;
 

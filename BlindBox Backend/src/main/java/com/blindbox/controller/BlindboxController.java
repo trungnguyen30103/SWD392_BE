@@ -150,6 +150,19 @@ public class BlindboxController {
         return ResponseEntity.ok(new ResponseData(200, true, "Out of stock blindboxes retrieved successfully", blindboxes, null));
     }
 
+    // Get ACTIVE blindboxes by category
+    @Operation(summary = "Get ACTIVE blindboxes by category", description = "Retrieve a list of all ACTIVE blindboxes by category ID")
+    @GetMapping("/status/active/category/{categoryID}")
+    public ResponseEntity<ResponseData> getActiveBlindboxesByCategory(@PathVariable Integer categoryID) {
+        try {
+            List<Blindbox> blindboxes = blindboxService.getActiveBlindboxByCategoryID(categoryID);
+            return ResponseEntity.ok(new ResponseData(200, true, "Active blindboxes by category retrieved successfully", blindboxes, null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseData(500, false, "Failed to retrieve active blindboxes by category", null, null));
+        }
+    }
+
     /* Blindbox Image
     * */
 
