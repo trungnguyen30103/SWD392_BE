@@ -39,7 +39,7 @@ public class Product {
     private Integer stock;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at", insertable = false)
     private LocalDateTime lastUpdated;
@@ -47,5 +47,16 @@ public class Product {
     @JsonIgnoreProperties("product")
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductImage> productImages;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.lastUpdated = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.lastUpdated = LocalDateTime.now();
+    }
 
 }

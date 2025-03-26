@@ -58,7 +58,7 @@ public class GachaServiceImpl implements GachaService {
                 // Lưu lịch sử mở hộp gacha
                 GachaHistory history = new GachaHistory(userId, item.getName(), java.time.LocalDateTime.now().toString());
                 gachaHistoryRepository.save(history);
-                return "Bạn nhận được: " + item.getName();
+                return "You got: " + item.getName();
             }
         }
 

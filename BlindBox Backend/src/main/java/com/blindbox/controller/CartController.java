@@ -1,6 +1,6 @@
 package com.blindbox.controller;
 
-import com.blindbox.model.Cart;
+import com.blindbox.response.DTO.Cart.CartDTO;
 import com.blindbox.response.ResponseData;
 import com.blindbox.service.CartService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,11 +38,11 @@ public class CartController {
     }
 
     @Operation(summary = "Get cart by user ID", description = "Retrieve the cart for a given user")
-    @GetMapping("/user/{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<ResponseData> getCartByUserID(@PathVariable Integer userId) {
         try {
-            Cart cart = cartService.getCartByUserID(userId);
-            return ResponseEntity.ok(new ResponseData(200, true, "Cart retrieved successfully", cart, null));
+            CartDTO cartDTO = cartService.getCartByUserID(userId);
+            return ResponseEntity.ok(new ResponseData(200, true, "Cart retrieved successfully", cartDTO, null));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseData(404, false, "Cart not found", null, null));
@@ -50,10 +50,10 @@ public class CartController {
     }
 
     @Operation(summary = "Remove product from cart", description = "Remove a product from the user's cart")
-    @DeleteMapping("/{cartId}/remove/{productId}")
-    public ResponseEntity<ResponseData> removeProductFromCart(@PathVariable Integer cartId, @PathVariable Integer productId) {
+    @DeleteMapping("/{userID}/remove/{productID}")
+    public ResponseEntity<ResponseData> removeProductFromCart(@PathVariable Integer userID, @PathVariable Integer productID) {
         try {
-            cartService.removeProductFromCart(cartId, productId);
+            cartService.removeProductFromCart(userID, productID);
             return ResponseEntity.status(HttpStatus.NO_CONTENT)
                     .body(new ResponseData(204, true, "Product removed from cart", null, null));
         } catch (RuntimeException e) {
@@ -76,10 +76,10 @@ public class CartController {
     }
 
     @Operation(summary = "Update cart item", description = "Update the quantity and price of a cart item")
-    @PutMapping("/{cartId}/update/{productId}")
-    public ResponseEntity<ResponseData> updateCartItem(@PathVariable Integer cartId, @PathVariable Integer productId, @RequestParam int quantity) {
+    @PutMapping("/{userID}/update/{productID}")
+    public ResponseEntity<ResponseData> updateCartItem(@PathVariable Integer userID, @PathVariable Integer productID, @RequestParam int quantity) {
         try {
-            cartService.updateCartItem(cartId, productId, quantity);
+            cartService.updateCartItem(userID, productID, quantity);
             return ResponseEntity.status(HttpStatus.NO_CONTENT)
                     .body(new ResponseData(204, true, "Cart item updated successfully", null, null));
         } catch (RuntimeException e) {

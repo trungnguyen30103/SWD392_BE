@@ -1,6 +1,6 @@
 package com.blindbox.service;
 
-import com.blindbox.model.Cart;
+import com.blindbox.response.DTO.Cart.CartDTO;
 
 public interface CartService {
 
@@ -8,15 +8,15 @@ public interface CartService {
 
     void addProductToCart(Integer userID, Integer productID, int quantity);
 
-    void removeProductFromCart(Integer cartID, Integer productID);
+    void removeProductFromCart(Integer userID, Integer productID);
 
     void clearCart(Integer userID);
 
 
-    Cart getCartByUserID(Integer userID);
+    CartDTO getCartByUserID(Integer userID);
 
 
     /* Cart Item */
 
-    void updateCartItem(Integer cartID, Integer productID, int quantity);
+    void updateCartItem(Integer userID, Integer productID, int quantity);
 }

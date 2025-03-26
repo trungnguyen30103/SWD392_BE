@@ -6,8 +6,10 @@ import com.blindbox.model.Product;
 import com.blindbox.repository.CartItemRepository;
 import com.blindbox.repository.CartRepository;
 import com.blindbox.repository.ProductRepository;
+import com.blindbox.response.DTO.Cart.CartDTO;
 import com.blindbox.service.CartService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -65,22 +67,30 @@ public class CartServiceImpl implements CartService {
 
     // Get User's cart
     @Override
-    public Cart getCartByUserID(Integer userID) {
-        return cartRepository.findByUser_UserID(userID).orElse(null);
+    @Transactional
+    public CartDTO getCartByUserID(Integer userID) {
+        Cart cart = cartRepository.findByUser_UserID(userID)
+                .orElseThrow(() -> new RuntimeException("Cart not found"));
+
+        return new CartDTO(cart);
     }
 
     // Remove a product from cart
     @Override
-    public void removeProductFromCart(Integer cartID, Integer productID) {
-        CartItem cartItem = cartItemRepository.findByCart_CartIdAndProduct_ProductID(cartID, productID)
+    @Transactional
+    public void removeProductFromCart(Integer userID, Integer productID) {
+        Cart cart = cartRepository.findByUser_UserID(userID)
+                .orElseThrow(() -> new RuntimeException("Cart not found"));
+
+        CartItem cartItem = cartItemRepository.findByCart_CartIdAndProduct_ProductID(cart.getCartId(), productID)
                 .orElseThrow(() -> new RuntimeException("Product not exists in your cart"));
         cartItemRepository.delete(cartItem);
 
         // Update the total amount of the cart
-        Cart cart = cartRepository.findById(cartID)
+        Cart updatedCart = cartRepository.findById(cart.getCartId())
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
-        cart.setTotalAmount(calculateCartTotalAmount(cart.getCartItems()));
-        cartRepository.save(cart);
+        updatedCart.setTotalAmount(calculateCartTotalAmount(updatedCart.getCartItems()));
+        cartRepository.save(updatedCart);
     }
 
     // Clear entire Cart
@@ -98,11 +108,11 @@ public class CartServiceImpl implements CartService {
 
     // Update Cart Item
     @Override
-    public void updateCartItem(Integer cartID, Integer productID, int quantity) {
-        Cart cart = cartRepository.findById(cartID)
+    public void updateCartItem(Integer userID, Integer productID, int quantity) {
+        Cart cart = cartRepository.findByUser_UserID(userID)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
 
-        CartItem cartItem = cartItemRepository.findByCart_CartIdAndProduct_ProductID(cartID, productID)
+        CartItem cartItem = cartItemRepository.findByCart_CartIdAndProduct_ProductID(cart.getCartId(), productID)
                 .orElseThrow(() -> new RuntimeException("Product not found in cart"));
 
         Product product = productRepository.findById(productID)
@@ -115,7 +125,7 @@ public class CartServiceImpl implements CartService {
             cartItem.setPrice(product.getPrice() * quantity);
             cartItemRepository.save(cartItem);
         }
-        List<CartItem> updatedCartItems = cartItemRepository.findByCart_CartId(cartID);
+        List<CartItem> updatedCartItems = cartItemRepository.findByCart_CartId(cart.getCartId());
         cart.setTotalAmount(updatedCartItems.stream().mapToDouble(CartItem::getPrice).sum());
         cartRepository.save(cart);
     }
