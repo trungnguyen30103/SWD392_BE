@@ -1,5 +1,7 @@
 package com.blindbox.request.Update.Blindbox;
 
+import com.blindbox.request.Create.Blindbox.BlindboxImageCreateRequest;
+import com.blindbox.request.Create.Blindbox.BlindboxItemCreateRequest;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -16,12 +18,14 @@ public class BlindboxUpdateRequest {
 
     Double price;
 
-    Integer stock;
-
     Integer categoryID;
 
-    Set<BlindboxImageUpdateRequest> blindboxImages;
+    Set<BlindboxImageUpdateRequest> blindboxImageUpdateRequests;
 
-    Set<BlindboxItemUpdateRequest> blindboxItem;
+    Set<BlindboxImageCreateRequest> blindboxImageCreateRequests;
+
+    Set<BlindboxItemUpdateRequest> blindboxItemUpdateRequests;
+
+    Set<BlindboxItemCreateRequest> blindboxItemCreateRequests;
 
 }

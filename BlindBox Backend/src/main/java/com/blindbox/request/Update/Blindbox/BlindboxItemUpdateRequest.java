@@ -9,8 +9,8 @@ import lombok.experimental.FieldDefaults;
 public class BlindboxItemUpdateRequest {
 
     Integer blindboxItemID;
-    Integer blindboxID;
     String name;
     Integer rarity;
+    Integer stock;
 
 }

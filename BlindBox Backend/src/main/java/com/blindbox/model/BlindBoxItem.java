@@ -1,5 +1,6 @@
 package com.blindbox.model;
 
+import com.blindbox.enums.Blindbox.BlindboxItemStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,10 +22,16 @@ public class BlindBoxItem {
     @JsonIgnore // Prevents recursion
     private Blindbox blindbox;
 
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
-    @Column(name = "rarity", nullable = false)
+    @Column(nullable = false)
     private Integer rarity;
+
+    @Column(nullable = false)
+    private BlindboxItemStatus status;
+
+    @Column(nullable = false)
+    private Integer stock;
 
 }

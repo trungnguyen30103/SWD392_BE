@@ -1,17 +1,12 @@
 package com.blindbox.controller;
 
-import com.blindbox.model.BlindBoxItem;
 import com.blindbox.model.Blindbox;
-import com.blindbox.model.BlindboxImage;
 import com.blindbox.request.Create.Blindbox.BlindboxCreateRequest;
-import com.blindbox.request.Update.Blindbox.BlindboxImageUpdateRequest;
-import com.blindbox.request.Update.Blindbox.BlindboxItemUpdateRequest;
 import com.blindbox.request.Update.Blindbox.BlindboxUpdateRequest;
 import com.blindbox.response.ResponseData;
 import com.blindbox.service.BlindboxService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +32,7 @@ public class BlindboxController {
     // Create a new blindbox
     @Operation(summary = "Create a new blindbox", description = "Add a new blindbox to the catalog")
     @PostMapping
-    public ResponseEntity<ResponseData> createBlindbox(@Valid @RequestBody BlindboxCreateRequest request) {
+    public ResponseEntity<ResponseData> createBlindbox(@RequestBody BlindboxCreateRequest request) {
         try {
             Blindbox createdBlindbox = blindboxService.createBlindbox(request);
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -57,12 +52,12 @@ public class BlindboxController {
             return ResponseEntity.ok(new ResponseData(200, true, "Blindbox updated successfully", updatedBlindbox, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseData(500, false, "Failed to update blindbox", null, null));
+                    .body(new ResponseData(500, false, "Failed to update blindbox: " + e.getMessage(), null, null));
         }
     }
 
     // Delete a blindbox by ID
-    @Operation(summary = "Delete a blindbox by ID")
+    @Operation(summary = "Disable a blindbox by ID", description = "Disable a blindbox along with its item(s) using its ID")
     @DeleteMapping("/{blindboxID}")
     public ResponseEntity<ResponseData> deleteBlindbox(@PathVariable Integer blindboxID) {
         blindboxService.deleteBlindbox(blindboxID);
@@ -92,6 +87,7 @@ public class BlindboxController {
             System.out.println("✅ Fetch Successful: " + blindbox);
             return ResponseEntity.ok(new ResponseData(200, true, "Blindbox retrieved successfully", blindbox, null));
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseData(404, false, "Blindbox not found: " + e.getMessage(), null, null));
         }
@@ -133,26 +129,6 @@ public class BlindboxController {
     /* Blindbox Image
     * */
 
-    // Update an existing image
-    @Operation(summary = "Update an existing image", description = "Update an existing image using its ID")
-    @PutMapping("/{blindboxID}/blindbox-images/{imageID}")
-    public ResponseEntity<ResponseData> updateImage(@PathVariable Integer blindboxID, @PathVariable Integer imageID, @RequestBody BlindboxImageUpdateRequest request) {
-        try {
-            Blindbox blindbox = blindboxService.getBlindboxById(blindboxID);
-            if (blindbox == null){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new ResponseData(404, false, "Blindbox with ID: " + blindboxID + " not found", null, null));
-            }
-
-
-            BlindboxImage image = blindboxService.updateImage(blindboxID, imageID, request);
-            return ResponseEntity.ok(new ResponseData(200, true, "Image updated", image, null));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseData(500, false, "Fail to update image with imageID '" + imageID + "' and blindboxID '" + blindboxID + "'.", null, null));
-        }
-    }
-
     // Delete an image by ID
     @Operation(summary = "Delete an image by ID")
     @DeleteMapping("/{blindboxID}/blindbox-images/{imageID}")
@@ -164,21 +140,8 @@ public class BlindboxController {
     /* Blindbox Item
     * */
 
-    // Update an existing item
-    @Operation(summary = "Update an existing item", description = "Update an existing item using its ID")
-    @PutMapping("/{blindboxID}/blindbox-items/{itemID}")
-    public ResponseEntity<ResponseData> updateItem(@PathVariable Integer blindboxID, @PathVariable Integer itemID, @Valid @RequestBody BlindboxItemUpdateRequest request) {
-        try {
-            BlindBoxItem item = blindboxService.updateItem(blindboxID, itemID, request);
-            return ResponseEntity.ok(new ResponseData(200, true, "Item updated", item, null));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseData(500, false, "Fail to update item with itemID '" + itemID + "' and blindboxID '" + blindboxID + "'.", null, null));
-        }
-    }
-
     // Delete an item by ID
-    @Operation(summary = "Delete an item by ID")
+    @Operation(summary = "Disable an item by blindboxID and blindbox_item_id")
     @DeleteMapping("/{blindboxID}/blindbox-items/{itemID}")
     public ResponseEntity<Void> deleteItem(@PathVariable Integer blindboxID, @PathVariable Integer itemID) {
         blindboxService.deleteItem(blindboxID, itemID);

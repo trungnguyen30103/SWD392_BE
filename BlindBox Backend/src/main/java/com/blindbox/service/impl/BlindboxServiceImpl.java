@@ -1,5 +1,7 @@
 package com.blindbox.service.impl;
 
+import com.blindbox.enums.Blindbox.BlindboxItemStatus;
+import com.blindbox.enums.Blindbox.BlindboxStatus;
 import com.blindbox.model.BlindBoxItem;
 import com.blindbox.model.Blindbox;
 import com.blindbox.model.BlindboxImage;
@@ -8,8 +10,8 @@ import com.blindbox.repository.BlindBoxItemRepository;
 import com.blindbox.repository.BlindboxImageRepository;
 import com.blindbox.repository.BlindboxRepository;
 import com.blindbox.repository.CategoryRepository;
-import com.blindbox.request.Create.Blindbox.BlindboxImageCreateRequest;
 import com.blindbox.request.Create.Blindbox.BlindboxCreateRequest;
+import com.blindbox.request.Create.Blindbox.BlindboxImageCreateRequest;
 import com.blindbox.request.Create.Blindbox.BlindboxItemCreateRequest;
 import com.blindbox.request.Update.Blindbox.BlindboxImageUpdateRequest;
 import com.blindbox.request.Update.Blindbox.BlindboxItemUpdateRequest;
@@ -38,20 +40,22 @@ public class BlindboxServiceImpl implements BlindboxService {
         this.blindBoxItemRepository = blindBoxItemRepository;
     }
 
-    /* Blindbox */
 
+    /* Blindbox
+    * */
 
     // Create a new blindbox
     @Override
     @Transactional
-    public Blindbox createBlindbox(@NonNull BlindboxCreateRequest request) {
+    public Blindbox createBlindbox(BlindboxCreateRequest request) {
         Blindbox blindbox = new Blindbox();
 
         // Set
         blindbox.setName(request.getName());
         blindbox.setDescription(request.getDescription());
         blindbox.setPrice(request.getPrice());
-        blindbox.setStock(request.getStock());
+        blindbox.setTotalStock(0);
+        blindbox.setStatus(BlindboxStatus.OUT_OF_STOCK);
 
         // Set categoryID into category
         Category category = categoryRepository.findById(request.getCategoryID())
@@ -75,18 +79,35 @@ public class BlindboxServiceImpl implements BlindboxService {
             blindboxImageRepository.saveAll(images);
         }
 
-        // Set items
+        // Set items and stock
         Set<BlindBoxItem> items = new HashSet<>();
         if (request.getBlindboxItem() != null) {
+            int totalStock = 0;
             for (BlindboxItemCreateRequest itemCreateRequest : request.getBlindboxItem()) {
                 BlindBoxItem item = new BlindBoxItem();
                 item.setBlindbox(blindbox);
                 item.setName(itemCreateRequest.getName());
                 item.setRarity(itemCreateRequest.getRarity());
+                if (itemCreateRequest.getStock() != 0) {
+                    item.setStock(itemCreateRequest.getStock());
+                    item.setStatus(BlindboxItemStatus.ACTIVE);
+                    totalStock += itemCreateRequest.getStock();
+                } else {
+                    item.setStock(0);
+                    item.setStatus(BlindboxItemStatus.OUT_OF_STOCK);
+                }
                 items.add(item);
             }
             blindBoxItemRepository.saveAll(items);
+            if (totalStock == 0) {
+                blindbox.setTotalStock(0);
+                blindbox.setStatus(BlindboxStatus.OUT_OF_STOCK);
+            } else {
+                blindbox.setTotalStock(totalStock);
+                blindbox.setStatus(BlindboxStatus.ACTIVE);
+            }
         }
+
 
         blindbox.setBlindboxImages(images);
 
@@ -99,6 +120,7 @@ public class BlindboxServiceImpl implements BlindboxService {
     // Update a blindbox
     @Override
     @NonNull
+    @Transactional
     public Blindbox updateBlindbox(@NonNull Integer blindboxID, @NonNull BlindboxUpdateRequest request) {
         Blindbox existingBlindbox = blindboxRepository.findById(blindboxID)
                 .orElseThrow(() -> new RuntimeException("Blindbox not found"));
@@ -107,7 +129,6 @@ public class BlindboxServiceImpl implements BlindboxService {
         if (request.getBlindboxName() != null) existingBlindbox.setName(request.getBlindboxName());
         if (request.getPrice() != null) existingBlindbox.setPrice(request.getPrice());
         if (request.getDescription() != null) existingBlindbox.setDescription(request.getDescription());
-        if (request.getStock() != null) existingBlindbox.setStock(request.getStock());
 
         if (request.getCategoryID() != null) {
             Category category = categoryRepository.findById(request.getCategoryID())
@@ -115,53 +136,97 @@ public class BlindboxServiceImpl implements BlindboxService {
             existingBlindbox.setCategory(category);
         }
 
+        // Force flush before updating child entities
+        blindboxRepository.saveAndFlush(existingBlindbox);
+
         // Update image
-        if (request.getBlindboxImages() != null) {
-            Set<BlindboxImage> updateImages = new HashSet<>();
-            for (BlindboxImageUpdateRequest imgReq : request.getBlindboxImages()) {
-                BlindboxImage image = blindboxImageRepository.findByBlindbox_BlindboxIDAndBlindboxImageID(blindboxID, imgReq.getBlindboxImageID())
+
+        // Update existing image(s)
+        if (request.getBlindboxImageUpdateRequests() != null) {
+            for (BlindboxImageUpdateRequest imageUpdateRequest : request.getBlindboxImageUpdateRequests()) {
+                BlindboxImage image = blindboxImageRepository.findByBlindbox_BlindboxIDAndBlindboxImageID(blindboxID, imageUpdateRequest.getBlindboxImageID())
                         .orElseThrow(() -> new RuntimeException("Blindbox Image not found"));
-                if (imgReq.getImageUrl() != null) image.setImageUrl(imgReq.getImageUrl());
-                if (imgReq.getAltText() != null) image.setAltText(imgReq.getAltText());
-
-                // Save new image
-                blindboxImageRepository.save(image);
-
-                // Add image to the set
-                updateImages.add(image);
+                if (imageUpdateRequest.getImageUrl() != null) image.setImageUrl(imageUpdateRequest.getImageUrl());
+                if (imageUpdateRequest.getAltText() != null) image.setAltText(imageUpdateRequest.getAltText());
             }
-            existingBlindbox.setBlindboxImages(updateImages);
+        }
+
+        // Add new image(s)
+        if (request.getBlindboxImageCreateRequests() != null) {
+            for (BlindboxImageCreateRequest imageCreateRequest : request.getBlindboxImageCreateRequests()) {
+                BlindboxImage newImage = new BlindboxImage();
+                newImage.setImageUrl(imageCreateRequest.getImageUrl());
+                newImage.setBlindbox(existingBlindbox);
+                newImage.setAltText(imageCreateRequest.getAltText());
+
+                // Save
+                BlindboxImage saveImage = blindboxImageRepository.save(newImage);
+                existingBlindbox.getBlindboxImages().add(saveImage);
+            }
         }
 
         // Update item
-        if (request.getBlindboxItem() != null) {
-            Set<BlindBoxItem> updateItems = new HashSet<>();
-            for (BlindboxItemUpdateRequest itemUpdateRequest : request.getBlindboxItem()) {
+        int totalStock = existingBlindbox.getTotalStock();
+
+        // Update exiting item(s)
+        if (request.getBlindboxItemUpdateRequests() != null) {
+            for (BlindboxItemUpdateRequest itemUpdateRequest : request.getBlindboxItemUpdateRequests()) {
                 BlindBoxItem item = blindBoxItemRepository.findByBlindbox_BlindboxIDAndBlindboxItemID(blindboxID, itemUpdateRequest.getBlindboxItemID())
                         .orElseThrow(() -> new RuntimeException("Blindbox Item not found"));
-                item.setName(itemUpdateRequest.getName());
-                item.setRarity(itemUpdateRequest.getRarity());
 
-                // Save new item
-                blindBoxItemRepository.save(item);
+                if (itemUpdateRequest.getName() != null) item.setName(itemUpdateRequest.getName());
+                if (itemUpdateRequest.getRarity() != null) item.setRarity(itemUpdateRequest.getRarity());
 
-                // Add item to the set
-                updateItems.add(item);
+                if (itemUpdateRequest.getStock() != null) {
+                    totalStock += itemUpdateRequest.getStock() - item.getStock();
+                    item.setStock(itemUpdateRequest.getStock());
+                    item.setStatus(item.getStock() == 0 ? BlindboxItemStatus.OUT_OF_STOCK : BlindboxItemStatus.ACTIVE);
+                }
             }
-            existingBlindbox.setBlindBoxItems(updateItems);
         }
+
+        // Create new item(s)
+        if (request.getBlindboxItemCreateRequests() != null) {
+            for (BlindboxItemCreateRequest itemCreateRequest : request.getBlindboxItemCreateRequests()) {
+                BlindBoxItem newItem = new BlindBoxItem();
+                newItem.setBlindbox(existingBlindbox);
+                newItem.setName(itemCreateRequest.getName());
+                newItem.setRarity(itemCreateRequest.getRarity());
+                newItem.setStock(itemCreateRequest.getStock() != null ? itemCreateRequest.getStock() : 0);
+                newItem.setStatus(newItem.getStock() == 0 ? BlindboxItemStatus.OUT_OF_STOCK : BlindboxItemStatus.ACTIVE);
+
+                // Save
+                BlindBoxItem savedItem = blindBoxItemRepository.save(newItem);
+                existingBlindbox.getBlindBoxItems().add(savedItem);
+            }
+        }
+
+        // Update totalStock
+        existingBlindbox.setTotalStock(totalStock);
+        existingBlindbox.setStatus(totalStock == 0 ? BlindboxStatus.OUT_OF_STOCK : BlindboxStatus.ACTIVE);
 
         // Save
         return blindboxRepository.save(existingBlindbox);
     }
 
-    // Delete a blindbox
+    // Disable a blindbox with its items
     @Override
     @NonNull
     public void deleteBlindbox(@NonNull Integer id) {
-        blindboxRepository.deleteById(id);
-        blindboxImageRepository.deleteAllByBlindbox_BlindboxID(id);
-        blindBoxItemRepository.deleteAllByBlindbox_BlindboxID(id);
+        Blindbox blindbox = blindboxRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Blindbox not found"));
+
+        // Update status to DISABLE
+        blindbox.setStatus(BlindboxStatus.DISABLE);
+
+        // Update status of all items to DISABLE
+        for (BlindBoxItem item : blindbox.getBlindBoxItems()) {
+            item.setStatus(BlindboxItemStatus.DISABLE);
+        }
+
+        // Save changes
+        blindboxRepository.save(blindbox);
+        blindBoxItemRepository.saveAll(blindbox.getBlindBoxItems());
     }
 
 
@@ -195,26 +260,8 @@ public class BlindboxServiceImpl implements BlindboxService {
     }
 
 
-    /* Blindbox image */
-
-    @Override
-    @NonNull
-    public BlindboxImage updateImage(@NonNull Integer blindboxID, @NonNull Integer imageID, @NonNull BlindboxImageUpdateRequest request) {
-        BlindboxImage image = blindboxImageRepository.findByBlindbox_BlindboxIDAndBlindboxImageID(blindboxID, imageID)
-                .orElseThrow(() -> new RuntimeException("Blindbox Image not found"));
-
-        if (request.getBlindboxID() != null) {
-            Blindbox blindbox = blindboxRepository.findById(request.getBlindboxID())
-                    .orElseThrow(() -> new RuntimeException("Blindbox not found"));
-            image.setBlindbox(blindbox);
-        }
-
-        if (request.getAltText() != null) image.setAltText(request.getAltText());
-
-        if (request.getImageUrl() != null) image.setImageUrl(request.getImageUrl());
-
-        return blindboxImageRepository.save(image);
-    }
+    /* Blindbox image
+    * */
 
     @Override
     public void deleteImage(@NonNull Integer blindboxID, @NonNull Integer imageID) {
@@ -222,28 +269,15 @@ public class BlindboxServiceImpl implements BlindboxService {
     }
 
 
-    /* Blindbox Item */
+    /* Blindbox Item
+    * */
 
-    @Override
-    @NonNull
-    public BlindBoxItem updateItem(@NonNull Integer blindboxID, @NonNull Integer itemID, @NonNull BlindboxItemUpdateRequest request) {
-        BlindBoxItem item = blindBoxItemRepository.findByBlindbox_BlindboxIDAndBlindboxItemID(blindboxID, itemID)
-                .orElseThrow(() -> new RuntimeException("Blindbox Item not found"));
-
-        if (request.getBlindboxID() != null) {
-            Blindbox blindbox = blindboxRepository.findById(request.getBlindboxID())
-                    .orElseThrow(() -> new RuntimeException("Blindbox not found"));
-            item.setBlindbox(blindbox);
-        }
-
-        if (request.getName() != null) item.setName(request.getName());
-        if (request.getRarity() != null) item.setRarity(request.getRarity());
-
-        return blindBoxItemRepository.save(item);
-    }
-
+    // Disable an item
     @Override
     public void deleteItem(@NonNull Integer blindboxID, @NonNull Integer itemID) {
-        blindBoxItemRepository.deleteByBlindbox_BlindboxIDAndBlindboxItemID(blindboxID, itemID);
+        BlindBoxItem item = blindBoxItemRepository.findByBlindbox_BlindboxIDAndBlindboxItemID(blindboxID, itemID)
+                .orElseThrow(() -> new RuntimeException("BlindboxItem not found"));
+        item.setStatus(BlindboxItemStatus.DISABLE);
+        blindBoxItemRepository.save(item);
     }
 }

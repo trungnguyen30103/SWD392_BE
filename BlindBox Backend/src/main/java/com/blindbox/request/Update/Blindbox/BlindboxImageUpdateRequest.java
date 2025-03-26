@@ -9,7 +9,6 @@ import lombok.experimental.FieldDefaults;
 public class BlindboxImageUpdateRequest {
 
     Integer blindboxImageID;
-    Integer blindboxID;
     String imageUrl;
     String altText;
 

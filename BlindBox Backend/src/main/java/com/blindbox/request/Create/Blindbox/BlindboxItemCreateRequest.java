@@ -16,4 +16,6 @@ public class BlindboxItemCreateRequest {
     @NotNull
     Integer rarity;
 
+    Integer stock;
+
 }

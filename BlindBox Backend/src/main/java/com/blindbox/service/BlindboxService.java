@@ -15,7 +15,7 @@ public interface BlindboxService {
 
     /* Blindbox */
 
-    Blindbox createBlindbox(@NonNull BlindboxCreateRequest request);
+    Blindbox createBlindbox(BlindboxCreateRequest request);
 
     @NonNull
     Blindbox updateBlindbox(@NonNull Integer id, @NonNull BlindboxUpdateRequest request);
@@ -34,15 +34,11 @@ public interface BlindboxService {
 
 
     /* Blindbox Image */
-    @NonNull
-    BlindboxImage updateImage(@NonNull Integer blindboxID, @NonNull Integer imageID, @NonNull BlindboxImageUpdateRequest request);
 
     void deleteImage(@NonNull Integer blindboxID, @NonNull Integer imageID);
 
 
     /* Blindbox Item */
-    @NonNull
-    BlindBoxItem updateItem(@NonNull Integer blindboxID, @NonNull Integer itemID, @NonNull BlindboxItemUpdateRequest request);
 
     void deleteItem(@NonNull Integer blindboxID, @NonNull Integer itemID);
 }

@@ -1,5 +1,6 @@
 package com.blindbox.model;
 
+import com.blindbox.enums.Blindbox.BlindboxStatus;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -32,7 +33,10 @@ public class Blindbox {
     private Byte rating;
 
     @Column(nullable = false)
-    private Integer stock;
+    private BlindboxStatus status;
+
+    @Column(name = "total_stock")
+    private Integer totalStock;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
