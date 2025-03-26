@@ -1,5 +1,6 @@
 package com.blindbox.repository;
 
+import com.blindbox.enums.Blindbox.BlindboxStatus;
 import com.blindbox.model.Blindbox;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,6 +29,9 @@ public interface BlindboxRepository extends JpaRepository<Blindbox, Integer> {
     @Query("SELECT b FROM Blindbox b WHERE LOWER(b.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     @EntityGraph(attributePaths = {"blindboxImages", "blindBoxItems"})
     List<Blindbox> findByBlindboxNameContainingIgnoreCase(@Param("name") String name);
+
+    @EntityGraph(attributePaths = {"blindboxImages", "blindBoxItems"})
+    List<Blindbox> findByStatus(BlindboxStatus status);
 
     // Có thể thêm các truy vấn đặc biệt nếu cần
 }

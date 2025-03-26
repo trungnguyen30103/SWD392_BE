@@ -32,6 +32,12 @@ public interface BlindboxService {
 
     List<Blindbox> getBlindboxByCategory(Integer categoryID);
 
+    List<Blindbox> getActiveBlindbox();
+
+    List<Blindbox> getDisableBlindbox();
+
+    List<Blindbox> getOutOfStockBlindbox();
+
 
     /* Blindbox Image */
 
@@ -41,4 +47,11 @@ public interface BlindboxService {
     /* Blindbox Item */
 
     void deleteItem(@NonNull Integer blindboxID, @NonNull Integer itemID);
+
+    List<BlindBoxItem> getActiveBlindboxItem();
+
+    List<BlindBoxItem> getDisableBlindboxItem();
+
+    List<BlindBoxItem> getOutOfStockBlindboxItem();
+
 }

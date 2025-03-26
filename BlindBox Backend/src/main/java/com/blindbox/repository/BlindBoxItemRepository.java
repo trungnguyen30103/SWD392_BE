@@ -1,5 +1,6 @@
 package com.blindbox.repository;
 
+import com.blindbox.enums.Blindbox.BlindboxItemStatus;
 import com.blindbox.model.BlindBoxItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.NonNull;
@@ -16,5 +17,7 @@ public interface BlindBoxItemRepository extends JpaRepository<BlindBoxItem, Inte
 
     @NonNull
     List<BlindBoxItem> findAll();
+
+    List<BlindBoxItem> findByStatus(BlindboxItemStatus status);
 
 }

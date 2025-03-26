@@ -259,6 +259,24 @@ public class BlindboxServiceImpl implements BlindboxService {
         return blindboxRepository.findByCategory_CategoryID(categoryID);
     }
 
+    // Get ACTIVE blindboxes
+    @Override
+    public List<Blindbox> getActiveBlindbox() {
+        return blindboxRepository.findByStatus(BlindboxStatus.ACTIVE);
+    }
+
+    // Get DISABLE blindboxes
+    @Override
+    public List<Blindbox> getDisableBlindbox() {
+        return blindboxRepository.findByStatus(BlindboxStatus.DISABLE);
+    }
+
+    // Get OUT_OF_STOCK blindboxes
+    @Override
+    public List<Blindbox> getOutOfStockBlindbox() {
+        return blindboxRepository.findByStatus(BlindboxStatus.OUT_OF_STOCK);
+    }
+
 
     /* Blindbox image
     * */
@@ -279,5 +297,23 @@ public class BlindboxServiceImpl implements BlindboxService {
                 .orElseThrow(() -> new RuntimeException("BlindboxItem not found"));
         item.setStatus(BlindboxItemStatus.DISABLE);
         blindBoxItemRepository.save(item);
+    }
+
+    // Get ACTIVE blindbox items
+    @Override
+    public List<BlindBoxItem> getActiveBlindboxItem() {
+        return blindBoxItemRepository.findByStatus(BlindboxItemStatus.ACTIVE);
+    }
+
+    // Get DISABLE blindbox items
+    @Override
+    public List<BlindBoxItem> getDisableBlindboxItem() {
+        return blindBoxItemRepository.findByStatus(BlindboxItemStatus.DISABLE);
+    }
+
+    // Get OUT_OF_STOCK blindbox items
+    @Override
+    public List<BlindBoxItem> getOutOfStockBlindboxItem() {
+        return blindBoxItemRepository.findByStatus(BlindboxItemStatus.OUT_OF_STOCK);
     }
 }

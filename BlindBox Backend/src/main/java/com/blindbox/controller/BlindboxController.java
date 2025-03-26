@@ -1,5 +1,6 @@
 package com.blindbox.controller;
 
+import com.blindbox.model.BlindBoxItem;
 import com.blindbox.model.Blindbox;
 import com.blindbox.request.Create.Blindbox.BlindboxCreateRequest;
 import com.blindbox.request.Update.Blindbox.BlindboxUpdateRequest;
@@ -84,10 +85,8 @@ public class BlindboxController {
     public ResponseEntity<ResponseData> getBlindboxById(@PathVariable Integer blindboxID) {
         try {
             Blindbox blindbox = blindboxService.getBlindboxById(blindboxID);
-            System.out.println("✅ Fetch Successful: " + blindbox);
             return ResponseEntity.ok(new ResponseData(200, true, "Blindbox retrieved successfully", blindbox, null));
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseData(404, false, "Blindbox not found: " + e.getMessage(), null, null));
         }
@@ -110,6 +109,7 @@ public class BlindboxController {
         }
     }
 
+    // Get blindboxes by category
     @Operation(summary = "Get blindboxes by category", description = "Retrieve blindboxes by category ID")
     @GetMapping("/category/{categoryID}")
     public ResponseEntity<ResponseData> getBlindboxesByCategory(@PathVariable Integer categoryID) {
@@ -124,6 +124,30 @@ public class BlindboxController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseData(500, false, "Failed to retrieve blindboxes", null, null));
         }
+    }
+
+    // Get ACTIVE blindboxes
+    @Operation(summary = "Get ACTIVE blindboxes", description = "Retrieve a list of all ACTIVE blindboxes")
+    @GetMapping("/status/active")
+    public ResponseEntity<ResponseData> getActiveBlindboxes() {
+        List<Blindbox> blindboxes = blindboxService.getActiveBlindbox();
+        return ResponseEntity.ok(new ResponseData(200, true, "Active blindboxes retrieved successfully", blindboxes, null));
+    }
+
+    // Get DISABLE blindboxes
+    @Operation(summary = "Get DISABLE blindboxes", description = "Retrieve a list of all DISABLE blindboxes")
+    @GetMapping("/status/disable")
+    public ResponseEntity<ResponseData> getDisableBlindboxes() {
+        List<Blindbox> blindboxes = blindboxService.getDisableBlindbox();
+        return ResponseEntity.ok(new ResponseData(200, true, "Disabled blindboxes retrieved successfully", blindboxes, null));
+    }
+
+    // Get OUT_OF_STOCK blindboxes
+    @Operation(summary = "Get OUT_OF_STOCK blindboxes", description = "Retrieve a list of all OUT_OF_STOCK blindboxes")
+    @GetMapping("/status/out-of-stock")
+    public ResponseEntity<ResponseData> getOutOfStockBlindboxes() {
+        List<Blindbox> blindboxes = blindboxService.getOutOfStockBlindbox();
+        return ResponseEntity.ok(new ResponseData(200, true, "Out of stock blindboxes retrieved successfully", blindboxes, null));
     }
 
     /* Blindbox Image
@@ -146,5 +170,29 @@ public class BlindboxController {
     public ResponseEntity<Void> deleteItem(@PathVariable Integer blindboxID, @PathVariable Integer itemID) {
         blindboxService.deleteItem(blindboxID, itemID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    // Get ACTIVE blindbox items
+    @Operation(summary = "Get ACTIVE blindbox items", description = "Retrieve a list of all ACTIVE blindbox items")
+    @GetMapping("/items/status/active")
+    public ResponseEntity<ResponseData> getActiveBlindboxItems() {
+        List<BlindBoxItem> items = blindboxService.getActiveBlindboxItem();
+        return ResponseEntity.ok(new ResponseData(200, true, "Active blindbox items retrieved successfully", items, null));
+    }
+
+    // Get DISABLE blindbox items
+    @Operation(summary = "Get DISABLE blindbox items", description = "Retrieve a list of all DISABLE blindbox items")
+    @GetMapping("/items/status/disable")
+    public ResponseEntity<ResponseData> getDisableBlindboxItems() {
+        List<BlindBoxItem> items = blindboxService.getDisableBlindboxItem();
+        return ResponseEntity.ok(new ResponseData(200, true, "Disabled blindbox items retrieved successfully", items, null));
+    }
+
+    // Get OUT_OF_STOCK blindbox items
+    @Operation(summary = "Get OUT_OF_STOCK blindbox items", description = "Retrieve a list of all OUT_OF_STOCK blindbox items")
+    @GetMapping("/items/status/out-of-stock")
+    public ResponseEntity<ResponseData> getOutOfStockBlindboxItems() {
+        List<BlindBoxItem> items = blindboxService.getOutOfStockBlindboxItem();
+        return ResponseEntity.ok(new ResponseData(200, true, "Out of stock blindbox items retrieved successfully", items, null));
     }
 }
