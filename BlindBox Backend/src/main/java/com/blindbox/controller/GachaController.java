@@ -1,5 +1,6 @@
 package com.blindbox.controller;
 
+import com.blindbox.model.BlindBoxItem;
 import com.blindbox.response.ResponseData;
 import com.blindbox.service.GachaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Gacha Management System", description = "Operations pertaining to gacha in the Gacha Management System")
 @RestController
@@ -25,7 +28,7 @@ public class GachaController {
     @GetMapping("/open-box")
     public ResponseEntity<ResponseData> openBox(@RequestParam Integer userId, @RequestParam Integer orderId) {
         try {
-            String result = gachaService.openBlindbox(userId, orderId);
+            List<BlindBoxItem> result = gachaService.openBlindbox(userId, orderId);
             return ResponseEntity.ok(new ResponseData(200, true, "Gacha completed successfully", result, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

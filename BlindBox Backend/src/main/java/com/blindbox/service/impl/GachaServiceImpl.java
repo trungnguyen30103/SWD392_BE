@@ -42,14 +42,14 @@ public class GachaServiceImpl implements GachaService {
     // Open blind box
     @Override
     @Transactional
-    public String openBlindbox(Integer userId, Integer orderId) {
+    public List<BlindBoxItem> openBlindbox(Integer userId, Integer orderId) {
         // Fetch the user and order
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found for id: " + orderId));
 
         // Check if the order is paid
         if (order.getPaymentStatus() != PaymentStatus.PAID) {
-            return "Order is not paid!";
+            throw new RuntimeException("Order is not paid!");
         }
 
         // Fetch the blindbox and its items
@@ -90,7 +90,7 @@ public class GachaServiceImpl implements GachaService {
         order.setTotalAmount(calculateOrderTotalAmount(order.getOrderDetails()));
         orderRepository.save(order);
 
-        return "Gacha completed!";
+        return wonItems;
     }
 
 
@@ -117,9 +117,10 @@ public class GachaServiceImpl implements GachaService {
     // Get the chance
     private int getChanceByRarity(Rarity rarity) {
         return switch (rarity) {
-            case COMMON -> 80;
-            case RARE -> 60;
-            case EPIC -> 25;
+            case COMMON -> 90;
+            case UNCOMMON -> 40;
+            case RARE -> 20;
+            case EPIC -> 5;
             case LEGENDARY -> 1;
         };
     }

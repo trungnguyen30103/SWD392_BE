@@ -1,5 +1,9 @@
 package com.blindbox.service;
 
+import com.blindbox.model.BlindBoxItem;
+
+import java.util.List;
+
 public interface GachaService {
-    String openBlindbox(Integer userId, Integer orderId);
+    List<BlindBoxItem> openBlindbox(Integer userId, Integer orderId);
 }
