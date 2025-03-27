@@ -4,14 +4,15 @@ import com.blindbox.model.Product;
 import com.blindbox.request.Create.Product.ProductCreateRequest;
 import com.blindbox.request.Update.Product.ProductUpdateRequest;
 import com.blindbox.response.ResponseData;
+import com.blindbox.service.CloudinaryService;
 import com.blindbox.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,35 +23,59 @@ public class ProductController {
 
     private final ProductService productService;
 
+    private final CloudinaryService cloudinaryService;
+
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CloudinaryService cloudinaryService) {
         this.productService = productService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     /* Product */
 
     @Operation(summary = "Create a new product", description = "Add a new product to the catalog")
     @PostMapping
-    public ResponseEntity<ResponseData> createProduct(@Valid @RequestBody ProductCreateRequest request) {
+    public ResponseEntity<ResponseData> createProduct(@RequestPart ProductCreateRequest request,
+                                                      @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         try {
+            if (images != null && !images.isEmpty()) {
+                for (int i = 0; i < images.size(); i++) {
+                    MultipartFile image = images.get(i);
+                    if (image != null && !image.isEmpty()) {
+                        String imageUrl = cloudinaryService.uploadFile(image);
+                        request.getProductImages().get(i).setImageUrl(imageUrl);
+                    }
+                }
+            }
             Product createdProduct = productService.createProduct(request);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ResponseData(201, true, "Product created successfully", createdProduct, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseData(500, false, "Failed to create product" + e.getMessage(), null, null));
+                    .body(new ResponseData(500, false, "Failed to create product: " + e.getMessage(), null, null));
         }
     }
 
     @Operation(summary = "Update an existing product", description = "Update an existing product using its ID")
     @PutMapping("/{productID}")
-    public ResponseEntity<ResponseData> updateProduct(@PathVariable Integer productID, @RequestBody ProductUpdateRequest request) {
+    public ResponseEntity<ResponseData> updateProduct(@PathVariable Integer productID,
+                                                      @RequestPart ProductUpdateRequest request,
+                                                      @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         try {
+            if (images != null && !images.isEmpty()) {
+                for (int i = 0; i < images.size(); i++) {
+                    MultipartFile image = images.get(i);
+                    if (image != null && !image.isEmpty()) {
+                        String imageUrl = cloudinaryService.uploadFile(image);
+                        request.getProductImageUpdateRequests().get(i).setImageUrl(imageUrl);
+                    }
+                }
+            }
             Product updatedProduct = productService.updateProduct(productID, request);
             return ResponseEntity.ok(new ResponseData(200, true, "Product updated successfully", updatedProduct, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseData(500, false, "Failed to update product", null, null));
+                    .body(new ResponseData(500, false, "Failed to update product: " + e.getMessage(), null, null));
         }
     }
 

@@ -71,7 +71,7 @@ public class BlindboxServiceImpl implements BlindboxService {
         blindbox = blindboxRepository.save(blindbox);
 
         // Set images
-        Set<BlindboxImage> images = new HashSet<>();
+        List<BlindboxImage> images = new ArrayList<>();
         if (request.getBlindboxImages() != null) {
             for (BlindboxImageCreateRequest imgReq : request.getBlindboxImages()) {
                 BlindboxImage image = new BlindboxImage();
@@ -86,7 +86,7 @@ public class BlindboxServiceImpl implements BlindboxService {
         }
 
         // Set items and stock
-        Set<BlindBoxItem> items = new HashSet<>();
+        List<BlindBoxItem> items = new ArrayList<>();
         if (request.getBlindboxItem() != null) {
             int totalStock = 0;
             for (BlindboxItemCreateRequest itemCreateRequest : request.getBlindboxItem()) {

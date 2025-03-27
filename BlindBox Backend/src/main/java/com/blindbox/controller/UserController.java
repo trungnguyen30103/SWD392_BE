@@ -6,13 +6,14 @@ import com.blindbox.request.Create.User.Customer.CustomerCreateRequest;
 import com.blindbox.request.Update.User.Admin.UserUpdateRequest;
 import com.blindbox.request.Update.User.Customer.CustomerUpdateRequest;
 import com.blindbox.response.ResponseData;
+import com.blindbox.service.CloudinaryService;
 import com.blindbox.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,8 +24,11 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    private final CloudinaryService cloudinaryService;
+
+    public UserController(UserService userService, CloudinaryService cloudinaryService) {
         this.userService = userService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     /* Admin
@@ -33,41 +37,57 @@ public class UserController {
     // Create admin
     @Operation(summary = "Create a new admin", description = "Register a new user in the system")
     @PostMapping("/admin")
-    public ResponseEntity<ResponseData> createAdmin(@Valid @RequestBody UserCreateRequest request) {
+    public ResponseEntity<ResponseData> createAdmin(@RequestPart UserCreateRequest request,
+                                                    @RequestPart(value = "avatar", required = false) MultipartFile avatar) {
         try {
+            if (avatar != null && !avatar.isEmpty()) {
+                String avatarUrl = cloudinaryService.uploadFile(avatar);
+                request.setAvatar_url(avatarUrl);
+            }
             User createdAdmin = userService.createAdmin(request);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ResponseData(201, true, "Admin created successfully", createdAdmin, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseData(500, false, "Failed to create admin", null, null));
+                    .body(new ResponseData(500, false, "Failed to create admin: " + e.getMessage(), null, null));
         }
     }
 
     // Create customer (by Admin)
     @Operation(summary = "Create customer (by admin)", description = "Create a new customer (by admin)")
     @PostMapping("/admin/customer")
-    public ResponseEntity<ResponseData> createUserAdmin(@RequestBody UserCreateRequest request) {
+    public ResponseEntity<ResponseData> createUserAdmin(@RequestPart UserCreateRequest request,
+                                                        @RequestPart(value = "avatar", required = false) MultipartFile avatar) {
         try {
+            if (avatar != null && !avatar.isEmpty()) {
+                String avatarUrl = cloudinaryService.uploadFile(avatar);
+                request.setAvatar_url(avatarUrl);
+            }
             User newUser = userService.createUser_Admin(request);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ResponseData(201, true, "Admin user created successfully", newUser, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseData(500, false, "Failed to create admin user", null, null));
+                    .body(new ResponseData(500, false, "Failed to create admin user: " + e.getMessage(), null, null));
         }
     }
 
     // Cập nhật thông tin người dùng
     @Operation(summary = "Update an existing user", description = "Update an existing user using their ID")
     @PutMapping("/admin/{userID}")
-    public ResponseEntity<ResponseData> updateUser(@PathVariable Integer userID, @Valid @RequestBody UserUpdateRequest request) {
+    public ResponseEntity<ResponseData> updateUser(@PathVariable Integer userID,
+                                                   @RequestPart UserUpdateRequest request,
+                                                   @RequestPart(value = "avatar", required = false) MultipartFile avatar) {
         try {
+            if (avatar != null && !avatar.isEmpty()) {
+                String avatarUrl = cloudinaryService.uploadFile(avatar);
+                request.setAvatar_url(avatarUrl);
+            }
             User updatedCustomer = userService.updateUser(userID, request);
             return ResponseEntity.ok(new ResponseData(200, true, "Customer updated successfully", updatedCustomer, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseData(500, false, "Failed to update customer", null, null));
+                    .body(new ResponseData(500, false, "Failed to update customer: " + e.getMessage(), null, null));
         }
     }
 
@@ -77,27 +97,38 @@ public class UserController {
     // Create customer
     @Operation(summary = "Create a new customer", description = "Add a new customer to the system")
     @PostMapping("/customer")
-    public ResponseEntity<ResponseData> createCustomer(@Valid @RequestBody CustomerCreateRequest request) {
+    public ResponseEntity<ResponseData> createCustomer(@RequestPart CustomerCreateRequest request,
+                                                       @RequestPart(value = "avatar", required = false) MultipartFile avatar) {
         try {
+            if (avatar != null && !avatar.isEmpty()) {
+                String avatarUrl = cloudinaryService.uploadFile(avatar);
+                request.setAvatar_url(avatarUrl);
+            }
             User createdCustomer = userService.createCustomer(request);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ResponseData(201, true, "Customer created successfully", createdCustomer, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseData(500, false, "Failed to create customer", null, null));
+                    .body(new ResponseData(500, false, "Failed to create customer: " + e.getMessage(), null, null));
         }
     }
 
     // Update customer
     @Operation(summary = "Update customer", description = "Update customer details by user ID")
     @PutMapping("/customer/{userID}")
-    public ResponseEntity<ResponseData> updateCustomer(@PathVariable Integer userID, @RequestBody CustomerUpdateRequest request) {
+    public ResponseEntity<ResponseData> updateCustomer(@PathVariable Integer userID,
+                                                       @RequestPart CustomerUpdateRequest request,
+                                                       @RequestPart(value = "avatar", required = false) MultipartFile avatar) {
         try {
+            if (avatar != null && !avatar.isEmpty()) {
+                String avatarUrl = cloudinaryService.uploadFile(avatar);
+                request.setAvatar_url(avatarUrl);
+            }
             User updatedUser = userService.updateCustomer(userID, request);
             return ResponseEntity.ok(new ResponseData(200, true, "Customer updated successfully", updatedUser, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseData(500, false, "Failed to update customer", null, null));
+                    .body(new ResponseData(500, false, "Failed to update customer: " + e.getMessage(), null, null));
         }
     }
 

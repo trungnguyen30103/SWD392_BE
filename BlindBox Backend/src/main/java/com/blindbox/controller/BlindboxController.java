@@ -6,12 +6,14 @@ import com.blindbox.request.Create.Blindbox.BlindboxCreateRequest;
 import com.blindbox.request.Update.Blindbox.BlindboxUpdateRequest;
 import com.blindbox.response.ResponseData;
 import com.blindbox.service.BlindboxService;
+import com.blindbox.service.CloudinaryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,9 +24,12 @@ public class BlindboxController {
 
     private final BlindboxService blindboxService;
 
+    private final CloudinaryService cloudinaryService;
+
     @Autowired
-    public BlindboxController(BlindboxService blindboxService) {
+    public BlindboxController(BlindboxService blindboxService, CloudinaryService cloudinaryService) {
         this.blindboxService = blindboxService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     /* Blindbox
@@ -33,22 +38,53 @@ public class BlindboxController {
     // Create a new blindbox
     @Operation(summary = "Create a new blindbox", description = "Add a new blindbox to the catalog")
     @PostMapping
-    public ResponseEntity<ResponseData> createBlindbox(@RequestBody BlindboxCreateRequest request) {
+    public ResponseEntity<ResponseData> createBlindbox(@RequestPart BlindboxCreateRequest request,
+                                                       @RequestPart(value = "image", required = false) MultipartFile imageFile,
+                                                       @RequestPart(value = "itemImages", required = false) List<MultipartFile> itemImages) {
         try {
+            if (imageFile != null && !imageFile.isEmpty()) {
+                String imageUrl = cloudinaryService.uploadFile(imageFile);
+                request.getBlindboxImages().forEach(image -> image.setImageUrl(imageUrl));
+            }
+            if (itemImages != null && !itemImages.isEmpty()) {
+                for (int i = 0; i < itemImages.size(); i++) {
+                    MultipartFile itemImage = itemImages.get(i);
+                    if (itemImage != null && !itemImage.isEmpty()) {
+                        String itemImageUrl = cloudinaryService.uploadFile(itemImage);
+                        request.getBlindboxItem().get(i).setImageUrl(itemImageUrl);
+                    }
+                }
+            }
             Blindbox createdBlindbox = blindboxService.createBlindbox(request);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ResponseData(201, true, "Blindbox created successfully", createdBlindbox, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseData(500, false, "Failed to create blindbox " + e.getMessage(), null, null));
+                    .body(new ResponseData(500, false, "Failed to create blindbox: " + e.getMessage(), null, null));
         }
     }
 
     // Update an existing blindbox
     @Operation(summary = "Update an existing blindbox", description = "Update an existing blindbox using its ID")
     @PutMapping("/{blindboxID}")
-    public ResponseEntity<ResponseData> updateBlindbox(@PathVariable Integer blindboxID, @RequestBody BlindboxUpdateRequest request) {
+    public ResponseEntity<ResponseData> updateBlindbox(@PathVariable Integer blindboxID,
+                                                       @RequestPart BlindboxUpdateRequest request,
+                                                       @RequestPart(value = "image", required = false) MultipartFile imageFile,
+                                                       @RequestPart(value = "itemImages", required = false) List<MultipartFile> itemImages) {
         try {
+            if (imageFile != null && !imageFile.isEmpty()) {
+                String imageUrl = cloudinaryService.uploadFile(imageFile);
+                request.getBlindboxImageUpdateRequests().forEach(image -> image.setImageUrl(imageUrl));
+            }
+            if (itemImages != null && !itemImages.isEmpty()) {
+                for (int i = 0; i < itemImages.size(); i++) {
+                    MultipartFile itemImage = itemImages.get(i);
+                    if (itemImage != null && !itemImage.isEmpty()) {
+                        String itemImageUrl = cloudinaryService.uploadFile(itemImage);
+                        request.getBlindboxItemUpdateRequests().get(i).setImageUrl(itemImageUrl);
+                    }
+                }
+            }
             Blindbox updatedBlindbox = blindboxService.updateBlindbox(blindboxID, request);
             return ResponseEntity.ok(new ResponseData(200, true, "Blindbox updated successfully", updatedBlindbox, null));
         } catch (Exception e) {

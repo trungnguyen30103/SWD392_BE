@@ -93,6 +93,16 @@ public class GachaServiceImpl implements GachaService {
         return wonItems;
     }
 
+    @Override
+    public List<GachaHistory> getAllGachaHistory() {
+        return gachaHistoryRepository.findAll();
+    }
+
+    @Override
+    public List<GachaHistory> getGachaHistoryByUserID(Integer userId) {
+        return gachaHistoryRepository.findByUserId(userId);
+    }
+
 
     // Perform gacha
     private BlindBoxItem performGacha(List<BlindBoxItem> items) {

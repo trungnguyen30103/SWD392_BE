@@ -1,6 +1,7 @@
 package com.blindbox.controller;
 
 import com.blindbox.model.BlindBoxItem;
+import com.blindbox.model.GachaHistory;
 import com.blindbox.response.ResponseData;
 import com.blindbox.service.GachaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,4 +36,29 @@ public class GachaController {
                     .body(new ResponseData(500, false, "Failed to complete gacha: " + e.getMessage(), null, null));
         }
     }
+
+    @Operation(summary = "Get all gacha history", description = "Retrieve all gacha history records")
+    @GetMapping("/history")
+    public ResponseEntity<ResponseData> getAllGachaHistory() {
+        try {
+            List<GachaHistory> result = gachaService.getAllGachaHistory();
+            return ResponseEntity.ok(new ResponseData(200, true, "Gacha history retrieved successfully", result, null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseData(500, false, "Failed to retrieve gacha history: " + e.getMessage(), null, null));
+        }
+    }
+
+    @Operation(summary = "Get gacha history by user ID", description = "Retrieve gacha history records for a specific user")
+    @GetMapping("/history/user")
+    public ResponseEntity<ResponseData> getGachaHistoryByUserID(@RequestParam Integer userId) {
+        try {
+            List<GachaHistory> result = gachaService.getGachaHistoryByUserID(userId);
+            return ResponseEntity.ok(new ResponseData(200, true, "Gacha history for user retrieved successfully", result, null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseData(500, false, "Failed to retrieve gacha history for user: " + e.getMessage(), null, null));
+        }
+    }
+
 }
