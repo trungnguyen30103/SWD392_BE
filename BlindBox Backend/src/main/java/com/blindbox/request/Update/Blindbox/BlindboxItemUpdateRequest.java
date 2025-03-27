@@ -1,5 +1,6 @@
 package com.blindbox.request.Update.Blindbox;
 
+import com.blindbox.enums.Blindbox.Rarity;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -10,7 +11,7 @@ public class BlindboxItemUpdateRequest {
 
     Integer blindboxItemID;
     String name;
-    Integer rarity;
+    Rarity rarity;
     Integer stock;
     String imageUrl;
 

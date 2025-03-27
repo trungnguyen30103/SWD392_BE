@@ -40,7 +40,7 @@ public class BlindboxController {
                     .body(new ResponseData(201, true, "Blindbox created successfully", createdBlindbox, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseData(500, false, "Failed to create blindbox", null, null));
+                    .body(new ResponseData(500, false, "Failed to create blindbox " + e.getMessage(), null, null));
         }
     }
 
@@ -75,7 +75,7 @@ public class BlindboxController {
             return ResponseEntity.ok(new ResponseData(200, true, "Blindboxes retrieved successfully", blindboxes, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseData(500, false, "Failed to retrieve blindboxes", null, null));
+                    .body(new ResponseData(500, false, "Failed to retrieve blindboxes" + e.getMessage(), null, null));
         }
     }
 

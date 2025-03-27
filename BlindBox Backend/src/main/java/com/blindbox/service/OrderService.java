@@ -1,6 +1,8 @@
 package com.blindbox.service;
 
 import com.blindbox.model.Order;
+import com.blindbox.request.Create.Order.Blindbox.OrderBlindboxCreateRequest;
+
 import java.util.List;
 
 public interface OrderService {
@@ -23,5 +25,9 @@ public interface OrderService {
     // Quy's
     Order createOrderFromCart(Integer userId);
 
-    boolean payForOrderByUserBalance(Integer userId, Integer orderId);
+    boolean payForOrderProductByUserBalance(Integer userId, Integer orderId);
+
+    Order createOrderBlindbox(OrderBlindboxCreateRequest request);
+
+    boolean payForOrderBlindboxByUserBalance(Integer userId, Integer orderId);
 }

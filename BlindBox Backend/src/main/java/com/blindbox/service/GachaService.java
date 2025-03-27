@@ -1,5 +1,5 @@
 package com.blindbox.service;
 
 public interface GachaService {
-    String openBlindBox(Integer userId);
+    String openBlindbox(Integer userId, Integer orderId);
 }

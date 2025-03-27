@@ -13,7 +13,7 @@ public interface BlindBoxItemRepository extends JpaRepository<BlindBoxItem, Inte
 
     Optional<BlindBoxItem> findByBlindbox_BlindboxIDAndBlindboxItemID(Integer blindboxID, Integer blindboxItemID);
 
-    Set<BlindBoxItem> findAllByBlindbox_BlindboxID(Integer blindboxID);
+    List<BlindBoxItem> findAllByBlindbox_BlindboxID(Integer blindboxID);
 
     @NonNull
     List<BlindBoxItem> findAll();

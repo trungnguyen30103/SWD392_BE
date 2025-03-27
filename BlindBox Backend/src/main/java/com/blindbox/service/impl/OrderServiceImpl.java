@@ -1,11 +1,9 @@
 package com.blindbox.service.impl;
 
-import com.blindbox.enums.DiscountStatus;
-import com.blindbox.enums.OrderStatus;
-import com.blindbox.enums.PaymentStatus;
-import com.blindbox.enums.ShippingStatus;
+import com.blindbox.enums.*;
 import com.blindbox.model.*;
 import com.blindbox.repository.*;
+import com.blindbox.request.Create.Order.Blindbox.OrderBlindboxCreateRequest;
 import com.blindbox.service.OrderService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,16 +22,19 @@ public class OrderServiceImpl implements OrderService {
 
     private final DiscountRepository discountRepository;
 
-    private final OrderDetailRepository orderDetailRepository;
+    private final ProductRepository productRepository;
 
     private final UserRepository userRepository;
 
-    public OrderServiceImpl(OrderRepository orderRepository, CartRepository cartRepository, DiscountRepository discountRepository, OrderDetailRepository orderDetailRepository, UserRepository userRepository) {
+    private final BlindboxRepository blindboxRepository;
+
+    public OrderServiceImpl(OrderRepository orderRepository, CartRepository cartRepository, DiscountRepository discountRepository, ProductRepository productRepository, UserRepository userRepository, BlindboxRepository blindboxRepository) {
         this.orderRepository = orderRepository;
         this.cartRepository = cartRepository;
         this.discountRepository = discountRepository;
-        this.orderDetailRepository = orderDetailRepository;
+        this.productRepository = productRepository;
         this.userRepository = userRepository;
+        this.blindboxRepository = blindboxRepository;
     }
 
     @Override
@@ -108,10 +109,10 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
-    // Pay by User's/Customer's balance
+    // Pay for order product(s) by User's/Customer's balance
     @Override
     @Transactional
-    public boolean payForOrderByUserBalance(Integer userId, Integer orderId) {
+    public boolean payForOrderProductByUserBalance(Integer userId, Integer orderId) {
         // Fetch the user and order
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found for id: " + userId));
@@ -124,10 +125,17 @@ public class OrderServiceImpl implements OrderService {
             user.setBalance(user.getBalance() - order.getTotalAmount());
             userRepository.save(user);
 
-            // Update the order status
-            order.setStatus(OrderStatus.PAID);
+            // Update the order status and payment status
+            order.setStatus(OrderStatus.SHIPPING);
             order.setPaymentStatus(PaymentStatus.PAID);
             orderRepository.save(order);
+
+            // Reduce the product's quantity by orderDetail's quantity
+            for (OrderDetail orderDetail : order.getOrderDetails()) {
+                Product product = orderDetail.getProduct();
+                product.setStock(product.getStock() - orderDetail.getQuantity());
+                productRepository.save(product);
+            }
 
             // Clear the cart
             Cart cart = cartRepository.findByUser_UserID(userId)
@@ -135,6 +143,67 @@ public class OrderServiceImpl implements OrderService {
             cart.getCartItems().clear();
             cart.setTotalAmount(0.0);
             cartRepository.save(cart);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Create Buy blindbox order
+    @Override
+    @Transactional
+    public Order createOrderBlindbox(OrderBlindboxCreateRequest request) {
+        // Fetch the user
+        User user = userRepository.findById(request.getUserID())
+                .orElseThrow(() -> new RuntimeException("User not found for id: " + request.getUserID()));
+
+        // Create a new order
+        Order order = new Order();
+        order.setUser(user);
+        order.setOrderDate(LocalDateTime.now());
+        order.setStatus(OrderStatus.PENDING);
+        order.setPaymentStatus(PaymentStatus.PENDING);
+        order.setShippingStatus(ShippingStatus.PENDING);
+        order.setGachaType(request.getGachaType());
+        order.setOrderDetails(new ArrayList<>());
+
+        // Fetch the blindbox and set it to the order
+        Blindbox blindbox = blindboxRepository.findById(request.getBlindboxID())
+                .orElseThrow(() -> new RuntimeException("Blindbox not found for id: " + request.getBlindboxID()));
+        order.setBlindbox(blindbox);
+
+        // Calculate the total price based on gachaType
+        double totalPrice = blindbox.getPrice();
+        if (request.getGachaType() == GachaType.FIVE_TIME) {
+            totalPrice *= 5;
+        }
+        order.setTotalAmount(totalPrice);
+
+        // Save the order
+        return orderRepository.save(order);
+    }
+
+    // Pay for order blindbox by User's/Customer's balance
+    @Override
+    @Transactional
+    public boolean payForOrderBlindboxByUserBalance(Integer userId, Integer orderId) {
+        // Fetch the user and order
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found for id: " + userId));
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found for id: " + orderId));
+
+        // Check if the user's balance is sufficient
+        if (user.getBalance() >= order.getTotalAmount()) {
+            // Deduct the balance
+            user.setBalance(user.getBalance() - order.getTotalAmount());
+            userRepository.save(user);
+
+            // Update the order status and payment status
+            order.setStatus(OrderStatus.SHIPPING);
+            order.setPaymentStatus(PaymentStatus.PAID);
+            orderRepository.save(order);
 
             return true;
         } else {

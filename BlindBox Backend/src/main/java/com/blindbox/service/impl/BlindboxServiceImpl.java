@@ -18,6 +18,8 @@ import com.blindbox.request.Update.Blindbox.BlindboxItemUpdateRequest;
 import com.blindbox.request.Update.Blindbox.BlindboxUpdateRequest;
 import com.blindbox.service.BlindboxService;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,10 +30,12 @@ import java.util.*;
 public class BlindboxServiceImpl implements BlindboxService {
 
     private final BlindboxRepository blindboxRepository;
-
     private final CategoryRepository categoryRepository;
     private final BlindboxImageRepository blindboxImageRepository;
     private final BlindBoxItemRepository blindBoxItemRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public BlindboxServiceImpl(BlindboxRepository blindboxRepository, CategoryRepository categoryRepository, BlindboxImageRepository blindboxImageRepository, BlindBoxItemRepository blindBoxItemRepository) {
         this.blindboxRepository = blindboxRepository;
@@ -71,7 +75,9 @@ public class BlindboxServiceImpl implements BlindboxService {
         if (request.getBlindboxImages() != null) {
             for (BlindboxImageCreateRequest imgReq : request.getBlindboxImages()) {
                 BlindboxImage image = new BlindboxImage();
+
                 image.setImageUrl(imgReq.getImageUrl());
+
                 image.setBlindbox(blindbox);
                 image.setAltText(imgReq.getAltText());
                 images.add(image);
@@ -88,7 +94,9 @@ public class BlindboxServiceImpl implements BlindboxService {
                 item.setBlindbox(blindbox);
                 item.setName(itemCreateRequest.getName());
                 item.setRarity(itemCreateRequest.getRarity());
-                item.setImageUrl(item.getImageUrl());
+
+                item.setImageUrl(itemCreateRequest.getImageUrl());
+
                 if (itemCreateRequest.getStock() != 0) {
                     item.setStock(itemCreateRequest.getStock());
                     item.setStatus(BlindboxItemStatus.ACTIVE);
@@ -236,10 +244,18 @@ public class BlindboxServiceImpl implements BlindboxService {
     // Get all blindboxes
     @Override
     @NonNull
-    @Transactional(readOnly = true)
     public List<Blindbox> getAllBlindboxes() {
-        return blindboxRepository.findAll();
+        entityManager.clear(); // Clear Hibernate cache
+        List<Blindbox> blindboxes = blindboxRepository.findAll();
+        System.out.println("Total fetched blindboxes: " + blindboxes.size());
+        return blindboxes;
     }
+
+
+
+
+
+
 
     // Get blindbox by ID
     @Override

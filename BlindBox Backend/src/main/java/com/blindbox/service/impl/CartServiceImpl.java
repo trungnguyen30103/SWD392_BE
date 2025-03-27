@@ -160,7 +160,7 @@ public class CartServiceImpl implements CartService {
 
     private void checkPendingOrder(Integer userID) {
         Optional<Order> pendingOrders = orderRepository.findByUser_UserIDAndPaymentStatus(userID, PaymentStatus.PENDING);
-        if (!pendingOrders.isEmpty()) {
+        if (pendingOrders.isPresent()) {
             throw new RuntimeException("Cannot modify cart while there is a pending order.");
         }
     }

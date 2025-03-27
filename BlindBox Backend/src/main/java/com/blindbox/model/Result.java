@@ -27,11 +27,8 @@ public class Result {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "blindbox_id", nullable = false)
-    private Blindbox blindbox;
-
-    @Column(name = "result_text", columnDefinition = "TEXT")
-    private String resultText;
+    @JoinColumn(name = "blindbox_item_id", nullable = false)
+    private BlindBoxItem blindboxItem;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

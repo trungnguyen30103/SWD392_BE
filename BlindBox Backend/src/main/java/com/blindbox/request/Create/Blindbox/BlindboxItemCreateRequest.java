@@ -1,5 +1,6 @@
 package com.blindbox.request.Create.Blindbox;
 
+import com.blindbox.enums.Blindbox.Rarity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -14,10 +15,11 @@ public class BlindboxItemCreateRequest {
     String name;
 
     @NotNull
-    Integer rarity;
+    Rarity rarity;
 
     Integer stock;
 
+    @NotNull
     String imageUrl;
 
 }

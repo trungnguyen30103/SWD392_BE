@@ -6,8 +6,6 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
-
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderBlindboxCreateRequest {
@@ -15,8 +13,8 @@ public class OrderBlindboxCreateRequest {
     @NotNull
     Integer userID;
 
-    GachaType gachaType;
+    Integer blindboxID;
 
-    List<OrderDetailBlindboxCreateRequest> orderDetailBlindboxCreateRequests;
+    GachaType gachaType;
 
 }

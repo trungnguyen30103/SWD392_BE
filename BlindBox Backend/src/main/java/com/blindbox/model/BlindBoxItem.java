@@ -1,6 +1,7 @@
 package com.blindbox.model;
 
 import com.blindbox.enums.Blindbox.BlindboxItemStatus;
+import com.blindbox.enums.Blindbox.Rarity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,7 +27,7 @@ public class BlindBoxItem {
     private String name;
 
     @Column(nullable = false)
-    private Integer rarity;
+    private Rarity rarity;
 
     @Column(nullable = false)
     private BlindboxItemStatus status;

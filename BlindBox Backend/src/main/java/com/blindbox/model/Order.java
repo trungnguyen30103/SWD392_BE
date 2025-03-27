@@ -33,6 +33,11 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "blindbox_id")
+    private Blindbox blindbox;
+
     @Column(name = "gacha_type", length = 50)
     private GachaType gachaType;      // ONE_TIME, FIVE_TIME
 

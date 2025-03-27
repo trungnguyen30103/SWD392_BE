@@ -1,6 +1,7 @@
 package com.blindbox.controller;
 
 import com.blindbox.model.Order;
+import com.blindbox.request.Create.Order.Blindbox.OrderBlindboxCreateRequest;
 import com.blindbox.response.ResponseData;
 import com.blindbox.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +33,7 @@ public class OrderController {
         return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
     }
 
-    // Create a new order from cart
+    // Create a new product(s) order from cart
     @Operation(summary = "Create an order from cart", description = "Create an order from the user's cart to buy product")
     @PostMapping("/create-from-cart/{userId}")
     public ResponseEntity<ResponseData> createOrderFromCart(@PathVariable Integer userId) {
@@ -43,6 +44,20 @@ public class OrderController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseData(500, false, "Failed to create order from cart" + e.getMessage(), null, null));
+        }
+    }
+
+    // Create a new blindbox order
+    @Operation(summary = "Create a new blindbox order", description = "Create a new order for a blindbox")
+    @PostMapping("/create-blindbox-order")
+    public ResponseEntity<ResponseData> createOrderBlindbox(@RequestBody OrderBlindboxCreateRequest request) {
+        try {
+            Order order = orderService.createOrderBlindbox(request);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ResponseData(201, true, "Order created successfully", order, null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseData(500, false, "Failed to create order: " + e.getMessage(), null, null));
         }
     }
 
@@ -57,12 +72,12 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    // Pay by user balance
-    @Operation(summary = "Pay for order by user balance", description = "Pay for the order by deducting the user's balance")
+    // Pay for product(s) by user balance
+    @Operation(summary = "Pay for product(s) order by user balance", description = "Pay for product(s) order using user's balance")
     @PostMapping("/pay/{userId}/{orderId}")
     public ResponseEntity<ResponseData> payForOrderByUserBalance(@PathVariable Integer userId, @PathVariable Integer orderId) {
         try {
-            boolean paymentSuccess = orderService.payForOrderByUserBalance(userId, orderId);
+            boolean paymentSuccess = orderService.payForOrderProductByUserBalance(userId, orderId);
             if (paymentSuccess) {
                 return ResponseEntity.ok(new ResponseData(200, true, "Payment successful", null, null));
             } else {
@@ -72,6 +87,24 @@ public class OrderController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseData(500, false, "Failed to process payment", null, null));
+        }
+    }
+
+    // Pay for blindbox order by user balance
+    @Operation(summary = "Pay for blindbox order by user balance", description = "Pay for a blindbox order using user's balance")
+    @PostMapping("/pay-blindbox-order")
+    public ResponseEntity<ResponseData> payForOrderBlindboxByUserBalance(@RequestParam Integer userId, @RequestParam Integer orderId) {
+        try {
+            boolean success = orderService.payForOrderBlindboxByUserBalance(userId, orderId);
+            if (success) {
+                return ResponseEntity.ok(new ResponseData(200, true, "Payment successful", null, null));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ResponseData(400, false, "Insufficient balance", null, null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseData(500, false, "Failed to process payment: " + e.getMessage(), null, null));
         }
     }
 
