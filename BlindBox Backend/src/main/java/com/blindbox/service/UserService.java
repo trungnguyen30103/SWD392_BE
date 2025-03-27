@@ -45,6 +45,8 @@ public interface UserService {
     @NonNull
     User updateCustomer(@NonNull Integer userID, @NonNull CustomerUpdateRequest request);
 
+    User addBalanceToCustomer(Integer userID, int amount);
+
     @NonNull
     User forgotPassword (@NonNull Integer userID, @NonNull String newPassword);
 

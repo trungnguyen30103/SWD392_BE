@@ -194,6 +194,20 @@ public class UserServiceImpl implements UserService {
         return customer;
     }
 
+    // Add balance
+    @Override
+    public User addBalanceToCustomer(Integer userID, int amount) {
+        User user = userRepository.findById(userID)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user.getRole().getRoleID() != 2) { // 2: Customer
+            throw new RuntimeException("User is not a customer");
+        }
+
+        user.setBalance(user.getBalance() + amount);
+        return userRepository.save(user);
+    }
+
     @Override
     @NonNull
     public User updateCustomer(@NonNull Integer userID, @NonNull CustomerUpdateRequest request) {

@@ -120,6 +120,19 @@ public class UserController {
         }
     }
 
+    // Add balance
+    @Operation(summary = "Add balance to customer", description = "Add a specified amount to a customer's balance")
+    @PostMapping("/customer/{userID}/add-balance")
+    public ResponseEntity<ResponseData> addBalanceToCustomer(@PathVariable Integer userID, @RequestParam int amount) {
+        try {
+            User updatedUser = userService.addBalanceToCustomer(userID, amount);
+            return ResponseEntity.ok(new ResponseData(200, true, "Balance added successfully", updatedUser, null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseData(500, false, "Failed to add balance: " + e.getMessage(), null, null));
+        }
+    }
+
     /* Chung
     * */
 
