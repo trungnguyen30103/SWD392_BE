@@ -19,4 +19,9 @@ public interface OrderService {
 
     // Xóa đơn hàng theo ID
     boolean deleteOrder(Integer orderId);
+
+    // Quy's
+    Order createOrderFromCart(Integer userId);
+
+    boolean payForOrderByUserBalance(Integer userId, Integer orderId);
 }

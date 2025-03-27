@@ -1,10 +1,13 @@
 package com.blindbox.service.impl;
 
+import com.blindbox.enums.PaymentStatus;
 import com.blindbox.model.Cart;
 import com.blindbox.model.CartItem;
+import com.blindbox.model.Order;
 import com.blindbox.model.Product;
 import com.blindbox.repository.CartItemRepository;
 import com.blindbox.repository.CartRepository;
+import com.blindbox.repository.OrderRepository;
 import com.blindbox.repository.ProductRepository;
 import com.blindbox.response.DTO.Cart.CartDTO;
 import com.blindbox.service.CartService;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -22,15 +26,19 @@ public class CartServiceImpl implements CartService {
 
     private final ProductRepository productRepository;
 
-    public CartServiceImpl(CartRepository cartRepository, CartItemRepository cartItemRepository, ProductRepository productRepository) {
+    private final OrderRepository orderRepository;
+
+    public CartServiceImpl(CartRepository cartRepository, CartItemRepository cartItemRepository, ProductRepository productRepository, OrderRepository orderRepository) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.productRepository = productRepository;
+        this.orderRepository = orderRepository;
     }
 
     // Add product to cart
     @Override
     public void addProductToCart(Integer userID, Integer productID, int quantity) {
+        checkPendingOrder(userID);
         Cart cart = cartRepository.findByUser_UserID(userID)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Product product = productRepository.findById(productID)
@@ -79,6 +87,7 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public void removeProductFromCart(Integer userID, Integer productID) {
+        checkPendingOrder(userID);
         Cart cart = cartRepository.findByUser_UserID(userID)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
 
@@ -96,6 +105,7 @@ public class CartServiceImpl implements CartService {
     // Clear entire Cart
     @Override
     public void clearCart(Integer userID) {
+        checkPendingOrder(userID);
         Cart cart = cartRepository.findByUser_UserID(userID)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
         cart.getCartItems().clear();
@@ -109,6 +119,7 @@ public class CartServiceImpl implements CartService {
     // Update Cart Item
     @Override
     public void updateCartItem(Integer userID, Integer productID, int quantity) {
+        checkPendingOrder(userID);
         Cart cart = cartRepository.findByUser_UserID(userID)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
 
@@ -145,5 +156,12 @@ public class CartServiceImpl implements CartService {
         return items.stream()
                 .mapToDouble(CartItem::getPrice)
                 .sum();
+    }
+
+    private void checkPendingOrder(Integer userID) {
+        Optional<Order> pendingOrders = orderRepository.findByUser_UserIDAndPaymentStatus(userID, PaymentStatus.PENDING);
+        if (!pendingOrders.isEmpty()) {
+            throw new RuntimeException("Cannot modify cart while there is a pending order.");
+        }
     }
 }

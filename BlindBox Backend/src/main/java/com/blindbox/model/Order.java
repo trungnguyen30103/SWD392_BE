@@ -1,9 +1,11 @@
 package com.blindbox.model;
 
+import com.blindbox.enums.GachaType;
 import com.blindbox.enums.OrderStatus;
 import com.blindbox.enums.PaymentStatus;
 import com.blindbox.enums.ShippingStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -31,7 +34,7 @@ public class Order {
     private User user;
 
     @Column(name = "gacha_type", length = 50)
-    private String gachaType;
+    private GachaType gachaType;      // ONE_TIME, FIVE_TIME
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
@@ -60,4 +63,8 @@ public class Order {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("order")
+    private List<OrderDetail> orderDetails;
 }

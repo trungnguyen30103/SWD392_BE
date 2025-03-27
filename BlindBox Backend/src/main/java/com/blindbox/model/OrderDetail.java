@@ -29,8 +29,8 @@ public class OrderDetail {
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "blindbox_id")
-    private Blindbox blindbox;
+    @JoinColumn(name = "blindbox_item_id")
+    private BlindBoxItem blindBoxItem;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;

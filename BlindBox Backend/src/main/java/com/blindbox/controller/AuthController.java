@@ -1,12 +1,12 @@
 package com.blindbox.controller;
 
+import com.blindbox.model.User;
 import com.blindbox.request.AuthRequest;
 import com.blindbox.response.AuthResponse;
 import com.blindbox.security.JwtUtil;
 import com.blindbox.service.impl.CustomUserDetailsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,14 +18,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
+
+    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, CustomUserDetailsService userDetailsService) {
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Operation(summary = "Authenticate user", description = "Authenticate a user using their username and password")
     @PostMapping("/login")
@@ -39,6 +42,9 @@ public class AuthController {
             // Lấy thông tin người dùng từ UserDetailsService
             UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
 
+            // Lấy user từ database để lấy userID
+            User user = userDetailsService.getUserByUsername(request.getUsername());
+
             // Tạo JWT token cho người dùng
             String token = jwtUtil.generateToken(userDetails.getUsername());
 
@@ -46,7 +52,7 @@ public class AuthController {
             String role = userDetails.getAuthorities().iterator().next().getAuthority();
 
             // Trả về token và role của người dùng
-            return new AuthResponse(token, role);
+            return new AuthResponse(token, role, user.getUserID());
         } catch (Exception e) {
             // Nếu đăng nhập không thành công, ném ngoại lệ
             throw new RuntimeException("Invalid username or password", e);
