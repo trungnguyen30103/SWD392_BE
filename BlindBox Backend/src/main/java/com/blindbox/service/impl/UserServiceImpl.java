@@ -50,8 +50,6 @@ public class UserServiceImpl implements UserService {
         if (request.getBalance() != 0) admin.setBalance(request.getBalance());
         admin.setStatus("ACTIVE");
 
-        if (request.getAvatar_url() != null) admin.setAvatar_url(request.getAvatar_url());
-
         // Set role ADMIN
         Role role = roleRepository.findById(1) // 1: Admin
                 .orElseThrow(() -> new RuntimeException("Role not found"));
@@ -74,8 +72,6 @@ public class UserServiceImpl implements UserService {
         user.setFullName(request.getFullName());
         if (request.getBalance() != 0) user.setBalance(request.getBalance());
         user.setStatus("ACTIVE");
-
-        if (request.getAvatar_url() != null) user.setAvatar_url(request.getAvatar_url());
 
         // Set role CUSTOMER
         Role role = roleRepository.findById(2) // 1: Admin

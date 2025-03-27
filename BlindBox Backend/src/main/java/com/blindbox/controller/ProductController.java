@@ -35,18 +35,8 @@ public class ProductController {
 
     @Operation(summary = "Create a new product", description = "Add a new product to the catalog")
     @PostMapping
-    public ResponseEntity<ResponseData> createProduct(@RequestPart ProductCreateRequest request,
-                                                      @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+    public ResponseEntity<ResponseData> createProduct(@RequestBody ProductCreateRequest request) {
         try {
-            if (images != null && !images.isEmpty()) {
-                for (int i = 0; i < images.size(); i++) {
-                    MultipartFile image = images.get(i);
-                    if (image != null && !image.isEmpty()) {
-                        String imageUrl = cloudinaryService.uploadFile(image);
-                        request.getProductImages().get(i).setImageUrl(imageUrl);
-                    }
-                }
-            }
             Product createdProduct = productService.createProduct(request);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ResponseData(201, true, "Product created successfully", createdProduct, null));
@@ -59,18 +49,8 @@ public class ProductController {
     @Operation(summary = "Update an existing product", description = "Update an existing product using its ID")
     @PutMapping("/{productID}")
     public ResponseEntity<ResponseData> updateProduct(@PathVariable Integer productID,
-                                                      @RequestPart ProductUpdateRequest request,
-                                                      @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+                                                      @RequestBody ProductUpdateRequest request) {
         try {
-            if (images != null && !images.isEmpty()) {
-                for (int i = 0; i < images.size(); i++) {
-                    MultipartFile image = images.get(i);
-                    if (image != null && !image.isEmpty()) {
-                        String imageUrl = cloudinaryService.uploadFile(image);
-                        request.getProductImageUpdateRequests().get(i).setImageUrl(imageUrl);
-                    }
-                }
-            }
             Product updatedProduct = productService.updateProduct(productID, request);
             return ResponseEntity.ok(new ResponseData(200, true, "Product updated successfully", updatedProduct, null));
         } catch (Exception e) {

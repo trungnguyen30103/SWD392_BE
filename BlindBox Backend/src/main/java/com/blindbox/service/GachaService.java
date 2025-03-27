@@ -2,7 +2,6 @@ package com.blindbox.service;
 
 import com.blindbox.model.BlindBoxItem;
 import com.blindbox.model.GachaHistory;
-import com.blindbox.model.Result;
 
 import java.util.List;
 

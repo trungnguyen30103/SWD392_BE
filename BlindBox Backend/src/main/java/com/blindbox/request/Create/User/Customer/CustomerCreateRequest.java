@@ -29,6 +29,4 @@ public class CustomerCreateRequest {
     @NotBlank
     String fullName;
 
-    String avatar_url;
-
 }

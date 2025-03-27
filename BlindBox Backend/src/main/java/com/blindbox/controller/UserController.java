@@ -36,14 +36,9 @@ public class UserController {
 
     // Create admin
     @Operation(summary = "Create a new admin", description = "Register a new user in the system")
-    @PostMapping("/admin")
-    public ResponseEntity<ResponseData> createAdmin(@RequestPart UserCreateRequest request,
-                                                    @RequestPart(value = "avatar", required = false) MultipartFile avatar) {
+    @PostMapping( "/admin")
+    public ResponseEntity<ResponseData> createAdmin(@RequestBody UserCreateRequest request) {
         try {
-            if (avatar != null && !avatar.isEmpty()) {
-                String avatarUrl = cloudinaryService.uploadFile(avatar);
-                request.setAvatar_url(avatarUrl);
-            }
             User createdAdmin = userService.createAdmin(request);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ResponseData(201, true, "Admin created successfully", createdAdmin, null));
@@ -56,13 +51,8 @@ public class UserController {
     // Create customer (by Admin)
     @Operation(summary = "Create customer (by admin)", description = "Create a new customer (by admin)")
     @PostMapping("/admin/customer")
-    public ResponseEntity<ResponseData> createUserAdmin(@RequestPart UserCreateRequest request,
-                                                        @RequestPart(value = "avatar", required = false) MultipartFile avatar) {
+    public ResponseEntity<ResponseData> createUserAdmin(@RequestBody UserCreateRequest request) {
         try {
-            if (avatar != null && !avatar.isEmpty()) {
-                String avatarUrl = cloudinaryService.uploadFile(avatar);
-                request.setAvatar_url(avatarUrl);
-            }
             User newUser = userService.createUser_Admin(request);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ResponseData(201, true, "Admin user created successfully", newUser, null));
@@ -76,13 +66,8 @@ public class UserController {
     @Operation(summary = "Update an existing user", description = "Update an existing user using their ID")
     @PutMapping("/admin/{userID}")
     public ResponseEntity<ResponseData> updateUser(@PathVariable Integer userID,
-                                                   @RequestPart UserUpdateRequest request,
-                                                   @RequestPart(value = "avatar", required = false) MultipartFile avatar) {
+                                                   @RequestBody UserUpdateRequest request) {
         try {
-            if (avatar != null && !avatar.isEmpty()) {
-                String avatarUrl = cloudinaryService.uploadFile(avatar);
-                request.setAvatar_url(avatarUrl);
-            }
             User updatedCustomer = userService.updateUser(userID, request);
             return ResponseEntity.ok(new ResponseData(200, true, "Customer updated successfully", updatedCustomer, null));
         } catch (Exception e) {
@@ -97,13 +82,8 @@ public class UserController {
     // Create customer
     @Operation(summary = "Create a new customer", description = "Add a new customer to the system")
     @PostMapping("/customer")
-    public ResponseEntity<ResponseData> createCustomer(@RequestPart CustomerCreateRequest request,
-                                                       @RequestPart(value = "avatar", required = false) MultipartFile avatar) {
+    public ResponseEntity<ResponseData> createCustomer(@RequestBody CustomerCreateRequest request) {
         try {
-            if (avatar != null && !avatar.isEmpty()) {
-                String avatarUrl = cloudinaryService.uploadFile(avatar);
-                request.setAvatar_url(avatarUrl);
-            }
             User createdCustomer = userService.createCustomer(request);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ResponseData(201, true, "Customer created successfully", createdCustomer, null));
@@ -117,13 +97,8 @@ public class UserController {
     @Operation(summary = "Update customer", description = "Update customer details by user ID")
     @PutMapping("/customer/{userID}")
     public ResponseEntity<ResponseData> updateCustomer(@PathVariable Integer userID,
-                                                       @RequestPart CustomerUpdateRequest request,
-                                                       @RequestPart(value = "avatar", required = false) MultipartFile avatar) {
+                                                       @RequestBody CustomerUpdateRequest request) {
         try {
-            if (avatar != null && !avatar.isEmpty()) {
-                String avatarUrl = cloudinaryService.uploadFile(avatar);
-                request.setAvatar_url(avatarUrl);
-            }
             User updatedUser = userService.updateCustomer(userID, request);
             return ResponseEntity.ok(new ResponseData(200, true, "Customer updated successfully", updatedUser, null));
         } catch (Exception e) {

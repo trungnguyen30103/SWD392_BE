@@ -31,6 +31,4 @@ public class UserCreateRequest {
 
     double balance;
 
-    String avatar_url;
-
 }
