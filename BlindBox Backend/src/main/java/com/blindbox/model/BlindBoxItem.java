@@ -34,4 +34,7 @@ public class BlindBoxItem {
     @Column(nullable = false)
     private Integer stock;
 
+    @Column(name = "image_url", nullable = false, length = 500)
+    private String imageUrl;
+
 }

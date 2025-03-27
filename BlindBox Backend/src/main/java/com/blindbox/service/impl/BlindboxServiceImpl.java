@@ -88,6 +88,7 @@ public class BlindboxServiceImpl implements BlindboxService {
                 item.setBlindbox(blindbox);
                 item.setName(itemCreateRequest.getName());
                 item.setRarity(itemCreateRequest.getRarity());
+                item.setImageUrl(item.getImageUrl());
                 if (itemCreateRequest.getStock() != 0) {
                     item.setStock(itemCreateRequest.getStock());
                     item.setStatus(BlindboxItemStatus.ACTIVE);
@@ -171,6 +172,7 @@ public class BlindboxServiceImpl implements BlindboxService {
 
                 if (itemUpdateRequest.getName() != null) item.setName(itemUpdateRequest.getName());
                 if (itemUpdateRequest.getRarity() != null) item.setRarity(itemUpdateRequest.getRarity());
+                if (itemUpdateRequest.getImageUrl() != null) item.setImageUrl(itemUpdateRequest.getImageUrl());
 
                 if (itemUpdateRequest.getStock() != null) {
                     totalStock += itemUpdateRequest.getStock() - item.getStock();
@@ -183,12 +185,7 @@ public class BlindboxServiceImpl implements BlindboxService {
         // Create new item(s)
         if (request.getBlindboxItemCreateRequests() != null) {
             for (BlindboxItemCreateRequest itemCreateRequest : request.getBlindboxItemCreateRequests()) {
-                BlindBoxItem newItem = new BlindBoxItem();
-                newItem.setBlindbox(existingBlindbox);
-                newItem.setName(itemCreateRequest.getName());
-                newItem.setRarity(itemCreateRequest.getRarity());
-                newItem.setStock(itemCreateRequest.getStock() != null ? itemCreateRequest.getStock() : 0);
-                newItem.setStatus(newItem.getStock() == 0 ? BlindboxItemStatus.OUT_OF_STOCK : BlindboxItemStatus.ACTIVE);
+                BlindBoxItem newItem = getBlindBoxItem(itemCreateRequest, existingBlindbox);
 
                 // Save
                 BlindBoxItem savedItem = blindBoxItemRepository.save(newItem);
@@ -202,6 +199,17 @@ public class BlindboxServiceImpl implements BlindboxService {
 
         // Save
         return blindboxRepository.save(existingBlindbox);
+    }
+
+    private BlindBoxItem getBlindBoxItem(BlindboxItemCreateRequest itemCreateRequest, Blindbox existingBlindbox) {
+        BlindBoxItem newItem = new BlindBoxItem();
+        newItem.setBlindbox(existingBlindbox);
+        newItem.setName(itemCreateRequest.getName());
+        newItem.setRarity(itemCreateRequest.getRarity());
+        newItem.setImageUrl(itemCreateRequest.getImageUrl());
+        newItem.setStock(itemCreateRequest.getStock() != null ? itemCreateRequest.getStock() : 0);
+        newItem.setStatus(newItem.getStock() == 0 ? BlindboxItemStatus.OUT_OF_STOCK : BlindboxItemStatus.ACTIVE);
+        return newItem;
     }
 
     // Disable a blindbox with its items

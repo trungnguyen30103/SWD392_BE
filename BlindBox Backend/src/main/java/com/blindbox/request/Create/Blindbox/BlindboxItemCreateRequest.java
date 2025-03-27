@@ -18,4 +18,6 @@ public class BlindboxItemCreateRequest {
 
     Integer stock;
 
+    String imageUrl;
+
 }

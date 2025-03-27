@@ -12,5 +12,6 @@ public class BlindboxItemUpdateRequest {
     String name;
     Integer rarity;
     Integer stock;
+    String imageUrl;
 
 }
