@@ -178,6 +178,11 @@ public class OrderServiceImpl implements OrderService {
         if (request.getGachaType() == GachaType.FIVE_TIME) {
             totalPrice *= 5;
         }
+        Optional<Discount> discountOpt = discountRepository.findByStatusAndBlindbox_BlindboxID(DiscountStatus.ACTIVE, blindbox.getBlindboxID());
+        if (discountOpt.isPresent()){
+            Discount discount = discountOpt.get();
+            totalPrice = totalPrice - totalPrice * discount.getDiscountPercentage() / 100;
+        }
         order.setTotalAmount(totalPrice);
 
         // Save the order
