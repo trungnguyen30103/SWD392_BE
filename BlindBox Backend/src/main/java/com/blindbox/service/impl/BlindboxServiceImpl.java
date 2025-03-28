@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 @Service
 public class BlindboxServiceImpl implements BlindboxService {
@@ -71,7 +72,7 @@ public class BlindboxServiceImpl implements BlindboxService {
         blindbox = blindboxRepository.save(blindbox);
 
         // Set images
-        List<BlindboxImage> images = new ArrayList<>();
+        Set<BlindboxImage> images = new CopyOnWriteArraySet<>();
         if (request.getBlindboxImages() != null) {
             for (BlindboxImageCreateRequest imgReq : request.getBlindboxImages()) {
                 BlindboxImage image = new BlindboxImage();
@@ -86,7 +87,7 @@ public class BlindboxServiceImpl implements BlindboxService {
         }
 
         // Set items and stock
-        List<BlindBoxItem> items = new ArrayList<>();
+        Set<BlindBoxItem> items = new CopyOnWriteArraySet<>();
         if (request.getBlindboxItem() != null) {
             int totalStock = 0;
             for (BlindboxItemCreateRequest itemCreateRequest : request.getBlindboxItem()) {

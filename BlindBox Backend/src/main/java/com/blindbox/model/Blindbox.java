@@ -9,6 +9,8 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 @Entity
 @Getter
@@ -50,11 +52,11 @@ public class Blindbox {
 
     @OneToMany(mappedBy = "blindbox", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("blindbox") // Prevents infinite loop
-    private List<BlindboxImage> blindboxImages = new ArrayList<>();
+    private Set<BlindboxImage> blindboxImages = new CopyOnWriteArraySet<>();
 
     @OneToMany(mappedBy = "blindbox", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("blindbox") // Prevents infinite loop
-    private List<BlindBoxItem> blindBoxItems = new ArrayList<>();
+    private Set<BlindBoxItem> blindBoxItems = new CopyOnWriteArraySet<>();
 
     @PrePersist
     protected void onCreate() {
